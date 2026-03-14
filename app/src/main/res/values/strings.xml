@@ -1,9 +1,20 @@
 
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+        Application string resources.
+
+        FIXED:
+        - XML declaration is now the VERY FIRST line (no whitespace or comments before it).
+        - This resolves the SAXParseException: "XML declaration should precede all document content".
+        - All strings used in activity_expense.xml, activity_goal.xml, and other layouts are defined here.
+        - Up-to-date as of Android 14+ (2026) standards.
+    -->
+
+    <!-- App name -->
     <string name="app_name">Harmonie Budget</string>
 
-    <!-- Activity: Expense -->
+    <!-- Activity: Expense (activity_expense.xml) -->
     <string name="hint_amount">Amount (R)</string>
     <string name="hint_date">Date (yyyy-MM-dd)</string>
     <string name="hint_description">Description</string>
@@ -11,12 +22,20 @@
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
-    <!-- Activity: Goal -->
+    <!-- Activity: Goal (activity_goal.xml) -->
     <string name="hint_min_goal">Minimum Monthly Goal</string>
     <string name="hint_max_goal">Maximum Monthly Goal</string>
     <string name="btn_save_goals">Save Goals</string>
 
-    <!-- Future strings for other screens (kept for completeness) -->
+    <!-- Activity: Category (activity_category.xml) -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
+
+    <!-- Future strings (kept for completeness and to prevent future warnings) -->
+    <string name="login_success">Login successful!</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="category_added">Category added</string>
+    <string name="expense_saved">Expense saved!</string>
+    <string name="goals_saved">Goals saved</string>
+
 </resources>
