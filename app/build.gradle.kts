@@ -1,3 +1,4 @@
+// Gradle Scripts/build.gradle.kts (Module :app)
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -29,6 +30,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,11 +38,20 @@ android {
 }
 
 dependencies {
+    // Core AndroidX libraries (already present)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // Added for JSON persistence (Gson) - required by JsonHelper.kt
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // Added for RecyclerView in CategoryActivity.kt and ExpenseListActivity.kt
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // Test dependencies (unchanged)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

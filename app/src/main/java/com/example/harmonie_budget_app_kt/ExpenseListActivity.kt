@@ -1,22 +1,66 @@
+// app/kotlin+java/com.example.harmonie_budget_app_kt/ExpenseListActivity.kt
 package com.example.harmonie_budget_app_kt
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.harmonie_budget_app_kt.models.Expense
+import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
-class ExpenseListActivity : AppCompatActivity()
-{
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+/**
+ * ExpenseListActivity - View all expenses in a selectable period (simple all for prototype).
+ * RecyclerView with photo access (click to view URI if present).
+ */
+class ExpenseListActivity : AppCompatActivity() {
+
+    private lateinit var rvExpenses: RecyclerView
+    private val expenses = mutableListOf<Expense>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_expense_list)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        rvExpenses = findViewById(R.id.rv_expenses)
+        rvExpenses.layoutManager = LinearLayoutManager(this)
+
+        loadExpenses()
     }
+
+    private fun loadExpenses() {
+        expenses.clear()
+        expenses.addAll(JsonHelper.loadExpenses(this))
+        val adapter = ExpenseAdapter(expenses, this)
+        rvExpenses.adapter = adapter
+    }
+}
+
+// Simple Adapter
+class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
+    : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
+
+    class ViewHolder(val tv: android.widget.TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(tv)
+
+    override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
+        val tv = android.widget.TextView(parent.context)
+        tv.layoutParams = android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 120)
+        tv.setPadding(32, 16, 32, 16)
+        return ViewHolder(tv)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val exp = list[position]
+        var text = "${exp.date} | R${exp.amount} | ${exp.description}"
+        if (exp.photoUri != null) {
+            text += " (Photo attached - tap to view)"
+            holder.tv.setOnClickListener {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
+                intent.setDataAndType(android.net.Uri.parse(exp.photoUri), "image/*")
+                context.startActivity(intent)
+            }
+        }
+        holder.tv.text = text
+    }
+
+    override fun getItemCount() = list.size
 }
