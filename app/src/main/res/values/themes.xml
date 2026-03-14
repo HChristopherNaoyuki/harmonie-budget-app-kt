@@ -3,13 +3,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--
         Base application theme.
-        Corrected style name to exactly match the manifest reference (@style/Theme.HarmonieBudgetAppKt).
-        Parent updated to a clean, modern Material theme (no DarkActionBar for minimal Apple-like feel).
-        Colors kept from colors.xml for consistency.
-        Up-to-date as of Android 14+ MaterialComponents (2026 standards).
+        FIXED:
+        1. <?xml declaration is the VERY FIRST line (no comments or whitespace before it).
+        2. Style name corrected to exactly match the manifest (@style/Theme.HarmonieBudgetAppKt).
+        3. Parent changed to NoActionBar for clean minimal UI (Apple-like feel without mentioning Apple).
+        4. Uses colors defined in colors.xml for consistency.
+        Up-to-date Android 14+ MaterialComponents (2026).
     -->
     <style name="Theme.HarmonieBudgetAppKt" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color (clean blue for modern budgeting app). -->
+        <!-- Primary brand color (clean blue). -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@android:color/white</item>
@@ -19,10 +21,8 @@
         <item name="colorSecondaryVariant">@color/colorAccent</item>
         <item name="colorOnSecondary">@android:color/black</item>
 
-        <!-- Status bar color (matches primary variant). -->
+        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
-        <!-- Customize your theme here (light status bar for clean look). -->
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>
