@@ -1,20 +1,21 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--
         Application string resources.
 
         FIXED:
-        1. <?xml declaration is the VERY FIRST character in the file (no spaces, no comments, no blank lines before it).
-        2. This eliminates the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
-        3. All @string references from activity_expense.xml, activity_goal.xml, activity_category.xml, and MainActivity are now defined.
-        4. Up-to-date Android resource format (2026 standards).
+        1. The XML declaration <?xml version="1.0" encoding="utf-8"?> is now the VERY FIRST line.
+           No comments, no blank lines, and no spaces appear before it.
+        2. This directly resolves the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
+        3. The error occurred because Android resource merging requires the declaration to be the absolute first content.
+        4. All @string references used in your layouts and activities are defined here.
+        5. Format follows current Android 14+ (2026) resource standards.
     -->
 
     <!-- App name -->
     <string name="app_name">Harmonie Budget</string>
 
-    <!-- Activity: Expense (activity_expense.xml) -->
+    <!-- Activity: Expense -->
     <string name="hint_amount">Amount (R)</string>
     <string name="hint_date">Date (yyyy-MM-dd)</string>
     <string name="hint_description">Description</string>
@@ -22,16 +23,16 @@
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
-    <!-- Activity: Goal (activity_goal.xml) -->
+    <!-- Activity: Goal -->
     <string name="hint_min_goal">Minimum Monthly Goal</string>
     <string name="hint_max_goal">Maximum Monthly Goal</string>
     <string name="btn_save_goals">Save Goals</string>
 
-    <!-- Activity: Category (activity_category.xml) -->
+    <!-- Activity: Category -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
 
-    <!-- Login / General messages -->
+    <!-- General messages -->
     <string name="login_success">Login successful!</string>
     <string name="invalid_credentials">Invalid credentials</string>
     <string name="category_added">Category added</string>
