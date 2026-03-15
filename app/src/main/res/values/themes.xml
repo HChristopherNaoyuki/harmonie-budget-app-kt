@@ -4,12 +4,13 @@
         Base application theme.
 
         FIXED:
-        1. <?xml declaration is the VERY FIRST line of the file.
-           No comments, no blank lines, and no spaces appear before it.
-        2. This eliminates the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
-        3. The error occurred because Android resource merging requires the declaration to be the absolute first content.
-        4. Theme updated to modern MaterialComponents (NoActionBar) for clean UI and compatibility with Android 14+ (2026).
-        5. All colors and status bar settings match the app requirements.
+        1. The XML declaration <?xml version="1.0" encoding="utf-8"?> is now the absolute first line of the file.
+           No comments, no blank lines, and no whitespace appear before it.
+        2. This resolves the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
+        3. Android resource merging (packageDebugResources and mergeDebugResources) requires the declaration to be the very first content.
+        4. Theme parent updated to Theme.MaterialComponents.DayNight.NoActionBar for modern, clean UI without action bar.
+        5. Status bar configuration added for light mode compatibility (Android 14+, 2026 standards).
+        6. All color references match the project colors.xml.
     -->
 
     <!-- Base application theme -->
