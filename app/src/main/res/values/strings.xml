@@ -5,10 +5,10 @@
         Application string resources.
 
         FIXED:
-        - XML declaration is now the VERY FIRST line (no whitespace or comments before it).
-        - This resolves the SAXParseException: "XML declaration should precede all document content".
-        - All strings used in activity_expense.xml, activity_goal.xml, and other layouts are defined here.
-        - Up-to-date as of Android 14+ (2026) standards.
+        1. <?xml declaration is the VERY FIRST character in the file (no spaces, no comments, no blank lines before it).
+        2. This eliminates the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
+        3. All @string references from activity_expense.xml, activity_goal.xml, activity_category.xml, and MainActivity are now defined.
+        4. Up-to-date Android resource format (2026 standards).
     -->
 
     <!-- App name -->
@@ -31,11 +31,13 @@
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
 
-    <!-- Future strings (kept for completeness and to prevent future warnings) -->
+    <!-- Login / General messages -->
     <string name="login_success">Login successful!</string>
     <string name="invalid_credentials">Invalid credentials</string>
     <string name="category_added">Category added</string>
     <string name="expense_saved">Expense saved!</string>
     <string name="goals_saved">Goals saved</string>
+    <string name="username_exists">Username already exists</string>
+    <string name="enter_details">Enter details to register</string>
 
 </resources>
