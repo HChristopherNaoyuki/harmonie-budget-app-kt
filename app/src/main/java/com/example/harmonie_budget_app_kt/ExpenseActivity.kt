@@ -3,7 +3,6 @@ package com.example.harmonie_budget_app_kt
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -13,12 +12,11 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseActivity - Add new expense with optional photo.
- * Uses camera/gallery intent for photo (URI saved as string).
- * JSON persistence.
+ * ExpenseActivity - Create expense with optional photo attachment.
+ * Photo URI saved as string in expenses.json.
+ * All data in dedicated budget_data folder.
  */
 class ExpenseActivity : AppCompatActivity() {
-
     private lateinit var etAmount: EditText
     private lateinit var etDate: EditText
     private lateinit var etDescription: EditText
@@ -49,20 +47,16 @@ class ExpenseActivity : AppCompatActivity() {
             val date = etDate.text.toString().trim()
             val desc = etDescription.text.toString().trim()
             val catIdStr = etCategoryId.text.toString().trim()
-
             if (amountStr.isEmpty() || date.isEmpty() || desc.isEmpty() || catIdStr.isEmpty()) {
                 Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val amount = amountStr.toDoubleOrNull() ?: 0.0
             val catId = catIdStr.toIntOrNull() ?: 0
-
             val expenses = JsonHelper.loadExpenses(this).toMutableList()
             val maxId = if (expenses.isEmpty()) 0 else expenses.maxOf { it.id }
             expenses.add(Expense(maxId + 1, amount, date, desc, catId, photoUri))
             JsonHelper.saveExpenses(this, expenses)
-
             Toast.makeText(this, "Expense saved!", Toast.LENGTH_SHORT).show()
             finish()
         }

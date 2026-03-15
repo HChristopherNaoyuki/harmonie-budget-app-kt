@@ -1,32 +1,28 @@
-// app/src/main/java/com/example/harmonie_budget_app_kt/CategoryActivity.kt
+// app/kotlin+java/com.example.harmonie_budget_app_kt/CategoryActivity.kt
 package com.example.harmonie_budget_app_kt
 
+import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
-class CategoryActivity : AppCompatActivity()
-{
-    //
-    // Category management activity.
-    //
-    // FIXED:
-    // 1. All findViewById calls now use snake_case IDs that exist in activity_category.xml.
-    // 2. RecyclerView setup added with placeholder adapter.
-    // 3. Allman style used for braces and detailed comments.
-    // 4. Data loaded/saved via JsonHelper (models now defined).
-    //
-
+/**
+ * CategoryActivity - Create and view expense categories.
+ * Data saved to categories.json in budget_data folder.
+ * RecyclerView displays current categories (clean minimal list).
+ */
+class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
     private lateinit var btnAddCategory: Button
     private lateinit var rvCategories: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
 
@@ -36,23 +32,50 @@ class CategoryActivity : AppCompatActivity()
 
         rvCategories.layoutManager = LinearLayoutManager(this)
 
-        // Load existing categories
-        val categories = JsonHelper.loadList(this, "categories.json", Category::class.java)
-        // TODO: set adapter with categories (placeholder for now)
+        loadCategoriesAndSetAdapter()
 
-        btnAddCategory.setOnClickListener()
-        {
+        btnAddCategory.setOnClickListener {
             val name = etCategoryName.text.toString().trim()
-            if (name.isNotEmpty())
-            {
+            if (name.isNotEmpty()) {
+                val categories = JsonHelper.loadCategories(this).toMutableList()
                 val newId = (categories.maxOfOrNull { it.id } ?: 0) + 1
-                val newCategory = Category(newId, name)
-                val updated = categories.toMutableList()
-                updated.add(newCategory)
-                JsonHelper.saveList(this, "categories.json", updated)
+                categories.add(Category(newId, name))
+                JsonHelper.saveCategories(this, categories)
                 etCategoryName.text.clear()
-                // refresh RecyclerView
+                loadCategoriesAndSetAdapter()
+                Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    private fun loadCategoriesAndSetAdapter() {
+        val categories = JsonHelper.loadCategories(this)
+        val adapter = CategoryAdapter(categories, this)
+        rvCategories.adapter = adapter
+    }
+}
+
+/**
+ * Simple CategoryAdapter for RecyclerView.
+ */
+class CategoryAdapter(private val list: List<Category>, private val context: Context)
+    : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
+
+    override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
+        val tv = TextView(parent.context)
+        tv.layoutParams = android.view.ViewGroup.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            120
+        )
+        tv.setPadding(32, 16, 32, 16)
+        return ViewHolder(tv)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.tv.text = "${list[position].id} - ${list[position].name}"
+    }
+
+    override fun getItemCount() = list.size
 }

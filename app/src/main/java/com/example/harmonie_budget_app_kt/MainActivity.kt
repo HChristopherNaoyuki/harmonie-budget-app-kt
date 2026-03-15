@@ -11,12 +11,12 @@ import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * MainActivity - Login screen (Apple-like clean minimal UI).
- * Uses JSON for user persistence. Pre-populates a default user on first run.
- * Allman style brackets. Detailed comments for every step.
+ * MainActivity - Login and simple registration screen.
+ * Uses JSON for user persistence (users.json).
+ * Pre-creates a demo user on first launch.
+ * All data saved in dedicated budget_data folder.
  */
 class MainActivity : AppCompatActivity() {
-
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_register)
 
-        // Load or create default user on first launch
+        // Create default demo user if none exists
         val users = JsonHelper.loadUsers(this)
         if (users.isEmpty()) {
             JsonHelper.saveUsers(this, listOf(User("demo", "demo123")))
@@ -40,15 +40,12 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
-
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val loadedUsers = JsonHelper.loadUsers(this)
             val user = loadedUsers.find { it.username == username && it.password == password }
-
             if (user != null) {
                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, CategoryActivity::class.java))
@@ -59,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRegister.setOnClickListener {
-            // Simple register for prototype - saves new user
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
             if (username.isEmpty() || password.isEmpty()) {

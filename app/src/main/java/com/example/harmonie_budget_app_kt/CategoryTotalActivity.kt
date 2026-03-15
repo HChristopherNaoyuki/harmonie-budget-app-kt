@@ -8,11 +8,10 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * CategoryTotalActivity - Simple totals per category (prototype shows all).
- * TextView list for clean display.
+ * CategoryTotalActivity - Shows total spent per category.
+ * Simple TextView display for prototype.
  */
 class CategoryTotalActivity : AppCompatActivity() {
-
     private lateinit var tvTotals: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +21,9 @@ class CategoryTotalActivity : AppCompatActivity() {
         tvTotals = findViewById(R.id.tv_totals)
 
         val expenses = JsonHelper.loadExpenses(this)
-        val categoryMap = expenses.groupBy { it.categoryId }
-            .mapValues { it.value.sumOf { exp -> exp.amount } }
+        val categoryMap: Map<Int, Double> = expenses
+            .groupBy { it.categoryId }
+            .mapValues { (_, exps) -> exps.sumOf { it.amount } }
 
         val sb = StringBuilder("Category Totals:\n")
         categoryMap.forEach { (catId, total) ->

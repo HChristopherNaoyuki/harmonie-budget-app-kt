@@ -9,13 +9,12 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseListActivity - View all expenses in a selectable period (simple all for prototype).
- * RecyclerView with photo access (click to view URI if present).
+ * ExpenseListActivity - View list of all expenses.
+ * Photo can be opened by tapping the item.
+ * Data loaded from expenses.json.
  */
 class ExpenseListActivity : AppCompatActivity() {
-
     private lateinit var rvExpenses: RecyclerView
-    private val expenses = mutableListOf<Expense>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,18 +23,15 @@ class ExpenseListActivity : AppCompatActivity() {
         rvExpenses = findViewById(R.id.rv_expenses)
         rvExpenses.layoutManager = LinearLayoutManager(this)
 
-        loadExpenses()
-    }
-
-    private fun loadExpenses() {
-        expenses.clear()
-        expenses.addAll(JsonHelper.loadExpenses(this))
+        val expenses = JsonHelper.loadExpenses(this)
         val adapter = ExpenseAdapter(expenses, this)
         rvExpenses.adapter = adapter
     }
 }
 
-// Simple Adapter
+/**
+ * Simple ExpenseAdapter.
+ */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
