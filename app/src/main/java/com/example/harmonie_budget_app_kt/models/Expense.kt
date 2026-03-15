@@ -1,6 +1,12 @@
-// app/src/main/java/com/example/harmonie_budget_app_kt/Expense.kt
-data class Expense
-    (
+// app/kotlin+java/com.example.harmonie_budget_app_kt/models/Expense.kt
+package com.example.harmonie_budget_app_kt.models
+
+/**
+ * Expense model for budget tracking.
+ * Supports optional photo URI for receipt.
+ * Stored in expenses.json inside the budget_data folder.
+ */
+data class Expense(
     val id: Int,
     val amount: Double,
     val date: String,
@@ -8,11 +14,3 @@ data class Expense
     val categoryId: Int,
     val photoUri: String? = null
 )
-{
-    //
-    // Expense model for budget tracking.
-    //
-    // Supports optional photo URI for receipt.
-    // amount is used in CategoryTotalActivity grouping.
-    //
-}

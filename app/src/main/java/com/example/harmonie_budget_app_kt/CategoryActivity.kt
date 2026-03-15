@@ -1,11 +1,10 @@
 // app/kotlin+java/com.example.harmonie_budget_app_kt/CategoryActivity.kt
 package com.example.harmonie_budget_app_kt
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +12,10 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * CategoryActivity - Create and view expense categories.
- * Data saved to categories.json in budget_data folder.
- * RecyclerView displays current categories (clean minimal list).
+ * CategoryActivity - Create and manage expense categories.
+ * Data is saved to categories.json in the dedicated budget_data folder.
+ * RecyclerView shows current categories with clean minimal layout.
+ * All changes are persisted immediately.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -56,15 +56,15 @@ class CategoryActivity : AppCompatActivity() {
 }
 
 /**
- * Simple CategoryAdapter for RecyclerView.
+ * Simple adapter for RecyclerView in CategoryActivity.
  */
-class CategoryAdapter(private val list: List<Category>, private val context: Context)
-    : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(private val list: List<Category>, private val context: android.content.Context)
+    : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
-    class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
+    class ViewHolder(val tv: android.widget.TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(tv)
 
     override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
-        val tv = TextView(parent.context)
+        val tv = android.widget.TextView(parent.context)
         tv.layoutParams = android.view.ViewGroup.LayoutParams(
             android.view.ViewGroup.LayoutParams.MATCH_PARENT,
             120

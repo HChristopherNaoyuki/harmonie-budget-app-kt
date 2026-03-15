@@ -12,9 +12,9 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseActivity - Create expense with optional photo attachment.
- * Photo URI saved as string in expenses.json.
- * All data in dedicated budget_data folder.
+ * ExpenseActivity - Add new expense with optional photo.
+ * Photo URI is saved as string.
+ * All data persisted to expenses.json in budget_data folder.
  */
 class ExpenseActivity : AppCompatActivity() {
     private lateinit var etAmount: EditText
@@ -53,7 +53,9 @@ class ExpenseActivity : AppCompatActivity() {
             }
             val amount = amountStr.toDoubleOrNull() ?: 0.0
             val catId = catIdStr.toIntOrNull() ?: 0
-            val expenses = JsonHelper.loadExpenses(this).toMutableList()
+
+            // Explicit mutable list to resolve inference
+            val expenses: MutableList<Expense> = JsonHelper.loadExpenses(this).toMutableList()
             val maxId = if (expenses.isEmpty()) 0 else expenses.maxOf { it.id }
             expenses.add(Expense(maxId + 1, amount, date, desc, catId, photoUri))
             JsonHelper.saveExpenses(this, expenses)

@@ -12,12 +12,11 @@ import java.io.File
 
 /**
  * JsonHelper
- * Handles all local JSON persistence using app-private internal storage.
- * Dedicated folder: budget_data inside filesDir.
- * Creates folder and files automatically if they do not exist.
- * Uses Gson 2.10.1 (declared in build.gradle.kts).
- * All methods are static via object for easy access from any Activity.
- * No query language or RoomDB is used - pure JSON as required.
+ * Handles ALL local JSON persistence.
+ * Dedicated folder: budget_data inside app's filesDir.
+ * Files created automatically if missing.
+ * No RoomDB or query language - pure JSON only.
+ * Gson 2.10.1 is used (declared in build.gradle.kts).
  */
 object JsonHelper {
     private const val DATA_DIR_NAME = "budget_data"
@@ -30,9 +29,6 @@ object JsonHelper {
         return dir
     }
 
-    /**
-     * Generic save for any List<T>.
-     */
     fun <T> saveList(context: Context, fileName: String, list: List<T>) {
         val file = File(getDataDir(context), fileName)
         val gson = Gson()
@@ -40,9 +36,6 @@ object JsonHelper {
         file.writeText(json)
     }
 
-    /**
-     * Generic load for any List<T>.
-     */
     fun <T> loadList(context: Context, fileName: String, clazz: Class<T>): List<T> {
         val file = File(getDataDir(context), fileName)
         if (!file.exists()) {
@@ -54,9 +47,6 @@ object JsonHelper {
         return gson.fromJson(json, type) ?: emptyList()
     }
 
-    /**
-     * Specific methods for each model (added to resolve unresolved references).
-     */
     fun saveUsers(context: Context, users: List<User>) {
         saveList(context, "users.json", users)
     }
