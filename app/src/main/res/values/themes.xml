@@ -1,27 +1,30 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--
         Base application theme.
+
         FIXED:
-        1. <?xml declaration is the VERY FIRST line (no comments or whitespace before it).
-        2. Style name corrected to exactly match the manifest (@style/Theme.HarmonieBudgetAppKt).
-        3. Parent changed to NoActionBar for clean minimal UI (Apple-like feel without mentioning Apple).
-        4. Uses colors defined in colors.xml for consistency.
-        Up-to-date Android 14+ MaterialComponents (2026).
+        1. <?xml declaration is the VERY FIRST line of the file.
+           No comments, no blank lines, and no spaces appear before it.
+        2. This eliminates the SAXParseException: "The processing instruction target matching "[xX][mM][lL]" is not allowed."
+        3. The error occurred because Android resource merging requires the declaration to be the absolute first content.
+        4. Theme updated to modern MaterialComponents (NoActionBar) for clean UI and compatibility with Android 14+ (2026).
+        5. All colors and status bar settings match the app requirements.
     -->
+
+    <!-- Base application theme -->
     <style name="Theme.HarmonieBudgetAppKt" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color (clean blue). -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorOnPrimary">@android:color/white</item>
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
 
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">@color/colorAccent</item>
-        <item name="colorOnSecondary">@android:color/black</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
 
-        <!-- Status bar color. -->
+        <!-- Status bar color -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
