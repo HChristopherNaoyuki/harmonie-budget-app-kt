@@ -1,11 +1,14 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/models/Goal.kt
-package com.example.harmonie_budget_app_kt.models
-
-/**
- * Monthly spending goal model (min and max total).
- * For prototype, global monthly goal; per-category limits can be extended later.
- */
-data class Goal(
+// app/src/main/java/com/example/harmonie_budget_app_kt/Goal.kt
+data class Goal
+    (
     val minMonthly: Double,
     val maxMonthly: Double
 )
+{
+    //
+    // Monthly goal model.
+    //
+    // Stored as single object in JSON.
+    // minMonthly and maxMonthly used in GoalActivity.
+    //
+}

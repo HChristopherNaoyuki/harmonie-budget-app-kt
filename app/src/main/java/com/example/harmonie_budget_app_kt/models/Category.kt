@@ -1,11 +1,14 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/models/Category.kt
-package com.example.harmonie_budget_app_kt.models
-
-/**
- * Category model for expense grouping (e.g., Groceries, Transport).
- * ID is auto-incremented for uniqueness.
- */
-data class Category(
+// app/src/main/java/com/example/harmonie_budget_app_kt/Category.kt
+data class Category
+    (
     val id: Int,
     val name: String
 )
+{
+    //
+    // Category model for expense grouping.
+    //
+    // id is auto-generated in JsonHelper.
+    // name is user-entered.
+    //
+}
