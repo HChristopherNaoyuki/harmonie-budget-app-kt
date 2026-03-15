@@ -12,10 +12,9 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * CategoryActivity - Create and manage expense categories.
- * Data is saved to categories.json in the dedicated budget_data folder.
- * RecyclerView shows current categories with clean minimal layout.
- * All changes are persisted immediately.
+ * CategoryActivity - Create and view expense categories.
+ * Data saved to categories.json in the budget_data folder.
+ * RecyclerView provides clean list display.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -56,7 +55,7 @@ class CategoryActivity : AppCompatActivity() {
 }
 
 /**
- * Simple adapter for RecyclerView in CategoryActivity.
+ * Simple adapter for category list.
  */
 class CategoryAdapter(private val list: List<Category>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {

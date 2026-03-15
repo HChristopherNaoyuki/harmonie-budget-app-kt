@@ -9,8 +9,8 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseListActivity - View list of all expenses.
- * Photo can be opened by tapping the item.
+ * ExpenseListActivity - View all expenses (prototype shows every entry).
+ * Tap item to open attached photo if present.
  * Data loaded from expenses.json.
  */
 class ExpenseListActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ class ExpenseListActivity : AppCompatActivity() {
 }
 
 /**
- * Simple ExpenseAdapter.
+ * Simple adapter for expense list.
  */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
@@ -39,7 +39,10 @@ class ExpenseAdapter(private val list: List<Expense>, private val context: andro
 
     override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
         val tv = android.widget.TextView(parent.context)
-        tv.layoutParams = android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 120)
+        tv.layoutParams = android.view.ViewGroup.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            120
+        )
         tv.setPadding(32, 16, 32, 16)
         return ViewHolder(tv)
     }

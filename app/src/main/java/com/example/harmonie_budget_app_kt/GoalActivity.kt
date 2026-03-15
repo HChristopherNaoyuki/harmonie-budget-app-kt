@@ -11,7 +11,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
  * GoalActivity - Set minimum and maximum monthly spending goals.
- * Saved to goal.json in budget_data folder.
+ * Data saved to goal.json in budget_data folder.
  */
 class GoalActivity : AppCompatActivity() {
     private lateinit var etMinGoal: EditText
@@ -26,7 +26,6 @@ class GoalActivity : AppCompatActivity() {
         etMaxGoal = findViewById(R.id.et_max_goal)
         btnSaveGoal = findViewById(R.id.btn_save_goal)
 
-        // Load existing or default to 0
         val current = JsonHelper.loadGoal(this) ?: Goal(0.0, 0.0)
         etMinGoal.setText(current.minMonthly.toString())
         etMaxGoal.setText(current.maxMonthly.toString())

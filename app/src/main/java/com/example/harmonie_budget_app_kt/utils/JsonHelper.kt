@@ -12,11 +12,11 @@ import java.io.File
 
 /**
  * JsonHelper
- * Handles ALL local JSON persistence.
- * Dedicated folder: budget_data inside app's filesDir.
- * Files created automatically if missing.
- * No RoomDB or query language - pure JSON only.
- * Gson 2.10.1 is used (declared in build.gradle.kts).
+ * Central helper for all JSON persistence.
+ * Creates and uses a dedicated budget_data folder inside the app's filesDir.
+ * All files are created automatically if they do not exist.
+ * Pure JSON only - no database or query language.
+ * Gson 2.10.1 is used.
  */
 object JsonHelper {
     private const val DATA_DIR_NAME = "budget_data"

@@ -11,10 +11,11 @@ import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * MainActivity - Login and simple registration screen.
- * Uses JSON for user persistence (users.json).
- * Pre-creates a demo user on first launch.
- * All data saved in dedicated budget_data folder.
+ * MainActivity - Login screen with two buttons: Login and Register.
+ * Login uses username and password.
+ * Register button opens RegisterActivity with full form (name, surname, etc.).
+ * Default demo user is created on first launch if none exists.
+ * All data saved to users.json in budget_data folder.
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var etUsername: EditText
@@ -31,10 +32,10 @@ class MainActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_register)
 
-        // Create default demo user if none exists
+        // Create default demo user on first run
         val users = JsonHelper.loadUsers(this)
         if (users.isEmpty()) {
-            JsonHelper.saveUsers(this, listOf(User("demo", "demo123")))
+            JsonHelper.saveUsers(this, listOf(User("Demo", "User", "demo", "demo123")))
         }
 
         btnLogin.setOnClickListener {
@@ -56,20 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRegister.setOnClickListener {
-            val username = etUsername.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Enter details to register", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val currentUsers = JsonHelper.loadUsers(this).toMutableList()
-            if (currentUsers.any { it.username == username }) {
-                Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
-            } else {
-                currentUsers.add(User(username, password))
-                JsonHelper.saveUsers(this, currentUsers)
-                Toast.makeText(this, "Registered! Now login.", Toast.LENGTH_SHORT).show()
-            }
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }

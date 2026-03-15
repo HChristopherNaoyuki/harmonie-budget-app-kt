@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions for camera and storage (photo attachment) -->
+    <!-- Permissions required for photo attachment (camera and storage) -->
+    <!-- These are used only when the user chooses to attach a receipt photo -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,7 +19,8 @@
         android:theme="@style/Theme.HarmonieBudgetAppKt"
         tools:targetApi="31">
 
-        <!-- Main Login Activity -->
+        <!-- Main Login Screen (launcher activity) -->
+        <!-- This is the entry point of the app -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,27 +31,44 @@
             </intent-filter>
         </activity>
 
-        <!-- Category Management -->
+        <!-- Register Screen -->
+        <!-- Opened from the Login screen when the user taps the Register button -->
+        <!-- Contains fields: Name, Surname, Username, Password, Confirm Password -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- Category Management Screen -->
+        <!-- User can create and view expense categories -->
+        <!-- Data persisted in categories.json -->
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
 
-        <!-- Expense Entry -->
+        <!-- Expense Entry Screen -->
+        <!-- User adds new expense with amount, date, description, category, and optional photo -->
+        <!-- Data persisted in expenses.json -->
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
 
-        <!-- Goal Setting -->
+        <!-- Goal Setting Screen -->
+        <!-- User sets minimum and maximum monthly spending goals -->
+        <!-- Data persisted in goal.json -->
         <activity
             android:name=".GoalActivity"
             android:exported="false" />
 
-        <!-- Expense List View -->
+        <!-- Expense List Screen -->
+        <!-- Displays all expenses with option to view attached photos -->
+        <!-- Data loaded from expenses.json -->
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
 
-        <!-- Category Totals View -->
+        <!-- Category Totals Screen -->
+        <!-- Shows total spending per category -->
+        <!-- Data calculated from expenses.json -->
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />
