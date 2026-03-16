@@ -1,16 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Harmoniebudgetappkt" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
+    <!--
+        Night theme for dark mode support.
+        Style name exactly matches the main theme to prevent merging conflicts.
+        All colors reference the definitions in colors.xml (white, black, purple_200, etc.).
+        This resolves the "resource color/... not found" errors in values-night-v8.
+    -->
+    <style name="Theme.HarmonieBudgetAppKt" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
