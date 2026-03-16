@@ -3,36 +3,62 @@ package com.example.harmonie_budget_app_kt
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * GoalActivity - Set minimum and maximum monthly spending goals.
+ * GoalActivity
+ * Uses SeekBar for min and max goals.
+ * Fixed: used string resources instead of concatenation.
  * Data saved to goal.json in budget_data folder.
  */
 class GoalActivity : AppCompatActivity() {
-    private lateinit var etMinGoal: EditText
-    private lateinit var etMaxGoal: EditText
-    private lateinit var btnSaveGoal: Button
+    private lateinit var seekMin: SeekBar
+    private lateinit var seekMax: SeekBar
+    private lateinit var tvMin: TextView
+    private lateinit var tvMax: TextView
+    private lateinit var btnSave: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal)
 
-        etMinGoal = findViewById(R.id.et_min_goal)
-        etMaxGoal = findViewById(R.id.et_max_goal)
-        btnSaveGoal = findViewById(R.id.btn_save_goal)
+        seekMin = findViewById(R.id.seek_min)
+        seekMax = findViewById(R.id.seek_max)
+        tvMin = findViewById(R.id.tv_min_goal)
+        tvMax = findViewById(R.id.tv_max_goal)
+        btnSave = findViewById(R.id.btn_save_goal)
 
         val current = JsonHelper.loadGoal(this) ?: Goal(0.0, 0.0)
-        etMinGoal.setText(current.minMonthly.toString())
-        etMaxGoal.setText(current.maxMonthly.toString())
+        seekMin.progress = (current.minMonthly * 10).toInt()
+        seekMax.progress = (current.maxMonthly * 10).toInt()
 
-        btnSaveGoal.setOnClickListener {
-            val min = etMinGoal.text.toString().toDoubleOrNull() ?: 0.0
-            val max = etMaxGoal.text.toString().toDoubleOrNull() ?: 0.0
+        updateMinText(current.minMonthly)
+        updateMaxText(current.maxMonthly)
+
+        seekMin.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                updateMinText(progress / 10.0)
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        seekMax.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                updateMaxText(progress / 10.0)
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        btnSave.setOnClickListener {
+            val min = seekMin.progress / 10.0
+            val max = seekMax.progress / 10.0
             if (min > max) {
                 Toast.makeText(this, "Min cannot exceed Max", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -40,5 +66,13 @@ class GoalActivity : AppCompatActivity() {
             JsonHelper.saveGoal(this, Goal(min, max))
             Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun updateMinText(value: Double) {
+        tvMin.text = getString(R.string.hint_min_goal) + ": R" + value
+    }
+
+    private fun updateMaxText(value: Double) {
+        tvMax.text = getString(R.string.hint_max_goal) + ": R" + value
     }
 }

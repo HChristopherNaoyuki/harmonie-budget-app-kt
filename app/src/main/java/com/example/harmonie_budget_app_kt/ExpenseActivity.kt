@@ -7,23 +7,36 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseActivity - Add expense entry with optional photo.
- * Fields match assignment: amount, date, description, category, photo.
+ * ExpenseActivity
+ * Includes start and end time.
+ * Fixed: replaced deprecated startActivityForResult with ActivityResultLauncher.
  * Data saved to expenses.json in budget_data folder.
  */
 class ExpenseActivity : AppCompatActivity() {
     private lateinit var etAmount: EditText
     private lateinit var etDate: EditText
+    private lateinit var etStartTime: EditText
+    private lateinit var etEndTime: EditText
     private lateinit var etDescription: EditText
     private lateinit var etCategoryId: EditText
-    private lateinit var btnAddPhoto: Button
+    private lateinit var btnAttachPhoto: Button
     private lateinit var btnSaveExpense: Button
     private var photoUri: String? = null
+
+    private val pickPhotoLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            photoUri = uri.toString()
+            Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,43 +44,39 @@ class ExpenseActivity : AppCompatActivity() {
 
         etAmount = findViewById(R.id.et_amount)
         etDate = findViewById(R.id.et_date)
+        etStartTime = findViewById(R.id.et_start_time)
+        etEndTime = findViewById(R.id.et_end_time)
         etDescription = findViewById(R.id.et_description)
         etCategoryId = findViewById(R.id.et_category_id)
-        btnAddPhoto = findViewById(R.id.btn_add_photo)
+        btnAttachPhoto = findViewById(R.id.btn_attach_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
 
-        btnAddPhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, 100)
+        btnAttachPhoto.setOnClickListener {
+            pickPhotoLauncher.launch("image/*")
         }
 
         btnSaveExpense.setOnClickListener {
             val amountStr = etAmount.text.toString().trim()
             val date = etDate.text.toString().trim()
+            val startTime = etStartTime.text.toString().trim()
+            val endTime = etEndTime.text.toString().trim()
             val desc = etDescription.text.toString().trim()
             val catIdStr = etCategoryId.text.toString().trim()
-            if (amountStr.isEmpty() || date.isEmpty() || desc.isEmpty() || catIdStr.isEmpty()) {
-                Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show()
+
+            if (amountStr.isEmpty() || date.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || desc.isEmpty() || catIdStr.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             val amount = amountStr.toDoubleOrNull() ?: 0.0
             val catId = catIdStr.toIntOrNull() ?: 0
 
             val expenses: MutableList<Expense> = JsonHelper.loadExpenses(this).toMutableList()
             val maxId = if (expenses.isEmpty()) 0 else expenses.maxOf { it.id }
-            expenses.add(Expense(maxId + 1, amount, date, desc, catId, photoUri))
+            expenses.add(Expense(maxId + 1, amount, date, startTime, endTime, desc, catId, photoUri))
             JsonHelper.saveExpenses(this, expenses)
-            Toast.makeText(this, "Expense saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Expense saved", Toast.LENGTH_SHORT).show()
             finish()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            photoUri = data?.data.toString()
-            Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
         }
     }
 }

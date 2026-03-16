@@ -3,27 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-        Camera permission is required only when the user chooses to attach a receipt photo.
-        Declared as optional so the app runs on devices without a camera.
+        Camera permission is optional.
+        READ_MEDIA_IMAGES is used only for optional receipt photo selection.
+        Core use case is budget tracking (not persistent or frequent photo access).
+        On Android 14+ the system automatically shows Selected Photos dialog for ACTION_PICK.
     -->
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <!--
-        Modern photo access permission for Android 13+ (API 33) and higher.
-        READ_MEDIA_IMAGES replaces the deprecated READ_EXTERNAL_STORAGE.
-        This permission is used only for selecting receipt photos via the system gallery picker.
-        The core use case of the app is budget tracking, not persistent or frequent media access.
-        On Android 14+ (API 34+), the system automatically shows the "Selected Photos" permission dialog
-        when ACTION_PICK is used. No additional manifest changes are required for this behavior.
-        This resolves the "Selected Photos Access" and "broad access" warnings.
-    -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-    <!--
-        Hardware feature declaration for camera.
-        This directly resolves the lint warning about a permission without a matching uses-feature tag.
-        The feature is not required (required="false").
-    -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
@@ -37,11 +23,6 @@
         android:theme="@style/Theme.HarmonieBudgetAppKt"
         tools:targetApi="36">
 
-        <!--
-            Main login screen - launcher activity.
-            Contains only the two buttons: Login and Register, as required.
-            The redundant label warning is resolved by using the application-level label only.
-        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -51,32 +32,26 @@
             </intent-filter>
         </activity>
 
-        <!-- Register screen with full form: Name, Surname, Username, Password, Confirm Password -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
 
-        <!-- Category management screen -->
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
 
-        <!-- Expense entry screen (amount, date, description, category, optional photo) -->
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
 
-        <!-- Goal setting screen (minimum and maximum monthly goals) -->
         <activity
             android:name=".GoalActivity"
             android:exported="false" />
 
-        <!-- Expense list screen with photo viewing support -->
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
 
-        <!-- Category totals screen -->
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />

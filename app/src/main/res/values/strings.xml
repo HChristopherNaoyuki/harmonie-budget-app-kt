@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App name -->
+    <!-- App name and common strings -->
     <string name="app_name">Harmonie Budget</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
 
     <!-- Login screen -->
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-    <string name="btn_login">Login</string>
-    <string name="btn_register">Register</string>
 
     <!-- Register screen -->
     <string name="title_register">Register</string>
@@ -15,16 +15,30 @@
     <string name="hint_surname">Surname</string>
     <string name="hint_confirm_password">Confirm Password</string>
 
-    <!-- Other screens (kept for completeness) -->
+    <!-- Expense entry screen -->
     <string name="hint_amount">Amount (R)</string>
     <string name="hint_date">Date (yyyy-MM-dd)</string>
+    <string name="hint_start_time">Start Time</string>
+    <string name="hint_end_time">End Time</string>
     <string name="hint_description">Description</string>
     <string name="hint_category_id">Category ID</string>
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
+
+    <!-- Goal screen -->
     <string name="hint_min_goal">Minimum Monthly Goal</string>
     <string name="hint_max_goal">Maximum Monthly Goal</string>
     <string name="btn_save_goals">Save Goals</string>
+
+    <!-- Category screen -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
+
+    <!-- Expense list screen -->
+    <string name="hint_from_date">From Date</string>
+    <string name="hint_to_date">To Date</string>
+    <string name="btn_filter">Filter Period</string>
+
+    <!-- Category total screen -->
+    <string name="title_category_totals">Category Totals</string>
 </resources>

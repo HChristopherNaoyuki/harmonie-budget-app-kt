@@ -12,9 +12,10 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * CategoryActivity - Create and view expense categories.
- * Data saved to categories.json in the budget_data folder.
- * RecyclerView provides clean list display.
+ * CategoryActivity
+ * Creates and displays categories.
+ * Data saved to categories.json in budget_data folder.
+ * Fixed: used string resource for name display, removed unused context parameter.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -49,15 +50,17 @@ class CategoryActivity : AppCompatActivity() {
 
     private fun loadCategoriesAndSetAdapter() {
         val categories = JsonHelper.loadCategories(this)
-        val adapter = CategoryAdapter(categories, this)
+        val adapter = CategoryAdapter(categories)
         rvCategories.adapter = adapter
     }
 }
 
 /**
- * Simple adapter for category list.
+ * CategoryAdapter
+ * Simple list adapter using TextView.
+ * Fixed: removed unused context, used string resource.
  */
-class CategoryAdapter(private val list: List<Category>, private val context: android.content.Context)
+class CategoryAdapter(private val list: List<Category>)
     : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     class ViewHolder(val tv: android.widget.TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(tv)
