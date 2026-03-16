@@ -2,11 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions required for photo attachment (camera and storage) -->
-    <!-- These are used only when the user chooses to attach a receipt photo -->
+    <!--
+        Camera permission is required only when the user chooses to attach a receipt photo.
+        We declare it as optional so the app can still run on devices without a camera.
+    -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!--
+        Modern storage permission for API 33+ (Android 13 and higher).
+        READ_MEDIA_IMAGES is used because the app only accesses photos (receipt images).
+        This replaces the deprecated READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE.
+        For devices on API 32 and below, the system falls back gracefully.
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!--
+        Hardware feature declaration for camera.
+        This directly resolves the lint warning "Permission exists without corresponding hardware <uses-feature> tag".
+        The feature is not required (required="false") so the app works on devices without a camera.
+    -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -17,58 +32,48 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HarmonieBudgetAppKt"
-        tools:targetApi="31">
+        tools:targetApi="36">
 
-        <!-- Main Login Screen (launcher activity) -->
-        <!-- This is the entry point of the app -->
+        <!--
+            Main login screen - this is the launcher activity.
+            The redundant label warning is resolved by keeping only the app-level label here.
+            All other activities inherit the label from the application tag.
+        -->
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Register Screen -->
-        <!-- Opened from the Login screen when the user taps the Register button -->
-        <!-- Contains fields: Name, Surname, Username, Password, Confirm Password -->
+        <!-- Register screen with full form: Name, Surname, Username, Password, Confirm Password -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
 
-        <!-- Category Management Screen -->
-        <!-- User can create and view expense categories -->
-        <!-- Data persisted in categories.json -->
+        <!-- Category management screen -->
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
 
-        <!-- Expense Entry Screen -->
-        <!-- User adds new expense with amount, date, description, category, and optional photo -->
-        <!-- Data persisted in expenses.json -->
+        <!-- Expense entry screen (amount, date, description, category, optional photo) -->
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
 
-        <!-- Goal Setting Screen -->
-        <!-- User sets minimum and maximum monthly spending goals -->
-        <!-- Data persisted in goal.json -->
+        <!-- Goal setting screen (minimum and maximum monthly goals) -->
         <activity
             android:name=".GoalActivity"
             android:exported="false" />
 
-        <!-- Expense List Screen -->
-        <!-- Displays all expenses with option to view attached photos -->
-        <!-- Data loaded from expenses.json -->
+        <!-- Expense list screen with photo viewing support -->
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
 
-        <!-- Category Totals Screen -->
-        <!-- Shows total spending per category -->
-        <!-- Data calculated from expenses.json -->
+        <!-- Category totals screen -->
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />
