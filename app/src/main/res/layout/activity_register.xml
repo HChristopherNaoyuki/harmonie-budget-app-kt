@@ -4,25 +4,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F5F5F0"
     android:padding="32dp">
 
-    <!-- Name -->
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textSize="28sp"
+        android:textColor="#1C1C1E"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp" />
+
+    <!-- Name field (clean Material style like the image forms) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Name"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Surname -->
+    <!-- Surname field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_surname"
         android:layout_width="0dp"
@@ -38,7 +53,7 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Username -->
+    <!-- Username field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_username"
         android:layout_width="0dp"
@@ -54,7 +69,7 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Password -->
+    <!-- Password field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_password"
         android:layout_width="0dp"
@@ -71,9 +86,9 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Confirm Password -->
+    <!-- Confirm Password field -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_confirm"
+        android:id="@+id/til_confirm_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Confirm Password"
@@ -88,16 +103,18 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Register Button -->
+    <!-- Register button (rounded, green accent like the image) -->
     <Button
         android:id="@+id/btn_register"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:background="@drawable/rounded_button"
-        app:layout_constraintTop_toBottomOf="@id/til_confirm"
+        android:backgroundTint="#34C759"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/til_confirm_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="32dp"
+        android:paddingVertical="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

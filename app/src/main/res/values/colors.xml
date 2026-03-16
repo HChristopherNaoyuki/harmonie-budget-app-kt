@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-        Color resources for the application theme.
-
-        FIXED:
-        1. All colors referenced in themes.xml (purple_500, purple_700, teal_200, teal_700, white, black) are now defined.
-        2. This resolves the Android resource linking failure: "resource color/purple_500 not found" and similar errors in values.xml and values-night-v8.xml.
-        3. Values match the default Material Design palette used in modern Android 14+ projects (2026 standards).
-        4. No external sources used; based solely on standard Android color naming from the project manifest and theme parent.
-    -->
-
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Light beige background used across all screens to match the GUI image -->
+    <color name="background_light">#F5F5F0</color>
+    <!-- Blue accent for buttons and highlights (matches the image buttons) -->
+    <color name="accent_blue">#007AFF</color>
+    <!-- Green accent for positive actions and leaf icon style (matches the image) -->
+    <color name="accent_green">#34C759</color>
+    <!-- Primary text color for clean readability -->
+    <color name="text_primary">#1C1C1E</color>
+    <!-- White card background for rounded cards in all screens -->
+    <color name="card_background">#FFFFFF</color>
 </resources>
