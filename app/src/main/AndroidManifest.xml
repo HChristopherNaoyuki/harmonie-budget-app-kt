@@ -4,22 +4,25 @@
 
     <!--
         Camera permission is required only when the user chooses to attach a receipt photo.
-        We declare it as optional so the app can still run on devices without a camera.
+        Declared as optional so the app runs on devices without a camera.
     -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!--
-        Modern storage permission for API 33+ (Android 13 and higher).
-        READ_MEDIA_IMAGES is used because the app only accesses photos (receipt images).
-        This replaces the deprecated READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE.
-        For devices on API 32 and below, the system falls back gracefully.
+        Modern photo access permission for Android 13+ (API 33) and higher.
+        READ_MEDIA_IMAGES replaces the deprecated READ_EXTERNAL_STORAGE.
+        This permission is used only for selecting receipt photos via the system gallery picker.
+        The core use case of the app is budget tracking, not persistent or frequent media access.
+        On Android 14+ (API 34+), the system automatically shows the "Selected Photos" permission dialog
+        when ACTION_PICK is used. No additional manifest changes are required for this behavior.
+        This resolves the "Selected Photos Access" and "broad access" warnings.
     -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <!--
         Hardware feature declaration for camera.
-        This directly resolves the lint warning "Permission exists without corresponding hardware <uses-feature> tag".
-        The feature is not required (required="false") so the app works on devices without a camera.
+        This directly resolves the lint warning about a permission without a matching uses-feature tag.
+        The feature is not required (required="false").
     -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
@@ -35,9 +38,9 @@
         tools:targetApi="36">
 
         <!--
-            Main login screen - this is the launcher activity.
-            The redundant label warning is resolved by keeping only the app-level label here.
-            All other activities inherit the label from the application tag.
+            Main login screen - launcher activity.
+            Contains only the two buttons: Login and Register, as required.
+            The redundant label warning is resolved by using the application-level label only.
         -->
         <activity
             android:name=".MainActivity"
