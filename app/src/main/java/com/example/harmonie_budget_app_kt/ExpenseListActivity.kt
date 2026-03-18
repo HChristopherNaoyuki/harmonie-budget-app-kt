@@ -13,6 +13,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * Displays expense list with photo access.
  * Data loaded from expenses.json in budget_data folder.
  * Fixed: removed redundant qualifiers.
+ * Used KTX extension toUri for photo (as suggested).
  */
 class ExpenseListActivity : AppCompatActivity() {
     private lateinit var rvExpenses: RecyclerView
@@ -34,6 +35,7 @@ class ExpenseListActivity : AppCompatActivity() {
  * ExpenseAdapter
  * Simple list adapter.
  * Fixed: removed redundant qualifiers.
+ * Used toUri extension for photo URI.
  */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
@@ -57,7 +59,7 @@ class ExpenseAdapter(private val list: List<Expense>, private val context: andro
             text += " (Photo attached - tap to view)"
             holder.tv.setOnClickListener {
                 val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
-                intent.setDataAndType(android.net.Uri.parse(exp.photoUri), "image/*")
+                intent.setDataAndType(android.net.Uri.parse(exp.photoUri).toUri(), "image/*")
                 context.startActivity(intent)
             }
         }

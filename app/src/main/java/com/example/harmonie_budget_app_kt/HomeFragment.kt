@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 /**
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment
  * Dashboard screen with "My Dashboard" and buttons for add new and edit budget.
  * Buttons open existing activities (ExpenseActivity and GoalActivity).
  * Matches the Home tab in the image.
- * Fixed: used string resource for setText.
+ * Fixed: removed unused import directive.
  */
 class HomeFragment : Fragment() {
 
