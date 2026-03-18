@@ -11,10 +11,11 @@ import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * MainActivity - Login screen with two buttons: Login and Register.
- * Login uses username and password.
- * Register button opens RegisterActivity with full form (name, surname, etc.).
- * Default demo user is created on first launch if none exists.
+ * MainActivity
+ * Login screen with username and password fields, Login and Register buttons.
+ * On successful login, starts DashboardActivity with bottom navigation.
+ * On register button, starts RegisterActivity.
+ * Default demo user created on first launch.
  * All data saved to users.json in budget_data folder.
  */
 class MainActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_register)
 
-        // Create default demo user on first run
+        // Create default demo user if none exists
         val users = JsonHelper.loadUsers(this)
         if (users.isEmpty()) {
             JsonHelper.saveUsers(this, listOf(User("Demo", "User", "demo", "demo123")))
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             val user = loadedUsers.find { it.username == username && it.password == password }
             if (user != null) {
                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, CategoryActivity::class.java))
+                startActivity(Intent(this, DashboardActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
