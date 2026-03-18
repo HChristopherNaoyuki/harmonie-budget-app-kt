@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme matching the clean, minimal GUI image style -->
-    <!-- No action bar, light theme, Material3 components for rounded elements and white space -->
+<resources>
+
+    <!--
+        Main application theme.
+        Uses MaterialComponents for clean, minimal design with rounded elements and no action bar.
+        No unused namespace declarations.
+    -->
     <style name="Theme.HarmonieBudgetAppKt" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/accent_blue</item>
-        <item name="colorPrimaryVariant">@color/accent_blue</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/accent_green</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/background_light</item>
+        <item name="colorPrimary">#007AFF</item>
+        <item name="colorPrimaryVariant">#007AFF</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#34C759</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:statusBarColor">#F5F5F0</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:background">@color/background_light</item>
+        <item name="android:background">#F5F5F0</item>
     </style>
+
 </resources>

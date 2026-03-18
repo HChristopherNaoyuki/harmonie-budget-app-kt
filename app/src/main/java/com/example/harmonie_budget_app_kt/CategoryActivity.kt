@@ -4,6 +4,7 @@ package com.example.harmonie_budget_app_kt
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * CategoryActivity
  * Creates and displays categories.
  * Data saved to categories.json in budget_data folder.
- * Fixed: added import for TextView, removed redundant qualifiers.
+ * Fixed: added import for TextView, removed all redundant qualifiers.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -58,7 +59,7 @@ class CategoryActivity : AppCompatActivity() {
 /**
  * CategoryAdapter
  * Simple list adapter.
- * Fixed: added import for TextView, removed redundant qualifiers.
+ * Fixed: added import for TextView, removed all redundant qualifiers.
  */
 class CategoryAdapter(private val list: List<Category>)
     : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {

@@ -13,7 +13,7 @@ import androidx.core.net.toUri
  * ExpenseListActivity
  * Displays expense list with photo access.
  * Data loaded from expenses.json in budget_data folder.
- * Fixed: added import for toUri extension, removed redundant qualifiers.
+ * Fixed: added import androidx.core.net.toUri, removed redundant qualifiers.
  */
 class ExpenseListActivity : AppCompatActivity() {
     private lateinit var rvExpenses: RecyclerView
@@ -34,8 +34,7 @@ class ExpenseListActivity : AppCompatActivity() {
 /**
  * ExpenseAdapter
  * Simple list adapter.
- * Fixed: removed redundant qualifiers.
- * Used toUri extension for photo URI.
+ * Fixed: removed redundant qualifiers, used KTX toUri extension.
  */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
@@ -59,7 +58,7 @@ class ExpenseAdapter(private val list: List<Expense>, private val context: andro
             text += " (Photo attached - tap to view)"
             holder.tv.setOnClickListener {
                 val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
-                intent.setDataAndType(android.net.Uri.parse(exp.photoUri).toUri(), "image/*")
+                intent.setDataAndType(exp.photoUri.toUri(), "image/*")
                 context.startActivity(intent)
             }
         }
