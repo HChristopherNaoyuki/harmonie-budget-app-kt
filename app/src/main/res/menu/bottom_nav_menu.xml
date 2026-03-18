@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Home tab - uses public drawable (ic_menu_view) to avoid private resource error -->
+    <!-- Home tab - uses public drawable to avoid private resource error -->
     <item
         android:id="@+id/nav_home"
         android:icon="@android:drawable/ic_menu_view"
