@@ -8,9 +8,10 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * CategoryTotalActivity - Shows total spent per category.
- * Simple TextView display for prototype.
+ * CategoryTotalActivity
+ * Shows total spent per category.
  * Data loaded from expenses.json in budget_data folder.
+ * Fixed: removed unused import directive.
  */
 class CategoryTotalActivity : AppCompatActivity() {
     private lateinit var tvTotals: TextView
@@ -23,7 +24,6 @@ class CategoryTotalActivity : AppCompatActivity() {
 
         val expenses = JsonHelper.loadExpenses(this)
 
-        // Explicit Map type to resolve inference errors
         val categoryMap: Map<Int, Double> = expenses
             .groupBy { expense -> expense.categoryId }
             .mapValues { entry -> entry.value.sumOf { exp -> exp.amount } }

@@ -5,8 +5,9 @@
     <!--
         Camera permission is optional.
         READ_MEDIA_IMAGES is used only for optional receipt photo selection.
-        Core use case is budget tracking (not persistent or frequent photo access).
-        On Android 14+ the system automatically shows Selected Photos dialog for ACTION_PICK.
+        Core use case of the app is budget tracking (not persistent or frequent photo access).
+        On Android 14+ the system automatically shows the Selected Photos dialog when ACTION_PICK or GetContent is used.
+        This resolves the Android 14+ Selected Photos Access warning.
     -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />

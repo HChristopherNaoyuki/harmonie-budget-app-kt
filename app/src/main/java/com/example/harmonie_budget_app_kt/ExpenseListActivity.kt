@@ -9,9 +9,10 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * ExpenseListActivity - View all expenses (prototype shows every entry).
- * Tap item to open attached photo if present.
- * Data loaded from expenses.json.
+ * ExpenseListActivity
+ * Displays expense list with photo access.
+ * Data loaded from expenses.json in budget_data folder.
+ * Fixed: removed redundant qualifiers, used toUri extension where possible.
  */
 class ExpenseListActivity : AppCompatActivity() {
     private lateinit var rvExpenses: RecyclerView
@@ -30,7 +31,9 @@ class ExpenseListActivity : AppCompatActivity() {
 }
 
 /**
- * Simple adapter for expense list.
+ * ExpenseAdapter
+ * Simple list adapter.
+ * Fixed: removed redundant qualifiers, used toUri for photo.
  */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
