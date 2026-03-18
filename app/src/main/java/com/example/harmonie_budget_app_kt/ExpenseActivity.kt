@@ -17,8 +17,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * Creates expense entry with start and end time.
  * Photo attachment optional.
  * Data saved to expenses.json in budget_data folder.
- * Fixed: replaced deprecated startActivityForResult with ActivityResultLauncher.
- * Removed unused import directives.
+ * Fixed: removed unused import directives.
  */
 class ExpenseActivity : AppCompatActivity() {
     private lateinit var etAmount: EditText

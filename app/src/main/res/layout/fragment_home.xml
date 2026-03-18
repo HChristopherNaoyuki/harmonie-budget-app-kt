@@ -11,7 +11,7 @@
         android:id="@+id/tv_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Dashboard"
+        android:text="@string/my_dashboard"
         android:textSize="24sp"
         android:textColor="#1C1C1E"
         android:textStyle="bold" />

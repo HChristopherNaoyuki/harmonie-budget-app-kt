@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import androidx.core.net.toUri
 
 /**
  * ExpenseListActivity
  * Displays expense list with photo access.
  * Data loaded from expenses.json in budget_data folder.
- * Fixed: removed redundant qualifiers.
- * Used KTX extension toUri for photo (as suggested).
+ * Fixed: added import for toUri extension, removed redundant qualifiers.
  */
 class ExpenseListActivity : AppCompatActivity() {
     private lateinit var rvExpenses: RecyclerView

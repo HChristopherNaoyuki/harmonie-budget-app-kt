@@ -53,6 +53,7 @@
     <string name="open_categories">Open Categories</string>
     <string name="smart_detection">Smart Detection</string>
     <string name="view_category_totals">View Category Totals</string>
+    <string name="my_dashboard">My Dashboard</string>
 
     <!-- Bottom navigation strings -->
     <string name="nav_home">Home</string>
