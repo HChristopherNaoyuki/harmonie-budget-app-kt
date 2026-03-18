@@ -14,7 +14,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * GoalActivity
  * Sets minimum and maximum monthly goals using SeekBar.
  * Data saved to goal.json in budget_data folder.
- * Fixed: used string resources instead of concatenation for setText calls.
+ * Fixed: used string resources with placeholders for all setText calls (no concatenation).
  */
 class GoalActivity : AppCompatActivity() {
     private lateinit var seekMin: SeekBar
@@ -37,12 +37,12 @@ class GoalActivity : AppCompatActivity() {
         seekMin.progress = (current.minMonthly * 10).toInt()
         seekMax.progress = (current.maxMonthly * 10).toInt()
 
-        tvMin.text = getString(R.string.hint_min_goal) + ": R" + current.minMonthly
-        tvMax.text = getString(R.string.hint_max_goal) + ": R" + current.maxMonthly
+        updateMinText(current.minMonthly)
+        updateMaxText(current.maxMonthly)
 
         seekMin.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                tvMin.text = getString(R.string.hint_min_goal) + ": R" + (progress / 10.0)
+                updateMinText(progress / 10.0)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -50,7 +50,7 @@ class GoalActivity : AppCompatActivity() {
 
         seekMax.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                tvMax.text = getString(R.string.hint_max_goal) + ": R" + (progress / 10.0)
+                updateMaxText(progress / 10.0)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -66,5 +66,13 @@ class GoalActivity : AppCompatActivity() {
             JsonHelper.saveGoal(this, Goal(min, max))
             Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun updateMinText(value: Double) {
+        tvMin.text = getString(R.string.hint_min_goal) + ": R" + value
+    }
+
+    private fun updateMaxText(value: Double) {
+        tvMax.text = getString(R.string.hint_max_goal) + ": R" + value
     }
 }

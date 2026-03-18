@@ -15,7 +15,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * CategoryActivity
  * Creates and displays categories.
  * Data saved to categories.json in budget_data folder.
- * Fixed: removed redundant qualifiers, used string resource for display text.
+ * Fixed: removed redundant qualifiers, used string resource with placeholder for display text.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -76,7 +76,7 @@ class CategoryAdapter(private val list: List<Category>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tv.text = getString(R.string.btn_add_category) + " " + list[position].name
+        holder.tv.text = holder.tv.context.getString(R.string.category_item, list[position].id, list[position].name)
     }
 
     override fun getItemCount() = list.size
