@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
@@ -16,7 +17,8 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * Creates expense entry with start and end time.
  * Photo attachment optional.
  * Data saved to expenses.json in budget_data folder.
- * Fixed: removed unused import directives.
+ * Fixed: replaced deprecated startActivityForResult with ActivityResultLauncher.
+ * Removed unused import directives.
  */
 class ExpenseActivity : AppCompatActivity() {
     private lateinit var etAmount: EditText
@@ -28,6 +30,15 @@ class ExpenseActivity : AppCompatActivity() {
     private lateinit var btnAttachPhoto: Button
     private lateinit var btnSaveExpense: Button
     private var photoUri: String? = null
+
+    private val pickPhotoLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            photoUri = uri.toString()
+            Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +54,7 @@ class ExpenseActivity : AppCompatActivity() {
         btnSaveExpense = findViewById(R.id.btn_save_expense)
 
         btnAttachPhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, 100)
+            pickPhotoLauncher.launch("image/*")
         }
 
         btnSaveExpense.setOnClickListener {
@@ -70,14 +79,6 @@ class ExpenseActivity : AppCompatActivity() {
             JsonHelper.saveExpenses(this, expenses)
             Toast.makeText(this, "Expense saved", Toast.LENGTH_SHORT).show()
             finish()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            photoUri = data?.data.toString()
-            Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
         }
     }
 }

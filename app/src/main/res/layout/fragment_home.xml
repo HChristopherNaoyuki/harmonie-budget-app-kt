@@ -4,12 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#F5F5F0">
 
     <TextView
         android:id="@+id/tv_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="My Dashboard"
         android:textSize="24sp"
         android:textColor="#1C1C1E"
         android:textStyle="bold" />
@@ -18,7 +20,7 @@
         android:id="@+id/btn_add_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+ Add New"
+        android:text="@string/add_new"
         android:backgroundTint="#007AFF"
         android:textColor="#FFFFFF"
         android:layout_marginTop="32dp" />
@@ -27,7 +29,7 @@
         android:id="@+id/btn_edit_budget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Budget"
+        android:text="@string/edit_budget"
         android:backgroundTint="#34C759"
         android:textColor="#FFFFFF"
         android:layout_marginTop="16dp" />

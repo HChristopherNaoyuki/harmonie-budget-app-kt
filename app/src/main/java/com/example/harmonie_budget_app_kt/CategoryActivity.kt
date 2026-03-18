@@ -15,7 +15,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * CategoryActivity
  * Creates and displays categories.
  * Data saved to categories.json in budget_data folder.
- * Fixed: removed redundant qualifiers, used string resource with placeholder for display text.
+ * Fixed: removed redundant qualifiers.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText

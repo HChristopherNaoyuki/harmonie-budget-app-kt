@@ -69,10 +69,10 @@ class GoalActivity : AppCompatActivity() {
     }
 
     private fun updateMinText(value: Double) {
-        tvMin.text = getString(R.string.hint_min_goal) + ": R" + value
+        tvMin.text = getString(R.string.min_goal_text, value.toString())
     }
 
     private fun updateMaxText(value: Double) {
-        tvMax.text = getString(R.string.hint_max_goal) + ": R" + value
+        tvMax.text = getString(R.string.max_goal_text, value.toString())
     }
 }

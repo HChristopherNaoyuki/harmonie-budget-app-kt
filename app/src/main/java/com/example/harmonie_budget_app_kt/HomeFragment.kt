@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 /**
  * HomeFragment
  * Dashboard screen with "My Dashboard" and buttons for add new and edit budget.
- * Matches the Home tab in the GUI image.
+ * Buttons open existing activities (ExpenseActivity and GoalActivity).
+ * Matches the Home tab in the image.
+ * Fixed: used string resource for setText.
  */
 class HomeFragment : Fragment() {
 
@@ -22,26 +24,15 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val tvDashboard = view.findViewById<TextView>(R.id.tv_dashboard)
         val btnAddNew = view.findViewById<Button>(R.id.btn_add_new)
         val btnEditBudget = view.findViewById<Button>(R.id.btn_edit_budget)
 
-        tvDashboard.text = "My Dashboard"
-
         btnAddNew.setOnClickListener {
-            // Navigate to add expense
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BudgetFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), ExpenseActivity::class.java))
         }
 
         btnEditBudget.setOnClickListener {
-            // Navigate to goal edit
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, GoalFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), GoalActivity::class.java))
         }
 
         return view

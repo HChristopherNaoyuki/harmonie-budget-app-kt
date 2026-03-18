@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 /**
  * BudgetFragment
  * Add Expense and Edit Budget options.
- * Matches the Budget tab in the GUI image.
+ * Buttons open existing activities (ExpenseActivity and GoalActivity).
+ * Matches the Budget tab in the image.
+ * Fixed: no unresolved references.
  */
 class BudgetFragment : Fragment() {
 
@@ -25,17 +27,11 @@ class BudgetFragment : Fragment() {
         val btnEditBudget = view.findViewById<Button>(R.id.btn_edit_budget)
 
         btnAddExpense.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ExpenseFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), ExpenseActivity::class.java))
         }
 
         btnEditBudget.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, GoalFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), GoalActivity::class.java))
         }
 
         return view

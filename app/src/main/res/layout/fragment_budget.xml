@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#F5F5F0">
 
     <Button
         android:id="@+id/btn_add_expense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Expense"
+        android:text="@string/add_expense"
         android:backgroundTint="#007AFF"
         android:textColor="#FFFFFF" />
 
@@ -18,7 +19,7 @@
         android:id="@+id/btn_edit_budget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Budget"
+        android:text="@string/edit_budget"
         android:backgroundTint="#34C759"
         android:textColor="#FFFFFF"
         android:layout_marginTop="16dp" />

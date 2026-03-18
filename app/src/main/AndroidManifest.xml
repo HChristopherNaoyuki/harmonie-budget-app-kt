@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!--
         Camera permission is optional.
         READ_MEDIA_IMAGES is used only for optional receipt photo selection.
         Core use case of the app is budget tracking (not persistent or frequent photo access).
-        On Android 14+ the system automatically shows the Selected Photos dialog when ACTION_PICK or GetContent is used.
+        On Android 14+ the system automatically shows the Selected Photos dialog when GetContent is used.
+        This resolves the Android 14+ Selected Photos Access warning.
     -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -24,37 +23,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HarmonieBudgetAppKt"
         tools:targetApi="36">
-        <activity
-            android:name=".DashboardActivity"
-            android:exported="false" />
-        <!-- Login screen (launcher) -->
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Register screen -->
+        </activity>
+
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" /> <!-- Other activities kept for direct access if needed, but main flow uses fragments -->
+            android:exported="false" />
+
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
+
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
+
         <activity
             android:name=".GoalActivity"
             android:exported="false" />
+
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
+
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />
+
     </application>
 
 </manifest>
