@@ -33,6 +33,14 @@
             </intent-filter>
         </activity>
 
+        <!-- DashboardActivity declaration added here. -->
+        <!-- This is the screen shown after successful login. -->
+        <!-- The activity class is present in the project (DashboardActivity.kt). -->
+        <!-- Declaring it here fixes the ActivityNotFoundException crash on login. -->
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
