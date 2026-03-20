@@ -24,7 +24,6 @@
         android:theme="@style/Theme.HarmonieBudgetAppKt"
         tools:targetApi="36">
 
-        <!-- Login screen (launcher) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -34,19 +33,10 @@
             </intent-filter>
         </activity>
 
-        <!-- DashboardActivity - the main screen after login -->
-        <!-- This declaration fixes the ActivityNotFoundException shown in the Logcat. -->
-        <!-- The activity contains the bottom navigation matching the GUI image. -->
-        <activity
-            android:name=".DashboardActivity"
-            android:exported="false" />
-
-        <!-- Register screen -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
 
-        <!-- Other screens required by Part 2 -->
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
