@@ -12,7 +12,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * ExpenseListActivity
  * Displays expense list with photo access.
  * Data loaded from expenses.json in budget_data folder.
- * Fixed: removed toUri extension (replaced with direct Uri.parse to avoid unresolved reference), removed redundant qualifiers.
+ * Fixed: removed redundant qualifiers.
  */
 class ExpenseListActivity : AppCompatActivity() {
     private lateinit var rvExpenses: RecyclerView
@@ -33,7 +33,7 @@ class ExpenseListActivity : AppCompatActivity() {
 /**
  * ExpenseAdapter
  * Simple list adapter.
- * Fixed: removed redundant qualifiers, used direct Uri.parse for photo.
+ * Fixed: removed redundant qualifiers.
  */
 class ExpenseAdapter(private val list: List<Expense>, private val context: android.content.Context)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {

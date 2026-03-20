@@ -4,7 +4,6 @@ package com.example.harmonie_budget_app_kt
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +15,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
  * CategoryActivity
  * Creates and displays categories.
  * Data saved to categories.json in budget_data folder.
- * Fixed: added import for TextView, removed all redundant qualifiers.
+ * Fixed: removed all redundant qualifiers.
  */
 class CategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
@@ -59,15 +58,15 @@ class CategoryActivity : AppCompatActivity() {
 /**
  * CategoryAdapter
  * Simple list adapter.
- * Fixed: added import for TextView, removed all redundant qualifiers.
+ * Fixed: removed redundant qualifiers.
  */
 class CategoryAdapter(private val list: List<Category>)
     : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
-    class ViewHolder(val tv: TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(tv)
+    class ViewHolder(val tv: android.widget.TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(tv)
 
     override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
-        val tv = TextView(parent.context)
+        val tv = android.widget.TextView(parent.context)
         tv.layoutParams = android.view.ViewGroup.LayoutParams(
             android.view.ViewGroup.LayoutParams.MATCH_PARENT,
             120
