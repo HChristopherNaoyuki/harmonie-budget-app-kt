@@ -7,12 +7,12 @@
     android:background="#FFFFFF"
     android:padding="32dp">
 
-    <!-- App title matching the mockup -->
+    <!-- Title matching the mockup -->
     <TextView
         android:id="@+id/tv_app_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Harmonie Budget"
+        android:text="@string/app_name"
         android:textSize="24sp"
         android:textColor="#000000"
         android:textStyle="bold"
@@ -26,7 +26,7 @@
         android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Harmie Budget app."
+        android:text="@string/welcome_text"
         android:textSize="16sp"
         android:textColor="#666666"
         app:layout_constraintTop_toBottomOf="@id/tv_app_title"
@@ -89,7 +89,7 @@
         android:id="@+id/btn_forgot"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Forgot Password"
+        android:text="@string/forgot_password"
         android:backgroundTint="#666666"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/btn_login"
