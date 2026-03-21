@@ -35,7 +35,7 @@
 
         <!-- DashboardActivity declaration added here. -->
         <!-- This is the screen shown after successful login from MainActivity. -->
-        <!-- The activity class is present in the project. -->
+        <!-- The activity class is present in the project (DashboardActivity.kt). -->
         <!-- This declaration fixes the ActivityNotFoundException crash on login. -->
         <activity
             android:name=".DashboardActivity"
