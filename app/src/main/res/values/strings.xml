@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App name and common strings -->
+
+    <!-- Core app strings (corrected typo from previous version) -->
     <string name="app_name">Harmonie Budget</string>
+    <string name="welcome_text">Welcome to Harmonie Budget app.</string>
+
+    <!-- Dashboard and fragment titles (added to resolve all resource linking errors) -->
+    <string name="my_dashboard">My Dashboard</string>
+    <string name="add_new">+ Add New</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="edit_budget">Edit Budget</string>
+    <string name="manage_categories">Manage Categories</string>
+    <string name="open_categories">Open Categories</string>
+    <string name="smart_detection">Smart Budget Detection</string>
+    <string name="view_category_totals">View Category Totals</string>
+
+    <!-- Bottom navigation menu items (added to resolve all resource linking errors) -->
+    <string name="nav_home">Home</string>
+    <string name="nav_budget">Budget</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_budgets">Budgets</string>
+    <string name="nav_more">More</string>
+
+    <!-- Login and register screen strings -->
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
-    <string name="welcome_text">Welcome to Harmie Budget app.</string>
     <string name="create_new_account">Create new Account</string>
     <string name="forgot_password">Forgot Password</string>
-
-    <!-- Login screen -->
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-
-    <!-- Register screen -->
     <string name="hint_name">Name</string>
     <string name="hint_surname">Surname</string>
     <string name="hint_confirm_password">Confirm Password</string>
 
-    <!-- Other strings for completeness -->
+    <!-- Expense, goal, and category screen strings (for completeness) -->
     <string name="hint_amount">Amount (R)</string>
     <string name="hint_date">Date (yyyy-MM-dd)</string>
     <string name="hint_start_time">Start Time</string>
@@ -38,4 +54,5 @@
     <string name="category_item">%1$d - %2$s</string>
     <string name="min_goal_text">Minimum Monthly Goal: R%1$s</string>
     <string name="max_goal_text">Maximum Monthly Goal: R%1$s</string>
+
 </resources>
