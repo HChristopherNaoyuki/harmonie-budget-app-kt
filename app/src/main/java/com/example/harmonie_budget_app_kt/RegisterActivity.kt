@@ -5,6 +5,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.example.harmonie_budget_app_kt.models.User
+import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class RegisterActivity : AppCompatActivity() {
 

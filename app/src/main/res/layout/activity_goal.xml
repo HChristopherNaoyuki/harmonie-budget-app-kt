@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="64dp" />
 
-    <!-- Minimum goal input -->
+    <!-- Minimum goal input (user must input their goal) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_min_goal"
         android:layout_width="0dp"
