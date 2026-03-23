@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:padding="32dp">
 
-    <!-- Title matching the mockup -->
+    <!-- Title matching the mockup image exactly -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="64dp" />
 
-    <!-- Name field -->
+    <!-- Name field (gray background like the mockup image) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_name"
         android:layout_width="0dp"
@@ -113,7 +113,7 @@
             android:backgroundTint="#E0E0E0" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Register button (black like mockup) -->
+    <!-- Sign up button (black like the mockup image) -->
     <Button
         android:id="@+id/btn_register"
         android:layout_width="0dp"
