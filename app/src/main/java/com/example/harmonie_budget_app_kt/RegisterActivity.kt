@@ -19,7 +19,7 @@ class RegisterActivity : AppCompatActivity() {
         val etConfirmPassword: TextInputEditText = findViewById(R.id.et_confirm_password)
         val btnRegister: Button = findViewById(R.id.btn_register)
 
-        // Password validation logic (enforced exactly as required)
+        // Password validation logic (enforced exactly as required by the assignment)
         // At least 8 characters, at least one letter, one number, one special character
         btnRegister.setOnClickListener {
             val name = etName.text.toString().trim()

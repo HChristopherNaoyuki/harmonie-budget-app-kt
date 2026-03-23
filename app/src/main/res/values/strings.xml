@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Core app strings (corrected typo to match the mockup image exactly) -->
+    <!-- Core app strings (corrected to match the mockup image exactly) -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_text">Welcome to Harmonie Budget</string>
 
@@ -22,18 +22,17 @@
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Login and register screen strings (match the mockup image) -->
+    <!-- Login and register screen strings (match the mockup image and the assignment requirement) -->
     <string name="btn_login">Login</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="btn_register">Sign up</string>
+    <string name="btn_register">Register</string>
     <string name="create_new_account">Create new Account</string>
-    <string name="hint_username">USERNAME</string>
-    <string name="hint_password">PASSWORD</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
     <string name="hint_name">Name</string>
     <string name="hint_surname">Surname</string>
     <string name="hint_confirm_password">Confirm Password</string>
 
-    <!-- More section items (for expandable logic) -->
+    <!-- More section items (for the expandable list) -->
     <string name="export_data">Export Data</string>
     <string name="reset_progress">Reset Progress</string>
     <string name="about">About</string>

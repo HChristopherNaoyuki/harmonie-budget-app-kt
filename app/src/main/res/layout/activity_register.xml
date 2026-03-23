@@ -113,7 +113,7 @@
             android:backgroundTint="#E0E0E0" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Sign up button (black like the mockup image) -->
+    <!-- Register button (black like the mockup image) -->
     <Button
         android:id="@+id/btn_register"
         android:layout_width="0dp"

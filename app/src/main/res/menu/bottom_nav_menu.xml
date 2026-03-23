@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Home tab - uses public drawable to avoid private resource error -->
     <item
         android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_menu_view"
-        android:title="@string/nav_home" />
+        android:title="@string/nav_home"
+        android:icon="@android:drawable/ic_menu_home" />
 
-    <!-- Budget tab - uses public drawable -->
     <item
         android:id="@+id/nav_budget"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="@string/nav_budget" />
+        android:title="@string/nav_budget"
+        android:icon="@android:drawable/ic_menu_edit" />
 
-    <!-- Transactions tab - uses public drawable -->
     <item
         android:id="@+id/nav_transactions"
-        android:icon="@android:drawable/ic_menu_manage"
-        android:title="@string/nav_transactions" />
+        android:title="@string/nav_transactions"
+        android:icon="@android:drawable/ic_menu_manage" />
 
-    <!-- Budgets tab - uses public drawable -->
     <item
         android:id="@+id/nav_budgets"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="@string/nav_budgets" />
+        android:title="@string/nav_budgets"
+        android:icon="@android:drawable/ic_menu_gallery" />
 
-    <!-- More tab - uses public drawable -->
     <item
         android:id="@+id/nav_more"
-        android:icon="@android:drawable/ic_menu_more"
-        android:title="@string/nav_more" />
+        android:title="@string/nav_more"
+        android:icon="@android:drawable/ic_menu_more" />
 
 </menu>

@@ -47,20 +47,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp" />
 
-    <!-- Forgot Password button (white rounded like the mockup image) -->
-    <Button
-        android:id="@+id/btn_forgot"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
-        android:backgroundTint="#F5F5F5"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/btn_login"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
-
-    <!-- Sign up button (black rounded like the mockup image) -->
+    <!-- Register button (black rounded like the mockup image) -->
+    <!-- This matches the assignment requirement of exactly two buttons on the login page -->
     <Button
         android:id="@+id/btn_register"
         android:layout_width="0dp"
@@ -68,9 +56,9 @@
         android:text="@string/btn_register"
         android:backgroundTint="#000000"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/btn_forgot"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
