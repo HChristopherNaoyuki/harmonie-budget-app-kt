@@ -58,8 +58,8 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Save user data (user-specific JSON file created automatically)
-            // Username is the key for per-user isolation (only this user sees their data)
+            // Save user data using the corrected JsonHelper method
+            // Data is now isolated in username.json inside budget_data folder
             val user = User(name, surname, username, password)
             JsonHelper.saveUser(this, user)
 

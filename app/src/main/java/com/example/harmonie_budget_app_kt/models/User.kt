@@ -1,11 +1,11 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/models/User.kt
 package com.example.harmonie_budget_app_kt.models
 
 /**
- * User model for registration and login.
- * Now includes name and surname as required for the register form.
- * All user data is saved to users.json inside the budget_data folder.
- * Password is stored in plain text for this prototype only.
+ * User data class.
+ * This class holds the details entered during registration.
+ * Data is saved per username in a separate JSON file inside the budget_data folder.
+ * This ensures isolation: only the logged-in user can see their own budget data.
+ * The admin account is the only hardcoded exception for testing.
  */
 data class User(
     val name: String,
