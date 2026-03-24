@@ -1,6 +1,6 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/HomeFragment.kt
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,30 +8,27 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 
-/**
- * HomeFragment
- * Dashboard screen with "My Dashboard" and buttons for add new and edit budget.
- * Buttons open existing activities (ExpenseActivity and GoalActivity).
- * Matches the Home tab in the image.
- * Fixed: removed unused import directive.
- */
 class HomeFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val btnAddNew = view.findViewById<Button>(R.id.btn_add_new)
-        val btnEditBudget = view.findViewById<Button>(R.id.btn_edit_budget)
+        val btnAddNew: Button = view.findViewById(R.id.btn_add_new)
+        val btnEditBudget: Button = view.findViewById(R.id.btn_edit_budget)
+
+        // Username is passed from DashboardActivity
+        val username = requireActivity().intent.getStringExtra("username") ?: "admin"
 
         btnAddNew.setOnClickListener {
-            startActivity(android.content.Intent(requireContext(), ExpenseActivity::class.java))
+            val intent = Intent(requireContext(), ExpenseActivity::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
         }
 
         btnEditBudget.setOnClickListener {
-            startActivity(android.content.Intent(requireContext(), GoalActivity::class.java))
+            val intent = Intent(requireContext(), GoalActivity::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
         }
 
         return view

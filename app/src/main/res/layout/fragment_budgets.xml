@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:padding="16dp">
 
-    <!-- Smart Detection card matching the mockup -->
+    <!-- Smart Detection card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_smart_detection"
         android:layout_width="match_parent"
@@ -29,19 +29,20 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Placeholder for graph image (matching the mockup) -->
+            <!-- Graph image with contentDescription for accessibility -->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:src="@android:drawable/ic_menu_gallery"
                 android:scaleType="fitCenter"
+                android:contentDescription="Smart Budget Detection Graph"
                 android:layout_marginTop="8dp" />
 
             <Button
                 android:id="@+id/btn_detect_budget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Detect Budget"
+                android:text="@string/detect_budget"
                 android:backgroundTint="#34C759"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="16dp" />

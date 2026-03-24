@@ -7,12 +7,12 @@
     android:background="#FFFFFF"
     android:padding="32dp">
 
-    <!-- Title matching the mockup style -->
+    <!-- Title using string resource -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Monthly Goals"
+        android:text="@string/set_monthly_goals"
         android:textSize="24sp"
         android:textColor="#000000"
         android:textStyle="bold"
@@ -21,53 +21,59 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="64dp" />
 
-    <!-- Minimum goal input (user must input their goal) -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_min_goal"
+    <!-- Minimum goal SeekBar -->
+    <SeekBar
+        android:id="@+id/seek_min"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_min_goal"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:max="10000"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_min_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:backgroundTint="#E0E0E0" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="32dp" />
 
-    <!-- Maximum goal input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_max_goal"
+    <!-- Minimum goal TextView -->
+    <TextView
+        android:id="@+id/tv_min_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/min_goal_text"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/seek_min"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Maximum goal SeekBar -->
+    <SeekBar
+        android:id="@+id/seek_max"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_max_goal"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/til_min_goal"
+        android:max="10000"
+        app:layout_constraintTop_toBottomOf="@id/tv_min_goal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_max_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:backgroundTint="#E0E0E0" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="16dp" />
 
-    <!-- Save button (black like the mockup style) -->
+    <!-- Maximum goal TextView -->
+    <TextView
+        android:id="@+id/tv_max_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/max_goal_text"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/seek_max"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Save button -->
     <Button
-        android:id="@+id/btn_save_goals"
+        android:id="@+id/btn_save_goal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/btn_save_goals"
         android:backgroundTint="#000000"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/til_max_goal"
+        app:layout_constraintTop_toBottomOf="@id/tv_max_goal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp" />

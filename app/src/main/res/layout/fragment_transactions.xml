@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:padding="16dp">
 
-    <!-- Manage Categories card matching the mockup -->
+    <!-- Manage Categories card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_manage_categories"
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:id="@+id/btn_manage_categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Open Categories"
+                android:text="@string/open_categories"
                 android:backgroundTint="#000000"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="8dp" />
