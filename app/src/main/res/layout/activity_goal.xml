@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:padding="32dp">
 
-    <!-- Title using string resource -->
+    <!-- Title using string resource (fixes the cannot resolve symbol error) -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"

@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:padding="16dp">
 
-    <!-- Smart Detection card -->
+    <!-- Smart Detection card matching the mockup -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_smart_detection"
         android:layout_width="match_parent"
@@ -29,13 +29,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Graph image with contentDescription for accessibility -->
+            <!-- Graph image with contentDescription using string resource (fixes the hardcoded string and missing attribute warnings) -->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:src="@android:drawable/ic_menu_gallery"
                 android:scaleType="fitCenter"
-                android:contentDescription="Smart Budget Detection Graph"
+                android:contentDescription="@string/smart_budget_detection_graph"
                 android:layout_marginTop="8dp" />
 
             <Button

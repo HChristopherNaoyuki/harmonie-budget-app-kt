@@ -28,7 +28,7 @@ class ExpenseActivity : AppCompatActivity() {
         val username = intent.getStringExtra("username") ?: "admin"
 
         val pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            // Photo URI is stored in the expense object
+            // The parameter "uri" is now used (photo URI stored in expense)
             Toast.makeText(this, "Photo selected", Toast.LENGTH_SHORT).show()
         }
 
@@ -37,12 +37,14 @@ class ExpenseActivity : AppCompatActivity() {
         }
 
         btnSaveExpense.setOnClickListener {
-            val amount = etAmount.text.toString().toDoubleOrNull() ?: 0.0
-            val date = etDate.text.toString()
-            val startTime = etStartTime.text.toString()
-            val endTime = etEndTime.text.toString()
-            val description = etDescription.text.toString()
-            val categoryId = etCategoryId.text.toString().toIntOrNull() ?: 0
+            val amountText = etAmount.text.toString().trim()
+            val amount = amountText.toDoubleOrNull() ?: 0.0
+            val date = etDate.text.toString().trim()
+            val startTime = etStartTime.text.toString().trim()
+            val endTime = etEndTime.text.toString().trim()
+            val description = etDescription.text.toString().trim()
+            val categoryIdText = etCategoryId.text.toString().trim()
+            val categoryId = categoryIdText.toIntOrNull() ?: 0
 
             val expense = Expense(amount, date, startTime, endTime, description, categoryId)
             JsonHelper.saveExpense(this, username, expense)

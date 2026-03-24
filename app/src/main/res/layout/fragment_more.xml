@@ -7,9 +7,9 @@
     android:background="#FFFFFF"
     android:padding="16dp">
 
-    <!-- More options list (each item is a card for expandable behavior in the class) -->
+    <!-- RecyclerView for the expandable more options list -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_more_options"
+        android:id="@+id/menu_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

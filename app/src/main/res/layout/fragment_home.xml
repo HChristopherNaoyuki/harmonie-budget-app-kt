@@ -7,11 +7,43 @@
     android:background="#FFFFFF"
     android:padding="16dp">
 
-    <!-- More options list (each item is a card for expandable behavior in MoreFragment.kt) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_more_options"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <!-- Dashboard title -->
+    <TextView
+        android:id="@+id/tv_dashboard_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_dashboard"
+        android:textSize="24sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Add New button -->
+    <Button
+        android:id="@+id/btn_add_new"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_new"
+        android:backgroundTint="#000000"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/tv_dashboard_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Edit Budget button -->
+    <Button
+        android:id="@+id/btn_edit_budget"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_budget"
+        android:backgroundTint="#000000"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/btn_add_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

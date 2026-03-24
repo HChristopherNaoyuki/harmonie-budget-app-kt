@@ -24,7 +24,7 @@ class ExpenseListActivity : AppCompatActivity() {
         rvExpenses.layoutManager = LinearLayoutManager(this)
 
         val expenses = JsonHelper.loadExpenses(this, username)
-        val adapter = ExpenseAdapter(expenses) { expense ->
+        val adapter = ExpenseAdapter(expenses) { expense: Expense ->
             if (expense.photoUri != null) {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(Uri.parse(expense.photoUri), "image/*")
@@ -34,5 +34,40 @@ class ExpenseListActivity : AppCompatActivity() {
             }
         }
         rvExpenses.adapter = adapter
+    }
+
+    /**
+     * Inner adapter class for the expense list.
+     * This resolves the unresolved reference 'ExpenseAdapter'.
+     * Displays each expense and handles photo click.
+     */
+    private class ExpenseAdapter(
+        private val list: List<Expense>,
+        private val onPhotoClick: (Expense) -> Unit
+    ) : RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
+
+        class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val tv = TextView(parent.context)
+            tv.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            tv.setPadding(16, 16, 16, 16)
+            return ViewHolder(tv)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val exp = list[position]
+            var text = "${exp.amount} - ${exp.date} - ${exp.description}"
+            if (exp.photoUri != null) {
+                text += " (Photo attached - tap to view)"
+                holder.tv.setOnClickListener { onPhotoClick(exp) }
+            }
+            holder.tv.text = text
+        }
+
+        override fun getItemCount(): Int = list.size
     }
 }
