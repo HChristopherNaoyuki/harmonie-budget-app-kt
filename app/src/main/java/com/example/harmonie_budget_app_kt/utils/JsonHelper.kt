@@ -16,8 +16,7 @@ import java.io.File
  * The folder is created automatically if it does not exist.
  * Every user has their own isolated JSON files (username.json for the user object,
  * username_categories.json, username_expenses.json, username_goals.json).
- * This guarantees that data for one user (for example, MichaelRichards123)
- * is never visible to any other user.
+ * This guarantees that data for one user is never visible to any other user.
  * The only exception is the hardcoded admin account, which is handled by its username.
  * Gson is used for serialization (the dependency is already declared in build.gradle.kts).
  * No query languages or external databases are used, as required by the assignment.
@@ -136,7 +135,6 @@ object JsonHelper {
     /**
      * Saves a Goal object to username_goals.json.
      * Called from GoalActivity.
-     * This function is now used, resolving the "never used" warning.
      */
     fun saveGoal(context: Context, username: String, goal: Goal) {
         val fileName = "${username}_goals.json"
@@ -149,7 +147,7 @@ object JsonHelper {
     /**
      * Loads the Goal object for the current user.
      * Used in GoalActivity and dashboard calculations.
-     * This function is now used, resolving the "never used" warning.
+     * Even if currently unused in some screens, it is required for full Part 2 compliance.
      */
     fun loadGoal(context: Context, username: String): Goal? {
         val fileName = "${username}_goals.json"
