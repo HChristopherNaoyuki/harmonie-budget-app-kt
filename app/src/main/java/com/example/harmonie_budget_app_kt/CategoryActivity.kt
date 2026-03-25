@@ -41,6 +41,8 @@ class CategoryActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Category constructor expects (name: String)
+            // The previous type mismatch is fixed by passing name correctly
             val category = Category(name)
             JsonHelper.saveCategory(this, username, category)
 
@@ -57,7 +59,7 @@ class CategoryActivity : AppCompatActivity() {
      * Inner adapter class for the category list.
      * This resolves the unresolved reference 'CategoryAdapter'.
      * Displays each category in a simple TextView.
-     * Uses notifyDataSetChanged only when the list changes (as recommended by the lint warning).
+     * Uses notifyDataSetChanged only when necessary (as warned).
      */
     private class CategoryAdapter(private var list: List<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {

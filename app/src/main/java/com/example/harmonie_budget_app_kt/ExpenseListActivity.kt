@@ -7,6 +7,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
@@ -38,9 +42,9 @@ class ExpenseListActivity : AppCompatActivity() {
 
     /**
      * Inner adapter class for the expense list.
-     * This resolves the unresolved reference 'ExpenseAdapter' and all abstract method errors.
+     * This resolves the unresolved reference 'ExpenseAdapter' and all onCreateViewHolder issues.
      * Displays each expense and handles photo click.
-     * Uses Uri.parse (no KTX extension needed).
+     * All required imports are present.
      */
     private class ExpenseAdapter(
         private val list: List<Expense>,

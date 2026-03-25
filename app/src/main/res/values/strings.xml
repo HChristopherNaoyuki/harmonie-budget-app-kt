@@ -62,7 +62,7 @@
     <string name="min_goal_text">Minimum Monthly Goal: R%1$s</string>
     <string name="max_goal_text">Maximum Monthly Goal: R%1$s</string>
 
-    <!-- New strings added to fix the current resource errors -->
+    <!-- Strings added to fix remaining resource errors -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
     <string name="detect_budget">Detect Budget</string>
     <string name="smart_budget_detection_graph">Smart Budget Detection Graph</string>
