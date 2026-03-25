@@ -47,6 +47,7 @@ class ExpenseActivity : AppCompatActivity() {
             val categoryId = categoryIdText.toIntOrNull() ?: 0
 
             // Expense constructor order fixed: amount (Double), date (String), startTime (String), endTime (String), description (String), categoryId (Int)
+            // This resolves all argument type mismatches and missing parameter errors
             val expense = Expense(amount, date, startTime, endTime, description, categoryId)
             JsonHelper.saveExpense(this, username, expense)
 

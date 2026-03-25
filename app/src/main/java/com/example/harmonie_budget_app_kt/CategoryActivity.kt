@@ -41,9 +41,9 @@ class CategoryActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Category constructor expects (name: String)
-            // The previous type mismatch is fixed by passing name correctly
-            val category = Category(name)
+            // Category constructor expects (id: Int, name: String)
+            // id is auto-generated as 0 for new categories (database will handle unique ID on save)
+            val category = Category(0, name)
             JsonHelper.saveCategory(this, username, category)
 
             // Refresh list
