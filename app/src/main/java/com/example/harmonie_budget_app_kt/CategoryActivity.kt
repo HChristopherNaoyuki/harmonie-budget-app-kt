@@ -42,7 +42,7 @@ class CategoryActivity : AppCompatActivity() {
             }
 
             // Category constructor expects (id: Int, name: String)
-            // id is auto-generated as 0 for new categories (database will handle unique ID on save)
+            // id is auto-generated as 0 for new categories
             val category = Category(0, name)
             JsonHelper.saveCategory(this, username, category)
 
