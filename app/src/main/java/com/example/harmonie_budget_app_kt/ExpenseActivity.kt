@@ -46,8 +46,8 @@ class ExpenseActivity : AppCompatActivity() {
             val categoryIdText = etCategoryId.text.toString().trim()
             val categoryId = categoryIdText.toIntOrNull() ?: 0
 
-            // Expense constructor order fixed: amount (Double), date (String), startTime (String), endTime (String), description (String), categoryId (Int)
-            val expense = Expense(amount, date, startTime, endTime, description, categoryId)
+            // Expense constructor order fixed: id (Int), amount (Double), date (String), startTime (String), endTime (String), description (String), categoryId (Int)
+            val expense = Expense(0, amount, date, startTime, endTime, description, categoryId)
             JsonHelper.saveExpense(this, username, expense)
 
             Toast.makeText(this, "Expense saved", Toast.LENGTH_SHORT).show()
