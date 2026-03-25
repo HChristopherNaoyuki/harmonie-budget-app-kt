@@ -136,6 +136,7 @@ object JsonHelper {
     /**
      * Saves a Goal object to username_goals.json.
      * Called from GoalActivity.
+     * This function is now used, resolving the "never used" warning.
      */
     fun saveGoal(context: Context, username: String, goal: Goal) {
         val fileName = "${username}_goals.json"
@@ -148,6 +149,7 @@ object JsonHelper {
     /**
      * Loads the Goal object for the current user.
      * Used in GoalActivity and dashboard calculations.
+     * This function is now used, resolving the "never used" warning.
      */
     fun loadGoal(context: Context, username: String): Goal? {
         val fileName = "${username}_goals.json"

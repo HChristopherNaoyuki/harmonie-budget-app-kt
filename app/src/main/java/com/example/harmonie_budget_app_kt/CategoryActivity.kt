@@ -57,6 +57,7 @@ class CategoryActivity : AppCompatActivity() {
      * Inner adapter class for the category list.
      * This resolves the unresolved reference 'CategoryAdapter'.
      * Displays each category in a simple TextView.
+     * Uses notifyDataSetChanged only when the list changes (as recommended by the lint warning).
      */
     private class CategoryAdapter(private var list: List<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {

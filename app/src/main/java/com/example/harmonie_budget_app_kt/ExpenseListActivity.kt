@@ -38,8 +38,9 @@ class ExpenseListActivity : AppCompatActivity() {
 
     /**
      * Inner adapter class for the expense list.
-     * This resolves the unresolved reference 'ExpenseAdapter'.
+     * This resolves the unresolved reference 'ExpenseAdapter' and all abstract method errors.
      * Displays each expense and handles photo click.
+     * Uses Uri.parse (no KTX extension needed).
      */
     private class ExpenseAdapter(
         private val list: List<Expense>,
