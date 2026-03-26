@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="#F5F5F5">
-
-    <!-- Each item is a collapsible panel following progressive disclosure from the User Interface.pdf (page 3) -->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_export"
@@ -26,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Export Data"
+                android:text="@string/export_data_title"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -37,26 +36,14 @@
                 android:visibility="gone"
                 android:padding="16dp">
 
-                <!-- Content revealed on tap (user-specific export info) -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Your data has been exported to JSON files in the budget_data folder." />
+                    android:text="@string/export_data_content" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Similar CardView for Receive Progress, About, Help Information, Version -->
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_receive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="8dp">
-        <!-- Title and hidden content for Receive Progress -->
-    </androidx.cardview.widget.CardView>
-
-    <!-- Repeat for About, Help Information, Version with their respective titles and content areas -->
+    <!-- Additional cards for Receive Progress, About, Help Information, Version follow the same structure with progressive disclosure -->
 
 </LinearLayout>

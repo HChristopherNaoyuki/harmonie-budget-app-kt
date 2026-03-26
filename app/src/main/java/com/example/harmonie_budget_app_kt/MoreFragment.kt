@@ -15,7 +15,6 @@ class MoreFragment : Fragment() {
 
         val username = activity?.intent?.getStringExtra("username") ?: "admin"
 
-        // Card for Export Data
         val cardExport: View = view.findViewById(R.id.card_export)
         val tvExportTitle: TextView = view.findViewById(R.id.tv_export_title)
         val layoutExportContent: View = view.findViewById(R.id.layout_export_content)
@@ -23,10 +22,6 @@ class MoreFragment : Fragment() {
         tvExportTitle.setOnClickListener {
             layoutExportContent.visibility = if (layoutExportContent.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
-
-        // Repeat for Receive Progress, About, Help Information, Version (each with title click to toggle content)
-
-        // Content is user-specific where applicable (e.g., version from package, progress from goals)
 
         return view
     }

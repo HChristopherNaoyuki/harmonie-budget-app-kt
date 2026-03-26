@@ -17,12 +17,10 @@ class HomeFragment : Fragment() {
 
         val tvTotalBalance: TextView = view.findViewById(R.id.tv_total_balance)
 
-        // Load user-specific data (totals calculated from expenses)
         val expenses = JsonHelper.loadExpenses(requireContext(), username)
         val total = expenses.sumOf { it.amount }
-        tvTotalBalance.text = "$${total}"
 
-        // Additional dashboard elements populated here from JSON (per mockup)
+        tvTotalBalance.text = getString(R.string.total_balance, total)
 
         return view
     }
