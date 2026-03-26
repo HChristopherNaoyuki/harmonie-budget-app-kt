@@ -1,35 +1,28 @@
 package com.example.harmonie_budget_app_kt
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val btnAddNew: Button = view.findViewById(R.id.btn_add_new)
-        val btnEditBudget: Button = view.findViewById(R.id.btn_edit_budget)
+        val username = activity?.intent?.getStringExtra("username") ?: "admin"
 
-        // Username is passed from DashboardActivity
-        val username = requireActivity().intent.getStringExtra("username") ?: "admin"
+        val tvTotalBalance: TextView = view.findViewById(R.id.tv_total_balance)
 
-        btnAddNew.setOnClickListener {
-            val intent = Intent(requireContext(), ExpenseActivity::class.java)
-            intent.putExtra("username", username)
-            startActivity(intent)
-        }
+        // Load user-specific data (totals calculated from expenses)
+        val expenses = JsonHelper.loadExpenses(requireContext(), username)
+        val total = expenses.sumOf { it.amount }
+        tvTotalBalance.text = "$${total}"
 
-        btnEditBudget.setOnClickListener {
-            val intent = Intent(requireContext(), GoalActivity::class.java)
-            intent.putExtra("username", username)
-            startActivity(intent)
-        }
+        // Additional dashboard elements populated here from JSON (per mockup)
 
         return view
     }
