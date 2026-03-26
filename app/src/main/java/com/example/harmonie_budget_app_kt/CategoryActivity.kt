@@ -24,12 +24,10 @@ class CategoryActivity : AppCompatActivity() {
         val btnAddCategory: Button = findViewById(R.id.btn_add_category)
         val rvCategories: RecyclerView = findViewById(R.id.rv_categories)
 
-        // Username is passed from the calling activity (Dashboard or Main)
         val username = intent.getStringExtra("username") ?: "admin"
 
         rvCategories.layoutManager = LinearLayoutManager(this)
 
-        // Load categories for this user only
         val categories = JsonHelper.loadCategories(this, username)
         val adapter = CategoryAdapter(categories)
         rvCategories.adapter = adapter
@@ -41,12 +39,9 @@ class CategoryActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Category constructor expects (id: Int, name: String)
-            // id is auto-generated as 0 for new categories
             val category = Category(0, name)
             JsonHelper.saveCategory(this, username, category)
 
-            // Refresh list
             val updatedList = JsonHelper.loadCategories(this, username)
             adapter.updateList(updatedList)
 
@@ -55,12 +50,6 @@ class CategoryActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Inner adapter class for the category list.
-     * This resolves the unresolved reference 'CategoryAdapter'.
-     * Displays each category in a simple TextView.
-     * Uses notifyDataSetChanged only when necessary (as warned).
-     */
     private class CategoryAdapter(private var list: List<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 

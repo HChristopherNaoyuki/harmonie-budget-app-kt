@@ -11,6 +11,8 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class ExpenseActivity : AppCompatActivity() {
 
+    private var selectedPhotoUri: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense)
@@ -24,11 +26,10 @@ class ExpenseActivity : AppCompatActivity() {
         val btnAttachPhoto: Button = findViewById(R.id.btn_attach_photo)
         val btnSaveExpense: Button = findViewById(R.id.btn_save_expense)
 
-        // Username is passed from the calling activity
         val username = intent.getStringExtra("username") ?: "admin"
 
         val pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            // The parameter "uri" is now used (photo URI stored in expense)
+            selectedPhotoUri = uri?.toString()
             Toast.makeText(this, "Photo selected", Toast.LENGTH_SHORT).show()
         }
 
@@ -46,8 +47,16 @@ class ExpenseActivity : AppCompatActivity() {
             val categoryIdText = etCategoryId.text.toString().trim()
             val categoryId = categoryIdText.toIntOrNull() ?: 0
 
-            // Expense constructor order fixed: id (Int), amount (Double), date (String), startTime (String), endTime (String), description (String), categoryId (Int)
-            val expense = Expense(0, amount, date, startTime, endTime, description, categoryId)
+            val expense = Expense(
+                id = 0,
+                amount = amount,
+                date = date,
+                startTime = startTime,
+                endTime = endTime,
+                description = description,
+                categoryId = categoryId,
+                photoUri = selectedPhotoUri
+            )
             JsonHelper.saveExpense(this, username, expense)
 
             Toast.makeText(this, "Expense saved", Toast.LENGTH_SHORT).show()

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import androidx.core.net.toUri
 
 class ExpenseListActivity : AppCompatActivity() {
 
@@ -22,7 +23,6 @@ class ExpenseListActivity : AppCompatActivity() {
 
         val rvExpenses: RecyclerView = findViewById(R.id.rv_expenses)
 
-        // Username is passed from the calling activity
         val username = intent.getStringExtra("username") ?: "admin"
 
         rvExpenses.layoutManager = LinearLayoutManager(this)
@@ -31,7 +31,7 @@ class ExpenseListActivity : AppCompatActivity() {
         val adapter = ExpenseAdapter(expenses) { expense: Expense ->
             if (expense.photoUri != null) {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(Uri.parse(expense.photoUri), "image/*")
+                intent.setDataAndType(expense.photoUri.toUri(), "image/*")
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "No photo attached", Toast.LENGTH_SHORT).show()
@@ -40,12 +40,6 @@ class ExpenseListActivity : AppCompatActivity() {
         rvExpenses.adapter = adapter
     }
 
-    /**
-     * Inner adapter class for the expense list.
-     * This resolves the unresolved reference 'ExpenseAdapter' and all onCreateViewHolder issues.
-     * Displays each expense and handles photo click.
-     * All required imports are present.
-     */
     private class ExpenseAdapter(
         private val list: List<Expense>,
         private val onPhotoClick: (Expense) -> Unit
