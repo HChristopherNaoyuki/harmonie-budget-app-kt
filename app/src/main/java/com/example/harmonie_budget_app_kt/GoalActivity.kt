@@ -42,8 +42,8 @@ class GoalActivity : AppCompatActivity() {
         })
 
         btnSaveGoal.setOnClickListener {
-            val min = seekMin.progress
-            val max = seekMax.progress
+            val min = seekMin.progress.toDouble()
+            val max = seekMax.progress.toDouble()
             val goal = Goal(min, max)
             JsonHelper.saveGoal(this, username, goal)
             Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
