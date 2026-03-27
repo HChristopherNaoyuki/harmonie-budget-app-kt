@@ -18,10 +18,10 @@ class DashboardActivity : AppCompatActivity() {
 
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_nav)
 
-        // Username is passed from MainActivity or RegisterActivity
+        // Username is passed from MainActivity or RegisterActivity for user-specific data isolation
         val username = intent.getStringExtra("username") ?: "admin"
 
-        // Load the default HomeFragment on startup
+        // Load the default HomeFragment on startup (matches the mockup homepage)
         loadFragment(HomeFragment())
 
         bottomNav.setOnItemSelectedListener { item ->
