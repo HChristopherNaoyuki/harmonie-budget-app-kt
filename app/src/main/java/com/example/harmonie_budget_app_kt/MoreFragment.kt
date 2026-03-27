@@ -14,7 +14,7 @@ class MoreFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
-        // Username is used for future user-specific content (per assignment data isolation requirement)
+        // Username is stored for future user-specific content in accordance with the data isolation requirement in Part 2 of the assignment and the process document
         val username = activity?.intent?.getStringExtra("username") ?: "admin"
 
         val cardExport: View = view.findViewById(R.id.card_export)
