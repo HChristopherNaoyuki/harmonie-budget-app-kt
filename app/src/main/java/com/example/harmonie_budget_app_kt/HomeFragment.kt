@@ -8,19 +8,20 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
-class HomeFragment : Fragment() {
+class MoreFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_more, container, false)
 
         val username = activity?.intent?.getStringExtra("username") ?: "admin"
 
-        val tvTotalBalance: TextView = view.findViewById(R.id.tv_total_balance)
+        val cardExport: View = view.findViewById(R.id.card_export)
+        val tvExportTitle: TextView = view.findViewById(R.id.tv_export_title)
+        val layoutExportContent: View = view.findViewById(R.id.layout_export_content)
 
-        val expenses = JsonHelper.loadExpenses(requireContext(), username)
-        val total = expenses.sumOf { it.amount }
-
-        tvTotalBalance.text = getString(R.string.total_balance, total)
+        tvExportTitle.setOnClickListener {
+            layoutExportContent.visibility = if (layoutExportContent.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
 
         return view
     }

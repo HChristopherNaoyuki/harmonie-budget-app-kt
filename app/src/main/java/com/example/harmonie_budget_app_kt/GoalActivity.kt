@@ -21,36 +21,30 @@ class GoalActivity : AppCompatActivity() {
         val tvMaxGoal: TextView = findViewById(R.id.tv_max_goal)
         val btnSaveGoal: Button = findViewById(R.id.btn_save_goal)
 
-        // Username is passed from the calling activity
         val username = intent.getStringExtra("username") ?: "admin"
 
-        // Initial values
-        seekMin.progress = 0
-        seekMax.progress = 5000
-
-        tvMinGoal.text = getString(R.string.min_goal_text, seekMin.progress.toString())
-        tvMaxGoal.text = getString(R.string.max_goal_text, seekMax.progress.toString())
-
         seekMin.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvMinGoal.text = getString(R.string.min_goal_text, progress.toString())
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                tvMinGoal.text = getString(R.string.min_goal_text, progress)
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
         seekMax.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvMaxGoal.text = getString(R.string.max_goal_text, progress.toString())
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                tvMaxGoal.text = getString(R.string.max_goal_text, progress)
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
         btnSaveGoal.setOnClickListener {
-            val minGoal = seekMin.progress.toDouble()
-            val maxGoal = seekMax.progress.toDouble()
-            val goal = Goal(minGoal, maxGoal)
+            val min = seekMin.progress
+            val max = seekMax.progress
+            val goal = Goal(min, max)
             JsonHelper.saveGoal(this, username, goal)
             Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
             finish()

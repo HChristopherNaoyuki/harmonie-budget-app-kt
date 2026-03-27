@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
 import android.widget.TextView
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper

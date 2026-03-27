@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <!--
-        Camera permission is optional.
-        READ_MEDIA_IMAGES is used only for optional receipt photo selection.
-        Core use case of the app is budget tracking (not persistent or frequent photo access).
-        On Android 14+ the system automatically shows the Selected Photos dialog when GetContent is used.
-        This resolves the Android 14+ Selected Photos Access warning.
-    -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    package="com.example.harmonie_budget_app_kt">
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HarmonieBudgetAppKt"
-        tools:targetApi="36">
-
+        android:theme="@style/Theme.HarmonieBudgetAppKt">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,39 +17,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- DashboardActivity declaration added here. -->
-        <!-- This is the screen shown after successful login from MainActivity. -->
-        <!-- The activity class is present in the project. -->
-        <!-- This declaration fixes the ActivityNotFoundException crash on login. -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
-
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
-
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
-
-        <activity
-            android:name=".GoalActivity"
-            android:exported="false" />
-
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
-
         <activity
-            android:name=".CategoryTotalActivity"
+            android:name=".GoalActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
     </application>
+
+    <!-- Camera permission is optional because the app only uses it for photo selection when creating an expense entry. This satisfies the core use case requirement for broad photo access while handling Android 14+ Selected Photos Access. -->
 
 </manifest>
