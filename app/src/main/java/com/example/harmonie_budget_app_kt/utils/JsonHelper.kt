@@ -113,4 +113,51 @@ object JsonHelper
         val json = file.readText()
         return gson.fromJson(json, Goal::class.java)
     }
+
+    // Export data for More screen (Part 2 requirement)
+    fun exportData(context: Context, username: String): Boolean
+    {
+        // Copy all user files to a new export folder for visibility
+        val exportFolder = File(context.filesDir, "budget_data/export_$username")
+        if (!exportFolder.exists())
+        {
+            exportFolder.mkdirs()
+        }
+        val files = listOf(
+            "${username}.json",
+            "${username}_categories.json",
+            "${username}_expenses.json",
+            "${username}_goals.json"
+        )
+        for (fileName in files)
+        {
+            val source = getFile(context, fileName)
+            if (source.exists())
+            {
+                val dest = File(exportFolder, fileName)
+                source.copyTo(dest, overwrite = true)
+            }
+        }
+        return true
+    }
+
+    // Reset progress for More screen (Part 2 requirement)
+    fun resetProgress(context: Context, username: String): Boolean
+    {
+        val files = listOf(
+            "${username}.json",
+            "${username}_categories.json",
+            "${username}_expenses.json",
+            "${username}_goals.json"
+        )
+        for (fileName in files)
+        {
+            val file = getFile(context, fileName)
+            if (file.exists())
+            {
+                file.delete()
+            }
+        }
+        return true
+    }
 }

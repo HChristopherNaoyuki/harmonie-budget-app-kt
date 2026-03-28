@@ -1,12 +1,14 @@
 <resources>
-    <!-- App name and welcome -->
+    <!-- App name and welcome (from mockup) -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Login and register screen -->
+    <!-- Login screen (exactly two buttons as required by mockup) -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
+
+    <!-- Create new account screen -->
     <string name="create_account_title">Create new Account</string>
     <string name="name_hint">Name</string>
     <string name="surname_hint">Surname</string>
@@ -14,11 +16,13 @@
     <string name="password_hint">Password</string>
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="sign_up_button">Sign up</string>
+
+    <!-- Login screen fields -->
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="log_in_button">Log In</string>
     <string name="send_button">Send</string>
 
-    <!-- Dashboard screen -->
+    <!-- Dashboard screen (from mockup) -->
     <string name="dashboard_title">Dashboard</string>
     <string name="total_balance">Total Balance: $%1$.2f</string>
     <string name="last_30_days">Last 30 Days</string>
@@ -37,7 +41,7 @@
     <string name="detect_budget">Detect Budget</string>
     <string name="view_category_totals">View Category Totals</string>
 
-    <!-- More screen collapsible items -->
+    <!-- More screen collapsible items (from mockup) -->
     <string name="more_title">More</string>
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to JSON files in the budget_data folder.</string>
@@ -80,7 +84,7 @@
     <string name="manage_categories">Manage Categories</string>
     <string name="open_categories">Open Categories</string>
 
-    <!-- Bottom navigation -->
+    <!-- Bottom navigation (exact sections from mockup) -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
     <string name="nav_transactions">Transactions</string>
