@@ -1,24 +1,19 @@
 <resources>
-    <!-- App name and welcome (from mockup and Part 2 requirements) -->
+    <!-- App name and welcome -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Login screen (exactly two buttons as required) -->
+    <!-- Login and register screen -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
-
-    <!-- Create new account screen -->
     <string name="create_account_title">Create new Account</string>
-    <string name="already_have_account">Already have an account? Log in</string>
     <string name="name_hint">Name</string>
     <string name="surname_hint">Surname</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="sign_up_button">Sign up</string>
-
-    <!-- Login screen fields and buttons -->
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="log_in_button">Log In</string>
     <string name="send_button">Send</string>
@@ -33,25 +28,16 @@
 
     <!-- Budget screen -->
     <string name="budget_title">Budget</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="edit_budget">Edit Budget</string>
+
+    <!-- Budgets screen -->
     <string name="smart_detection">Smart Detection</string>
     <string name="smart_budget_detection_graph">Smart Budget Detection Graph</string>
     <string name="detect_budget">Detect Budget</string>
     <string name="view_category_totals">View Category Totals</string>
-    <string name="set_limit_button">Set Limit</string>
 
-    <!-- Transactions screen -->
-    <string name="transactions_title">Transactions</string>
-    <string name="groceries_category">Groceries</string>
-    <string name="transport_category">Transport</string>
-    <string name="entertainment_category">Entertainment</string>
-    <string name="bills_category">Bills</string>
-    <string name="shopping_category">Shopping</string>
-    <string name="add_category_button">+ Add Category</string>
-
-    <!-- Budgets screen -->
-    <string name="budgets_title">Budgets</string>
-
-    <!-- More screen (collapsible items as required by mockup) -->
+    <!-- More screen collapsible items -->
     <string name="more_title">More</string>
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to JSON files in the budget_data folder.</string>
@@ -66,7 +52,7 @@
     <string name="log_out_title">Log Out</string>
     <string name="log_out_content">You will be returned to the login screen.</string>
 
-    <!-- Expense entry (Part 2 required fields) -->
+    <!-- Expense entry -->
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
     <string name="hint_start_time">Start time</string>
@@ -77,12 +63,12 @@
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
-    <!-- Expense list and filter (Part 2 period selection) -->
+    <!-- Expense list filter -->
     <string name="hint_from_date">From date</string>
     <string name="hint_to_date">To date</string>
     <string name="btn_filter">Filter</string>
 
-    <!-- Goal setting (Part 2 minimum and maximum goals) -->
+    <!-- Goal setting -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
     <string name="min_goal_text">Minimum goal: %1$d</string>
     <string name="max_goal_text">Maximum goal: %1$d</string>
@@ -94,21 +80,16 @@
     <string name="manage_categories">Manage Categories</string>
     <string name="open_categories">Open Categories</string>
 
-    <!-- Bottom navigation (exact sections from mockup) -->
+    <!-- Bottom navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
     <string name="nav_transactions">Transactions</string>
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Error and validation messages (Part 2 password rules and user isolation) -->
+    <!-- Error messages -->
     <string name="error_username_taken">Username is already taken</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_invalid_password">Password must be at least 8 characters, with one letter, one number, and one special character</string>
     <string name="error_invalid_credentials">Invalid username or password</string>
-    <string name="error_photo_attachment">Photo attachment failed</string>
-
-    <!-- Success messages -->
-    <string name="success_data_exported">Data exported successfully</string>
-    <string name="success_goal_saved">Goals saved</string>
 </resources>

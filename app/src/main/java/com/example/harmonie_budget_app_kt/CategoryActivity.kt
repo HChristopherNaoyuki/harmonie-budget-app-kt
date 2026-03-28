@@ -1,12 +1,9 @@
 package com.example.harmonie_budget_app_kt
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,11 +55,11 @@ class CategoryActivity : AppCompatActivity()
     private class CategoryAdapter(private var list: List<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>()
     {
-        class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
+        class ViewHolder(val tv: android.widget.TextView) : RecyclerView.ViewHolder(tv)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
         {
-            val tv = TextView(parent.context)
+            val tv = android.widget.TextView(parent.context)
             tv.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT

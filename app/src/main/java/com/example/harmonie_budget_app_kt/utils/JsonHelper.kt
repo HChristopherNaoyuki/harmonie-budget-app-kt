@@ -1,6 +1,10 @@
 package com.example.harmonie_budget_app_kt.utils
 
 import android.content.Context
+import com.example.harmonie_budget_app_kt.models.Category
+import com.example.harmonie_budget_app_kt.models.Expense
+import com.example.harmonie_budget_app_kt.models.Goal
+import com.example.harmonie_budget_app_kt.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -20,7 +24,6 @@ object JsonHelper
         return File(folder, fileName)
     }
 
-    // Required for Part 2 user isolation (OPSC6311POE.pdf page 7)
     fun saveUser(context: Context, user: User)
     {
         val file = getFile(context, "${user.username}.json")
@@ -28,7 +31,6 @@ object JsonHelper
         file.writeText(json)
     }
 
-    // Required for Part 2 user isolation (OPSC6311POE.pdf page 7)
     fun loadUser(context: Context, username: String): User?
     {
         val file = getFile(context, "$username.json")
@@ -94,7 +96,6 @@ object JsonHelper
         return gson.fromJson(file.readText(), listType)
     }
 
-    // Required for Part 2 budget goals (OPSC6311POE.pdf page 7)
     fun saveGoal(context: Context, username: String, goal: Goal)
     {
         val file = getFile(context, "${username}_goals.json")
@@ -102,7 +103,6 @@ object JsonHelper
         file.writeText(json)
     }
 
-    // Required for Part 2 budget goals (OPSC6311POE.pdf page 7)
     fun loadGoal(context: Context, username: String): Goal?
     {
         val file = getFile(context, "${username}_goals.json")
