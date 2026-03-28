@@ -1,7 +1,7 @@
 <resources>
     <!-- App name and welcome (from mockup and Part 2 requirements) -->
     <string name="app_name">Harmonie Budget</string>
-    <string name="welcome_to_harmonie_budget">Welcome to Harmonie Budget</string>
+    <string name="welcome_message">Welcome to Harmonie Budget</string>
 
     <!-- Login screen (exactly two buttons as required) -->
     <string name="login_button">Login</string>
@@ -9,7 +9,7 @@
     <string name="forgot_password_button">Forgot Password</string>
 
     <!-- Create new account screen -->
-    <string name="create_new_account">Create new Account</string>
+    <string name="create_account_title">Create new Account</string>
     <string name="already_have_account">Already have an account? Log in</string>
     <string name="name_hint">Name</string>
     <string name="surname_hint">Surname</string>
@@ -33,8 +33,10 @@
 
     <!-- Budget screen -->
     <string name="budget_title">Budget</string>
-    <string name="smart_budget_detection">Smart Budget Detection</string>
-    <string name="detect_budget_button">Detect Budget</string>
+    <string name="smart_detection">Smart Detection</string>
+    <string name="smart_budget_detection_graph">Smart Budget Detection Graph</string>
+    <string name="detect_budget">Detect Budget</string>
+    <string name="view_category_totals">View Category Totals</string>
     <string name="set_limit_button">Set Limit</string>
 
     <!-- Transactions screen -->
@@ -49,7 +51,7 @@
     <!-- Budgets screen -->
     <string name="budgets_title">Budgets</string>
 
-    <!-- More screen (collapsible items as required by mockup and User Interface.pdf progressive disclosure) -->
+    <!-- More screen (collapsible items as required by mockup) -->
     <string name="more_title">More</string>
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to JSON files in the budget_data folder.</string>
@@ -70,6 +72,7 @@
     <string name="hint_start_time">Start time</string>
     <string name="hint_end_time">End time</string>
     <string name="hint_description">Description</string>
+    <string name="hint_category_id">Category ID</string>
     <string name="hint_category">Category</string>
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
