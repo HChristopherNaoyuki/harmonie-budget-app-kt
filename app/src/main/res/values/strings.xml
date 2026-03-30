@@ -22,6 +22,9 @@
     <string name="log_in_button">Log In</string>
     <string name="send_button">Send</string>
 
+    <!-- Forgot Password screen title (used in activity_forgot_password.xml) -->
+    <string name="forgot_password_title">Forgot Password</string>
+
     <!-- Dashboard screen -->
     <string name="dashboard_title">Dashboard</string>
     <string name="total_balance">Total Balance: $%1$.2f</string>
