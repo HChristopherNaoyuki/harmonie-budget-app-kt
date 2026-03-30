@@ -10,10 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HarmonieBudgetAppKt">
         <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,7 +43,5 @@
             android:name=".RegisterActivity"
             android:exported="false" />
     </application>
-
-    <!-- Camera permission is optional because the app only uses it for photo selection when creating an expense entry. This satisfies the core use case requirement for broad photo access while handling Android 14+ Selected Photos Access. -->
 
 </manifest>
