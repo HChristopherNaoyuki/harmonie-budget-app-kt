@@ -15,7 +15,7 @@ object JsonHelper
 
     private fun getFile(context: Context, fileName: String): File
     {
-        // Create dedicated budget_data folder if it does not exist (Part 2 requirement from OPSC6311POE.pdf page 7)
+        // Create dedicated budget_data folder if it does not exist (Part 2 requirement)
         val folder = File(context.filesDir, "budget_data")
         if (!folder.exists())
         {

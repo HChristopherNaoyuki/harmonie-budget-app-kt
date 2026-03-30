@@ -1,9 +1,9 @@
 <resources>
-    <!-- App name and welcome (from mockup) -->
+    <!-- App name and welcome (from mockup and Part 2 requirements) -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Login screen (exactly two buttons as required) -->
+    <!-- Login screen (exactly two buttons as required by mockup) -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>

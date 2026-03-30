@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_category_name"
         android:inputType="text"
+        android:autofillHints="name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_add_category" />
