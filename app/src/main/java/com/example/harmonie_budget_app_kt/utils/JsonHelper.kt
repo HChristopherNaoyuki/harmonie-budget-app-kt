@@ -15,7 +15,7 @@ object JsonHelper
 
     private fun getFile(context: Context, fileName: String): File
     {
-        // Create dedicated budget_data folder if it does not exist (Part 2 requirement)
+        // Create dedicated budget_data folder if it does not exist (Part 2 requirement from OPSC6311POE.pdf page 7)
         val folder = File(context.filesDir, "budget_data")
         if (!folder.exists())
         {
@@ -117,7 +117,6 @@ object JsonHelper
     // Export data for More screen (Part 2 requirement)
     fun exportData(context: Context, username: String): Boolean
     {
-        // Copy all user files to a new export folder for visibility
         val exportFolder = File(context.filesDir, "budget_data/export_$username")
         if (!exportFolder.exists())
         {

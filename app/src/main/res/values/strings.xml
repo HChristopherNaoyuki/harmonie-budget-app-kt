@@ -3,7 +3,7 @@
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Login screen (exactly two buttons as required by mockup) -->
+    <!-- Login screen (exactly two buttons as required) -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
@@ -17,12 +17,12 @@
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="sign_up_button">Sign up</string>
 
-    <!-- Login screen fields -->
+    <!-- Login screen fields and buttons -->
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="log_in_button">Log In</string>
     <string name="send_button">Send</string>
 
-    <!-- Dashboard screen (from mockup) -->
+    <!-- Dashboard screen -->
     <string name="dashboard_title">Dashboard</string>
     <string name="total_balance">Total Balance: $%1$.2f</string>
     <string name="last_30_days">Last 30 Days</string>
@@ -56,7 +56,7 @@
     <string name="log_out_title">Log Out</string>
     <string name="log_out_content">You will be returned to the login screen.</string>
 
-    <!-- Expense entry -->
+    <!-- Expense entry (Part 2 required fields) -->
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
     <string name="hint_start_time">Start time</string>
@@ -67,12 +67,12 @@
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
-    <!-- Expense list filter -->
+    <!-- Expense list and filter (Part 2 period selection) -->
     <string name="hint_from_date">From date</string>
     <string name="hint_to_date">To date</string>
     <string name="btn_filter">Filter</string>
 
-    <!-- Goal setting -->
+    <!-- Goal setting (Part 2 minimum and maximum goals) -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
     <string name="min_goal_text">Minimum goal: %1$d</string>
     <string name="max_goal_text">Maximum goal: %1$d</string>
@@ -91,9 +91,14 @@
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Error messages -->
+    <!-- Error and validation messages (Part 2 password rules and user isolation) -->
     <string name="error_username_taken">Username is already taken</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_invalid_password">Password must be at least 8 characters, with one letter, one number, and one special character</string>
     <string name="error_invalid_credentials">Invalid username or password</string>
+    <string name="error_photo_attachment">Photo attachment failed</string>
+
+    <!-- Success messages -->
+    <string name="success_data_exported">Data exported successfully</string>
+    <string name="success_goal_saved">Goals saved</string>
 </resources>
