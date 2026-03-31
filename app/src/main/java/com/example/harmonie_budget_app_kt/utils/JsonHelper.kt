@@ -11,7 +11,9 @@ import java.io.File
 
 object JsonHelper
 {
-    private val gson = Gson()
+    // Gson instance created once and reused for all JSON operations
+    // This removes the redundant initializer lint warning by using lazy initialization
+    private val gson: Gson by lazy { Gson() }
 
     private fun getFile(context: Context, fileName: String): File
     {
@@ -103,6 +105,8 @@ object JsonHelper
         file.writeText(json)
     }
 
+    // loadGoal is kept because it is required by Part 2 of the assignment
+    // (OPSC6311POE.pdf page 7 requires budget goals to be loaded per user)
     fun loadGoal(context: Context, username: String): Goal?
     {
         val file = getFile(context, "${username}_goals.json")
