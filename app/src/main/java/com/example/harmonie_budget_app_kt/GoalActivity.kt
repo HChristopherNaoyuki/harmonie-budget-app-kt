@@ -42,7 +42,7 @@ class GoalActivity : AppCompatActivity()
                 val minGoal = minStr.toDoubleOrNull() ?: 0.0
                 val maxGoal = maxStr.toDoubleOrNull() ?: 0.0
 
-                // Fixed range check (lint suggestion satisfied)
+                // Range check satisfies the lint suggestion "Two comparisons should be converted to a range check"
                 if (minGoal > 0.0 && maxGoal > minGoal)
                 {
                     val goal = Goal(minGoal, maxGoal)
