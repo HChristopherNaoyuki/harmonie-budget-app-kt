@@ -2,7 +2,6 @@ package com.example.harmonie_budget_app_kt
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Goal
@@ -10,8 +9,8 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class GoalActivity : AppCompatActivity()
 {
-    private lateinit var etMinGoal: EditText
-    private lateinit var etMaxGoal: EditText
+    private lateinit var etMinGoal: android.widget.EditText
+    private lateinit var etMaxGoal: android.widget.EditText
     private lateinit var btnSaveGoals: Button
     private lateinit var username: String
 
@@ -26,7 +25,7 @@ class GoalActivity : AppCompatActivity()
         etMaxGoal = findViewById(R.id.et_max_goal)
         btnSaveGoals = findViewById(R.id.btn_save_goals)
 
-        // Load existing goal (now calls loadGoal to remove "never used" warning)
+        // Load existing goal (required by Part 2 of the assignment)
         val existingGoal = JsonHelper.loadGoal(this, username)
         if (existingGoal != null)
         {
@@ -40,10 +39,11 @@ class GoalActivity : AppCompatActivity()
 
             if (minStr.isNotEmpty() && maxStr.isNotEmpty())
             {
-                val minGoal = minStr.toIntOrNull() ?: 0
-                val maxGoal = maxStr.toIntOrNull() ?: 0
+                val minGoal = minStr.toDoubleOrNull() ?: 0.0
+                val maxGoal = maxStr.toDoubleOrNull() ?: 0.0
 
-                if (minGoal > 0 && maxGoal > minGoal)
+                // Fixed range check (lint suggestion satisfied)
+                if (minGoal > 0.0 && maxGoal > minGoal)
                 {
                     val goal = Goal(minGoal, maxGoal)
                     JsonHelper.saveGoal(this, username, goal)
@@ -52,7 +52,11 @@ class GoalActivity : AppCompatActivity()
                 }
                 else
                 {
-                    Toast.makeText(this, "Max goal must be greater than min goal", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Maximum goal must be greater than minimum goal (both greater than 0)",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             else

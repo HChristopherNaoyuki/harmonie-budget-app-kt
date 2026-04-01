@@ -1,107 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App name and welcome (from mockup and Part 2 requirements) -->
+
+    <!--
+        Application-wide strings
+        These strings are used across the entire app and are extracted from the mockup image,
+        User Interface.pdf design principles (clean, minimalistic labels), OPSC6311POE.pdf Part 2
+        requirements, and OPSC6311-PROCESS-DOCUMENT.pdf. No hardcoded text is permitted anywhere.
+    -->
     <string name="app_name">Harmonie Budget</string>
-    <string name="welcome_message">Welcome to Harmonie Budget</string>
+    <string name="welcome_to_harmonie_budget">Welcome to Harmonie Budget</string>
 
-    <!-- Login screen (exactly two buttons as required by mockup) -->
-    <string name="login_button">Login</string>
-    <string name="register_button">Register</string>
-    <string name="forgot_password_button">Forgot Password</string>
+    <!--
+        Welcome / Login / Register / Forgot Password screen strings
+        Matches the exact mockup layout (two buttons on welcome screen, full forms on subsequent screens).
+    -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="send">Send</string>
 
-    <!-- Create new account screen -->
-    <string name="create_account_title">Create new Account</string>
-    <string name="name_hint">Name</string>
-    <string name="surname_hint">Surname</string>
-    <string name="username_hint">Username</string>
-    <string name="password_hint">Password</string>
-    <string name="confirm_password_hint">Confirm Password</string>
-    <string name="sign_up_button">Sign up</string>
+    <!--
+        Goal screen strings
+        Required by Part 2 of OPSC6311POE.pdf for minimum/maximum monthly goals.
+    -->
+    <string name="set_monthly_goals">Set Monthly Goals</string>
+    <string name="hint_min_goal">Minimum monthly goal</string>
+    <string name="hint_max_goal">Maximum monthly goal</string>
+    <string name="btn_save_goals">Save Goals</string>
 
-    <!-- Login screen fields and buttons -->
-    <string name="sign_in_to_continue">Sign in to continue</string>
-    <string name="log_in_button">Log In</string>
-    <string name="send_button">Send</string>
+    <!--
+        Category screen strings
+    -->
+    <string name="add_category">Add Category</string>
+    <string name="category_name">Category Name</string>
 
-    <!-- Forgot Password screen title (used in activity_forgot_password.xml) -->
-    <string name="forgot_password_title">Forgot Password</string>
-
-    <!-- Dashboard screen -->
-    <string name="dashboard_title">Dashboard</string>
-    <string name="total_balance">Total Balance: $%1$.2f</string>
-    <string name="last_30_days">Last 30 Days</string>
-    <string name="recent_transactions">Recent Transactions</string>
-    <string name="add_new_button">Add New</string>
-    <string name="edit_budget_button">Edit Budget</string>
-
-    <!-- Budget screen -->
-    <string name="budget_title">Budget</string>
+    <!--
+        Expense entry strings
+        Required by Part 2 (date, start/end times, description, category, optional photo).
+    -->
     <string name="add_expense">Add Expense</string>
-    <string name="edit_budget">Edit Budget</string>
-
-    <!-- Budgets screen -->
-    <string name="smart_detection">Smart Detection</string>
-    <string name="smart_budget_detection_graph">Smart Budget Detection Graph</string>
-    <string name="detect_budget">Detect Budget</string>
-    <string name="view_category_totals">View Category Totals</string>
-
-    <!-- More screen collapsible items (from mockup) -->
-    <string name="more_title">More</string>
-    <string name="export_data_title">Export Data</string>
-    <string name="export_data_content">Your data has been exported to JSON files in the budget_data folder.</string>
-    <string name="reset_progress_title">Reset Progress</string>
-    <string name="reset_progress_content">This will clear all your tracked data. Are you sure?</string>
-    <string name="about_title">About</string>
-    <string name="about_content">Harmonie Budget helps you track spending and reach your goals.</string>
-    <string name="help_and_info_title">Help and Information</string>
-    <string name="help_and_info_content">Tap categories to view totals. Use the period filter for custom dates.</string>
-    <string name="version_title">Version</string>
-    <string name="version_content">1.0.0 (Part 2 compliant)</string>
-    <string name="log_out_title">Log Out</string>
-    <string name="log_out_content">You will be returned to the login screen.</string>
-
-    <!-- Expense entry (Part 2 required fields) -->
+    <string name="edit_expense">Edit Expense</string>
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
-    <string name="hint_start_time">Start time</string>
-    <string name="hint_end_time">End time</string>
+    <string name="hint_start_time">Start Time</string>
+    <string name="hint_end_time">End Time</string>
     <string name="hint_description">Description</string>
-    <string name="hint_category_id">Category ID</string>
     <string name="hint_category">Category</string>
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
-    <!-- Expense list and filter (Part 2 period selection) -->
-    <string name="hint_from_date">From date</string>
-    <string name="hint_to_date">To date</string>
+    <!--
+        Expense list filter strings
+    -->
+    <string name="hint_from_date">From Date</string>
+    <string name="hint_to_date">To Date</string>
     <string name="btn_filter">Filter</string>
 
-    <!-- Goal setting (Part 2 minimum and maximum goals) -->
-    <string name="set_monthly_goals">Set Monthly Goals</string>
-    <string name="min_goal_text">Minimum goal: %1$d</string>
-    <string name="max_goal_text">Maximum goal: %1$d</string>
-    <string name="btn_save_goals">Save Goals</string>
+    <!--
+        More screen strings
+        Required by Part 2 and mockup (collapsible items with exact labels).
+    -->
+    <string name="export_data">Export Data</string>
+    <string name="reset_progress">Reset Progress</string>
+    <string name="about">About</string>
+    <string name="help_and_info">Help and Information</string>
+    <string name="version">Version</string>
+    <string name="log_out">Log Out</string>
+    <string name="export_success">Your data has been exported to the budget_data folder.</string>
+    <string name="reset_success">Progress has been reset.</string>
 
-    <!-- Category management -->
-    <string name="hint_category_name">Category name</string>
-    <string name="btn_add_category">Add Category</string>
-    <string name="manage_categories">Manage Categories</string>
-    <string name="open_categories">Open Categories</string>
-
-    <!-- Bottom navigation (exact sections from mockup) -->
+    <!--
+        Navigation bar strings
+        Matches the mockup bottom navigation (exactly 5 items).
+    -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
     <string name="nav_transactions">Transactions</string>
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Error and validation messages (Part 2 password rules and user isolation) -->
-    <string name="error_username_taken">Username is already taken</string>
-    <string name="error_password_mismatch">Passwords do not match</string>
-    <string name="error_invalid_password">Password must be at least 8 characters, with one letter, one number, and one special character</string>
-    <string name="error_invalid_credentials">Invalid username or password</string>
-    <string name="error_photo_attachment">Photo attachment failed</string>
+    <!--
+        Dashboard / Budget / Transactions / Budgets screen strings
+        Required by Part 2 (totals, charts, category lists, smart detection).
+    -->
+    <string name="my_dashboard">My Dashboard</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="detect_budget">Detect Budget</string>
+    <string name="manage_categories">Manage Categories</string>
+    <string name="open_categories">Open Categories</string>
+    <string name="smart_detection">Smart Detection</string>
+    <string name="smart_budget_detection_graph">Smart Budget Detection Graph</string>
+    <string name="view_category_totals">View Category Totals</string>
 
-    <!-- Success messages -->
-    <string name="success_data_exported">Data exported successfully</string>
-    <string name="success_goal_saved">Goals saved</string>
+    <!--
+        Common error and feedback messages
+        Required for password validation and user feedback (Part 2 and process document).
+    -->
+    <string name="error_invalid_credentials">Invalid username or password</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
+    <string name="error_username_taken">Username is already taken</string>
+
 </resources>
