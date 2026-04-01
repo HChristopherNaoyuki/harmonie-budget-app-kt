@@ -8,24 +8,26 @@
         requirements, and OPSC6311-PROCESS-DOCUMENT.pdf. No hardcoded text is permitted anywhere.
     -->
     <string name="app_name">Harmonie Budget</string>
-    <string name="welcome_to_harmonie_budget">Welcome to Harmonie Budget</string>
+    <string name="welcome_message">Welcome to Harmonie Budget</string>
 
     <!--
         Welcome / Login / Register / Forgot Password screen strings
         Matches the exact mockup layout (two buttons on welcome screen, full forms on subsequent screens).
     -->
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="create_new_account">Create New Account</string>
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="log_in">Log In</string>
-    <string name="send">Send</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="forgot_password_button">Forgot Password</string>
+    <string name="create_account_title">Create New Account</string>
+    <string name="name_hint">Name</string>
+    <string name="surname_hint">Surname</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="log_in_button">Log In</string>
+    <string name="sign_in_to_continue">Sign in to continue</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="send_button">Send</string>
 
     <!--
         Goal screen strings
@@ -39,21 +41,19 @@
     <!--
         Category screen strings
     -->
-    <string name="add_category">Add Category</string>
-    <string name="category_name">Category Name</string>
+    <string name="hint_category_name">Category Name</string>
+    <string name="btn_add_category">Add Category</string>
 
     <!--
         Expense entry strings
         Required by Part 2 (date, start/end times, description, category, optional photo).
     -->
-    <string name="add_expense">Add Expense</string>
-    <string name="edit_expense">Edit Expense</string>
+    <string name="hint_category_id">Category</string>
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
     <string name="hint_start_time">Start Time</string>
     <string name="hint_end_time">End Time</string>
     <string name="hint_description">Description</string>
-    <string name="hint_category">Category</string>
     <string name="btn_attach_photo">Attach Photo</string>
     <string name="btn_save_expense">Save Expense</string>
 
@@ -68,14 +68,18 @@
         More screen strings
         Required by Part 2 and mockup (collapsible items with exact labels).
     -->
-    <string name="export_data">Export Data</string>
-    <string name="reset_progress">Reset Progress</string>
-    <string name="about">About</string>
-    <string name="help_and_info">Help and Information</string>
-    <string name="version">Version</string>
-    <string name="log_out">Log Out</string>
-    <string name="export_success">Your data has been exported to the budget_data folder.</string>
-    <string name="reset_success">Progress has been reset.</string>
+    <string name="export_data_title">Export Data</string>
+    <string name="export_data_content">Your data has been exported to the budget_data folder.</string>
+    <string name="reset_progress_title">Reset Progress</string>
+    <string name="reset_progress_content">All your progress has been reset.</string>
+    <string name="about_title">About</string>
+    <string name="about_content">This is a personal budget tracker built for the OPSC6311 module.</string>
+    <string name="help_and_info_title">Help and Information</string>
+    <string name="help_and_info_content">How to use the app: log in, add expenses, set goals, view reports.</string>
+    <string name="version_title">Version</string>
+    <string name="version_content">1.0.0</string>
+    <string name="log_out_title">Log Out</string>
+    <string name="log_out_content">You have been logged out.</string>
 
     <!--
         Navigation bar strings
@@ -91,8 +95,8 @@
         Dashboard / Budget / Transactions / Budgets screen strings
         Required by Part 2 (totals, charts, category lists, smart detection).
     -->
-    <string name="my_dashboard">My Dashboard</string>
-    <string name="total_balance">Total Balance</string>
+    <string name="budget_title">Budget</string>
+    <string name="edit_budget">Edit Budget</string>
     <string name="detect_budget">Detect Budget</string>
     <string name="manage_categories">Manage Categories</string>
     <string name="open_categories">Open Categories</string>
