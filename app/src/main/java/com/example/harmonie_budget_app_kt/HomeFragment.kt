@@ -19,11 +19,15 @@ class HomeFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Resolve the total_balance reference required by the fragment layout
+        // Resolve the total_balance view ID declared in fragment_home.xml
         tvTotalBalance = view.findViewById(R.id.total_balance)
 
-        // Example of setting the total balance (value is loaded from JSON in production)
-        tvTotalBalance.text = getString(R.string.total_balance) + ": $0.00"
+        // Use the formatted string resource with placeholder
+        // (avoids concatenation and satisfies "do not concatenate text" and
+        // "string literal cannot be translated" lint rules)
+        // Example value 0.00 is for demonstration, replaced by JSON-loaded balance in full implementation
+        val formattedBalance = getString(R.string.total_balance, 0.00)
+        tvTotalBalance.text = formattedBalance
 
         return view
     }
