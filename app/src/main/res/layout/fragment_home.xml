@@ -9,6 +9,7 @@
 
     <!--
         Title for the home dashboard screen
+        Uses @string/my_dashboard to resolve the symbol error in fragment_home.xml.
         Matches the mockup image and User Interface.pdf minimalistic design.
     -->
     <TextView
@@ -24,7 +25,7 @@
 
     <!--
         Total balance display
-        ID total_balance is now declared to resolve the unresolved reference error.
+        ID total_balance is declared to support HomeFragment.kt.
         Uses the formatted string resource to avoid any concatenation in code.
     -->
     <TextView

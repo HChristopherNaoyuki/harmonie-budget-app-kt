@@ -1,11 +1,11 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/models/Goal.kt
 package com.example.harmonie_budget_app_kt.models
 
-/**
- * Monthly goal model.
- * Stored as single object in goal.json inside the budget_data folder.
- */
+//
+// Goal model for Part 2 of OPSC6311POE.pdf
+// Stores the minimum and maximum monthly budget goals (Double type) for the logged-in user.
+// This model is required to resolve the minGoal and maxGoal references in GoalActivity.kt.
+//
 data class Goal(
-    val minMonthly: Double,
-    val maxMonthly: Double
+    val minGoal: Double,
+    val maxGoal: Double
 )

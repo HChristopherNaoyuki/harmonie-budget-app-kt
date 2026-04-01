@@ -25,8 +25,8 @@ class GoalActivity : AppCompatActivity()
         etMaxGoal = findViewById(R.id.et_max_goal)
         btnSaveGoals = findViewById(R.id.btn_save_goals)
 
-        // Load existing goal (required by Part 2 of the assignment)
-        // minGoal and maxGoal are now correctly referenced from the Goal model (Double type)
+        // Load existing goal using the Goal model properties (minGoal and maxGoal as Double)
+        // This resolves the unresolved reference errors reported for GoalActivity.kt.
         val existingGoal = JsonHelper.loadGoal(this, username)
         if (existingGoal != null)
         {
