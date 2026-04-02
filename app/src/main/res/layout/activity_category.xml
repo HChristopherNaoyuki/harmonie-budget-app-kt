@@ -4,33 +4,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="32dp"
+    android:background="@color/white">
 
-    <EditText
-        android:id="@+id/et_category_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_category_name"
-        android:inputType="text"
-        android:autofillHints="name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_add_category" />
-
-    <Button
-        android:id="@+id/btn_add_category"
+    <!--
+        Title for the categories screen
+        Matches the mockup image and User Interface.pdf minimalistic design.
+    -->
+    <TextView
+        android:id="@+id/tv_category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_add_category"
+        android:text="@string/manage_categories"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--
+        Input field for new category name
+        Required by Part 2 of OPSC6311POE.pdf for category management.
+    -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_category_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_category_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_category_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_category_name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--
+        Add Category button
+        Required by Part 2 of OPSC6311POE.pdf for category management.
+    -->
+    <Button
+        android:id="@+id/btn_add_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_add_category"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/til_category_name"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--
+        RecyclerView for displaying user-specific categories
+        Required by Part 2 of OPSC6311POE.pdf (categories must belong to the logged-in user).
+    -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_categories"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_add_category"
+        app:layout_constraintBottom_toTopOf="@id/btn_return_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        Return Home button
+        Required by the listed improvements for the Categories Page.
+    -->
+    <Button
+        android:id="@+id/btn_return_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/return_home"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/et_category_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

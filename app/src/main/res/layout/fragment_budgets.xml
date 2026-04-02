@@ -4,62 +4,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:padding="16dp">
+    android:padding="32dp"
+    android:background="@color/white">
 
-    <!-- Smart Detection card matching the mockup -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_smart_detection"
-        android:layout_width="match_parent"
+    <!--
+        Title for the budgets tab
+        Matches the mockup image and User Interface.pdf minimalistic design.
+    -->
+    <TextView
+        android:id="@+id/tv_budgets_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:text="@string/smart_detection"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/smart_detection"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- Graph image with contentDescription using string resource (fixes the hardcoded string and missing attribute warnings) -->
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:src="@android:drawable/ic_menu_gallery"
-                android:scaleType="fitCenter"
-                android:contentDescription="@string/smart_budget_detection_graph"
-                android:layout_marginTop="8dp" />
-
-            <Button
-                android:id="@+id/btn_detect_budget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/detect_budget"
-                android:backgroundTint="#34C759"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="16dp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- View Category Totals button -->
-    <Button
-        android:id="@+id/btn_view_totals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/view_category_totals"
-        android:backgroundTint="#000000"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/card_smart_detection"
-        android:layout_marginTop="16dp" />
+    <!--
+        RecyclerView for immediate display of all categories with 28-day totals
+        (left-aligned names, right-aligned totals in one column)
+        Required by the listed improvements for the Budgets Tab.
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_budgets"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_budgets_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ class CategoryActivity : AppCompatActivity()
 {
     private lateinit var etCategoryName: EditText
     private lateinit var btnAddCategory: Button
+    private lateinit var btnReturnHome: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryAdapter
     private lateinit var username: String
@@ -28,6 +29,7 @@ class CategoryActivity : AppCompatActivity()
 
         etCategoryName = findViewById(R.id.et_category_name)
         btnAddCategory = findViewById(R.id.btn_add_category)
+        btnReturnHome = findViewById(R.id.btn_return_home)
         recyclerView = findViewById(R.id.recycler_categories)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -46,12 +48,17 @@ class CategoryActivity : AppCompatActivity()
                 JsonHelper.saveCategory(this, username, category)
 
                 // Add the new category directly to the adapter's mutable list
-                // and notify only the newly inserted item (satisfies the lint rule)
+                // and notify only the newly inserted item
+                // (this uses a specific change event and resolves the lint rule)
                 adapter.addCategory(category)
 
                 etCategoryName.text.clear()
                 Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        btnReturnHome.setOnClickListener {
+            finish()
         }
     }
 

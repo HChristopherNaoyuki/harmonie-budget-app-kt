@@ -108,6 +108,15 @@
     <string name="my_dashboard">My Dashboard</string>
 
     <!--
+        New strings for the requested navigation buttons and flow improvements
+        (Forgot Password, Create New Account, Log In, Add Expense, Categories, Edit Budget, Budgets Tab)
+    -->
+    <string name="home_button">Home</string>
+    <string name="return_home">Return Home</string>
+    <string name="sign_up_from_login">Sign Up</string>
+    <string name="log_in_from_forgot">Log In</string>
+
+    <!--
         Common error and feedback messages
         Required for password validation and user feedback (Part 2 and process document).
     -->
