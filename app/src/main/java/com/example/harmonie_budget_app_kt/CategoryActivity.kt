@@ -32,7 +32,9 @@ class CategoryActivity : AppCompatActivity()
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val categories = JsonHelper.loadCategories(this, username)
+        // Load the initial list of categories for the logged-in user
+        // (data isolation is enforced by the JsonHelper filename pattern)
+        val categories = JsonHelper.loadCategories(this, username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
 
@@ -43,8 +45,9 @@ class CategoryActivity : AppCompatActivity()
                 val category = Category(0, name)
                 JsonHelper.saveCategory(this, username, category)
 
-                val updatedList = JsonHelper.loadCategories(this, username)
-                adapter.updateList(updatedList)
+                // Add the new category directly to the adapter's mutable list
+                // and notify only the newly inserted item (satisfies the lint rule)
+                adapter.addCategory(category)
 
                 etCategoryName.text.clear()
                 Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show()
@@ -52,7 +55,7 @@ class CategoryActivity : AppCompatActivity()
         }
     }
 
-    private class CategoryAdapter(private var list: List<Category>)
+    private class CategoryAdapter(private val list: MutableList<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>()
     {
         class ViewHolder(val tv: android.widget.TextView) : RecyclerView.ViewHolder(tv)
@@ -75,12 +78,14 @@ class CategoryActivity : AppCompatActivity()
 
         override fun getItemCount(): Int = list.size
 
-        fun updateList(newList: List<Category>)
+        // Adds a single category and notifies only the inserted position
+        // This uses a specific change event (notifyItemInserted) instead of
+        // notifyDataSetChanged, addressing the Android lint recommendation
+        // for better performance and RecyclerView efficiency.
+        fun addCategory(category: Category)
         {
-            list = newList
-            // notifyDataSetChanged is used as last resort per Android lint guidance
-            // (more specific change events would be preferred in production)
-            notifyDataSetChanged()
+            list.add(category)
+            notifyItemInserted(list.size - 1)
         }
     }
 }
