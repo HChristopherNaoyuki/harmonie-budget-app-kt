@@ -7,10 +7,6 @@
     android:padding="32dp"
     android:background="@color/white">
 
-    <!--
-        Title for the add expense screen
-        Matches the mockup image and User Interface.pdf minimalistic design.
-    -->
     <TextView
         android:id="@+id/tv_expense_title"
         android:layout_width="wrap_content"
@@ -21,9 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--
-        Amount input
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_amount"
         android:layout_width="0dp"
@@ -41,9 +34,6 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Date input (opens calendar picker when clicked)
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_date"
         android:layout_width="0dp"
@@ -58,13 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_date"
-            android:focusable="false"
+            android:focusable="true"
             android:clickable="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Start time input (opens time picker when clicked)
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_start_time"
         android:layout_width="0dp"
@@ -79,13 +66,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_start_time"
-            android:focusable="false"
+            android:focusable="true"
             android:clickable="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        End time input (opens time picker when clicked)
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_end_time"
         android:layout_width="0dp"
@@ -100,13 +84,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_end_time"
-            android:focusable="false"
+            android:focusable="true"
             android:clickable="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Description input
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_description"
         android:layout_width="0dp"
@@ -123,9 +104,6 @@
             android:hint="@string/hint_description" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Category dropdown (populated from user-created categories)
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_category"
         android:layout_width="0dp"
@@ -141,9 +119,6 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Attach Photo button
-    -->
     <Button
         android:id="@+id/btn_attach_photo"
         android:layout_width="0dp"
@@ -154,9 +129,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        Save Expense button
-    -->
     <Button
         android:id="@+id/btn_save_expense"
         android:layout_width="0dp"
@@ -167,10 +139,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        Return Home button
-        Required by the listed improvements for the Add Expense page.
-    -->
     <Button
         android:id="@+id/btn_return_home"
         android:layout_width="0dp"

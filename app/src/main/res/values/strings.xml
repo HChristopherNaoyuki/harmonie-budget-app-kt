@@ -29,6 +29,7 @@
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="forgot_password_title">Forgot Password</string>
     <string name="send_button">Send</string>
+    <string name="change_password">Change Password</string>
 
     <!--
         Goal screen strings
@@ -41,14 +42,12 @@
 
     <!--
         Category screen strings
-        Required to resolve symbols in activity_category.xml.
     -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
 
     <!--
         Expense entry strings
-        Required by Part 2 (date, start/end times, description, category, optional photo).
     -->
     <string name="hint_category_id">Category</string>
     <string name="hint_amount">Amount</string>
@@ -64,7 +63,6 @@
 
     <!--
         More screen strings
-        Required by Part 2 and mockup (collapsible items with exact labels).
     -->
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to the budget_data folder.</string>
@@ -81,7 +79,6 @@
 
     <!--
         Navigation bar strings
-        Matches the mockup bottom navigation (exactly 5 items).
     -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
@@ -91,9 +88,6 @@
 
     <!--
         Dashboard / Budget / Transactions / Budgets screen strings
-        Required by Part 2 (totals, charts, category lists, smart detection).
-        total_balance uses a placeholder to avoid concatenation in code.
-        my_dashboard is now defined to resolve the symbol error in fragment_home.xml.
     -->
     <string name="budget_title">Budget</string>
     <string name="edit_budget">Edit Budget</string>
@@ -108,21 +102,19 @@
     <string name="my_dashboard">My Dashboard</string>
 
     <!--
-        New strings for the requested navigation buttons and flow improvements
-        (Forgot Password, Create New Account, Log In, Add Expense, Categories, Edit Budget, Budgets Tab)
-    -->
-    <string name="home_button">Home</string>
-    <string name="return_home">Return Home</string>
-    <string name="sign_up_from_login">Sign Up</string>
-    <string name="log_in_from_forgot">Log In</string>
-
-    <!--
         Common error and feedback messages
-        Required for password validation and user feedback (Part 2 and process document).
     -->
     <string name="error_invalid_credentials">Invalid username or password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
     <string name="error_username_taken">Username is already taken</string>
+
+    <!--
+        Navigation buttons used on multiple screens
+    -->
+    <string name="home_button">Home</string>
+    <string name="return_home">Return Home</string>
+    <string name="sign_up_from_login">Sign Up</string>
+    <string name="log_in_from_forgot">Log In</string>
 
 </resources>

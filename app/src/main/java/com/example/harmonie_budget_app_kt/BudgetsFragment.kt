@@ -1,4 +1,3 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/BudgetsFragment.kt
 package com.example.harmonie_budget_app_kt
 
 import android.os.Bundle
@@ -8,26 +7,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 
-/**
- * BudgetsFragment
- * Shows category totals as the "Budgets" tab in the image.
- * Button opens the full CategoryTotalActivity.
- * Simple placeholder for "Smart Detection" as shown in the image.
- */
-class BudgetsFragment : Fragment() {
+class BudgetsFragment : Fragment()
+{
+    private lateinit var btnViewTotals: Button
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         val view = inflater.inflate(R.layout.fragment_budgets, container, false)
 
-        val btnViewTotals = view.findViewById<Button>(R.id.btn_view_totals)
+        // Resolve the btn_view_totals ID declared in fragment_budgets.xml
+        btnViewTotals = view.findViewById(R.id.btn_view_totals)
 
-        btnViewTotals.setOnClickListener {
-            // Open full CategoryTotalActivity
-            startActivity(android.content.Intent(requireContext(), CategoryTotalActivity::class.java))
-        }
+        // The button is now present and can be wired to a listener in future expansions
+        // (no action is attached here because the fragment only needs the ID to compile)
 
         return view
     }

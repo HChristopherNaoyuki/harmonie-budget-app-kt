@@ -36,11 +36,9 @@ class ForgotPasswordActivity : AppCompatActivity()
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
             {
-                // Check if the username exists in the system (data isolation is enforced)
                 val user = JsonHelper.loadUser(this, username)
                 if (user != null)
                 {
-                    // Show the in-place new password form as requested
                     layoutNewPassword.visibility = android.view.View.VISIBLE
                     Toast.makeText(this, "Username found. Enter new password.", Toast.LENGTH_SHORT).show()
                 }
@@ -63,7 +61,6 @@ class ForgotPasswordActivity : AppCompatActivity()
             {
                 if (newPass == confirmPass)
                 {
-                    // Password rules are enforced here (as required by Part 2)
                     if (newPass.length >= 8 &&
                         newPass.matches(Regex(".*[a-zA-Z].*")) &&
                         newPass.matches(Regex(".*[0-9].*")) &&

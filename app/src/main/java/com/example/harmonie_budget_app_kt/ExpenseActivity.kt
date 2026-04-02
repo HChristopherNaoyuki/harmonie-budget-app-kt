@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import java.util.Calendar
+import java.util.Locale
 
 class ExpenseActivity : AppCompatActivity()
 {
@@ -57,7 +58,7 @@ class ExpenseActivity : AppCompatActivity()
             DatePickerDialog(
                 this,
                 { _, year, month, day ->
-                    etDate.setText("$year-${month + 1}-$day")
+                    etDate.setText(String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day))
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -71,7 +72,7 @@ class ExpenseActivity : AppCompatActivity()
             TimePickerDialog(
                 this,
                 { _, hour, minute ->
-                    etStartTime.setText(String.format("%02d:%02d", hour, minute))
+                    etStartTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute))
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
@@ -85,7 +86,7 @@ class ExpenseActivity : AppCompatActivity()
             TimePickerDialog(
                 this,
                 { _, hour, minute ->
-                    etEndTime.setText(String.format("%02d:%02d", hour, minute))
+                    etEndTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute))
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
@@ -94,8 +95,6 @@ class ExpenseActivity : AppCompatActivity()
         }
 
         btnAttachPhoto.setOnClickListener {
-            // Photo attachment logic (placeholder for camera/gallery intent)
-            // Full implementation would use ActivityResultLauncher
             photoUri = "file://example_photo.jpg"
             Toast.makeText(this, "Photo attached (demo)", Toast.LENGTH_SHORT).show()
         }
