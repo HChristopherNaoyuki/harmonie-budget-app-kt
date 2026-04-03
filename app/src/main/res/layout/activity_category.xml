@@ -7,10 +7,6 @@
     android:padding="32dp"
     android:background="@color/white">
 
-    <!--
-        Title for the categories screen
-        Matches the mockup image and User Interface.pdf minimalistic design.
-    -->
     <TextView
         android:id="@+id/tv_category_title"
         android:layout_width="wrap_content"
@@ -21,10 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--
-        Input field for new category name
-        Required by Part 2 of OPSC6311POE.pdf for category management.
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_category_name"
         android:layout_width="0dp"
@@ -41,10 +33,6 @@
             android:hint="@string/hint_category_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Add Category button
-        Required by Part 2 of OPSC6311POE.pdf for category management.
-    -->
     <Button
         android:id="@+id/btn_add_category"
         android:layout_width="0dp"
@@ -55,10 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        RecyclerView for displaying user-specific categories
-        Required by Part 2 of OPSC6311POE.pdf (categories must belong to the logged-in user).
-    -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_categories"
         android:layout_width="0dp"
@@ -69,10 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        Return Home button
-        Required by the listed improvements for the Categories Page.
-    -->
     <Button
         android:id="@+id/btn_return_home"
         android:layout_width="0dp"

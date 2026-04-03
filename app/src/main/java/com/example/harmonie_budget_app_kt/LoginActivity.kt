@@ -10,16 +10,24 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class LoginActivity : AppCompatActivity()
 {
+    private lateinit var etUsername: EditText
+    private lateinit var etPassword: EditText
+    private lateinit var btnLogin: Button
+    private lateinit var btnHome: Button
+    private lateinit var btnSignUp: Button
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val etUsername: EditText = findViewById(R.id.et_username)
-        val etPassword: EditText = findViewById(R.id.et_password)
-        val btnLogIn: Button = findViewById(R.id.btn_log_in)
+        etUsername = findViewById(R.id.et_username)
+        etPassword = findViewById(R.id.et_password)
+        btnLogin = findViewById(R.id.btn_login)
+        btnHome = findViewById(R.id.btn_home)
+        btnSignUp = findViewById(R.id.btn_sign_up)
 
-        btnLogIn.setOnClickListener {
+        btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
@@ -35,13 +43,22 @@ class LoginActivity : AppCompatActivity()
                 }
                 else
                 {
-                    Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
                 }
             }
             else
             {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        btnHome.setOnClickListener {
+            finish()
+        }
+
+        btnSignUp.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
         }
     }
 }

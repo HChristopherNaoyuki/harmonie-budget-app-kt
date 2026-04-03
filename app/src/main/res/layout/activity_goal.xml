@@ -7,10 +7,6 @@
     android:padding="32dp"
     android:background="@color/white">
 
-    <!--
-        Title for the goal screen
-        Matches the mockup image and User Interface.pdf minimalistic design.
-    -->
     <TextView
         android:id="@+id/tv_goal_title"
         android:layout_width="wrap_content"
@@ -22,9 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        Minimum goal input
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_min_goal"
         android:layout_width="0dp"
@@ -42,9 +35,6 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Maximum goal input
-    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_max_goal"
         android:layout_width="0dp"
@@ -62,9 +52,6 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--
-        Save Goals button
-    -->
     <Button
         android:id="@+id/btn_save_goals"
         android:layout_width="0dp"
@@ -75,10 +62,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--
-        Return Home button
-        Required by the listed improvements for the Edit Budget page.
-    -->
     <Button
         android:id="@+id/btn_return_home"
         android:layout_width="0dp"
