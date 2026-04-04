@@ -115,7 +115,7 @@ class ExpenseActivity : AppCompatActivity()
                 val expense = Expense(0, amount, date, startTime, endTime, description, category.id, photoUri)
                 JsonHelper.saveExpense(this, username, expense)
 
-                Toast.makeText(this, "Expense saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Expense submitted", Toast.LENGTH_SHORT).show()
                 finish()
             }
             else
