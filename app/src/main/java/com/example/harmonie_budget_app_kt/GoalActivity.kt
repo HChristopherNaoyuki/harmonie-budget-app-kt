@@ -26,7 +26,6 @@ class GoalActivity : AppCompatActivity()
         btnSaveGoals = findViewById(R.id.btn_save_goals)
 
         // Load existing goal using the Goal model properties (minGoal and maxGoal as Double)
-        // This resolves the unresolved reference errors reported for GoalActivity.kt.
         val existingGoal = JsonHelper.loadGoal(this, username)
         if (existingGoal != null)
         {
@@ -43,8 +42,8 @@ class GoalActivity : AppCompatActivity()
                 val minGoal = minStr.toDoubleOrNull() ?: 0.0
                 val maxGoal = maxStr.toDoubleOrNull() ?: 0.0
 
-                // Range check satisfies the lint suggestion "Two comparisons should be converted to a range check"
-                if (minGoal > 0.0 && maxGoal > minGoal)
+                // Input validation to prevent extreme values that could cause overflow
+                if (minGoal > 0.0 && maxGoal > minGoal && maxGoal <= 1000000.0)
                 {
                     val goal = Goal(minGoal, maxGoal)
                     JsonHelper.saveGoal(this, username, goal)
@@ -55,7 +54,7 @@ class GoalActivity : AppCompatActivity()
                 {
                     Toast.makeText(
                         this,
-                        "Maximum goal must be greater than minimum goal (both greater than 0)",
+                        "Maximum goal must be greater than minimum goal (both greater than 0 and under 1,000,000)",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

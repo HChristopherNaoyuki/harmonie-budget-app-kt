@@ -23,20 +23,27 @@ class MoreFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
-        username = activity?.intent?.getStringExtra("username") ?: "admin"
+        // Username is passed safely via fragment arguments
+        // This survives configuration changes and process death
+        username = arguments?.getString("username") ?: "admin"
 
-        // Export Data card (exports user JSON files)
+        // Export Data card
         val tvExportTitle: TextView = view.findViewById(R.id.tv_export_title)
         val layoutExportContent: View = view.findViewById(R.id.layout_export_content)
         tvExportTitle.setOnClickListener {
             layoutExportContent.isVisible = !layoutExportContent.isVisible
             if (layoutExportContent.isVisible)
             {
-                val success = JsonHelper.exportData(requireContext(), username)
-                if (success)
-                {
-                    Toast.makeText(requireContext(), "Data exported", Toast.LENGTH_SHORT).show()
-                }
+                // Perform file I/O on a background thread to prevent ANR
+                Thread {
+                    val success = JsonHelper.exportData(requireContext().applicationContext, username)
+                    requireActivity().runOnUiThread {
+                        if (success)
+                        {
+                            Toast.makeText(requireContext(), getString(R.string.data_exported), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
             }
         }
 
@@ -47,11 +54,16 @@ class MoreFragment : Fragment()
             layoutResetContent.isVisible = !layoutResetContent.isVisible
             if (layoutResetContent.isVisible)
             {
-                val success = JsonHelper.resetProgress(requireContext(), username)
-                if (success)
-                {
-                    Toast.makeText(requireContext(), "Progress reset", Toast.LENGTH_SHORT).show()
-                }
+                // Perform file I/O on a background thread to prevent ANR
+                Thread {
+                    val success = JsonHelper.resetProgress(requireContext().applicationContext, username)
+                    requireActivity().runOnUiThread {
+                        if (success)
+                        {
+                            Toast.makeText(requireContext(), getString(R.string.progress_reset), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
             }
         }
 
@@ -76,7 +88,7 @@ class MoreFragment : Fragment()
             layoutVersionContent.isVisible = !layoutVersionContent.isVisible
         }
 
-        // Log Out card (returns to login screen)
+        // Log Out card
         val tvLogOutTitle: TextView = view.findViewById(R.id.tv_log_out_title)
         val layoutLogOutContent: View = view.findViewById(R.id.layout_log_out_content)
         tvLogOutTitle.setOnClickListener {
@@ -91,5 +103,17 @@ class MoreFragment : Fragment()
         }
 
         return view
+    }
+
+    companion object
+    {
+        fun newInstance(username: String): MoreFragment
+        {
+            val fragment = MoreFragment()
+            val args = Bundle()
+            args.putString("username", username)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

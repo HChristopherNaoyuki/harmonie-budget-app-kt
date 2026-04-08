@@ -12,25 +12,36 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import androidx.core.net.toUri
 
-class ExpenseListActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+class ExpenseListActivity : AppCompatActivity()
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense_list)
 
         val rvExpenses: RecyclerView = findViewById(R.id.rv_expenses)
-
         val username = intent.getStringExtra("username") ?: "admin"
 
         rvExpenses.layoutManager = LinearLayoutManager(this)
 
         val expenses = JsonHelper.loadExpenses(this, username)
+
         val adapter = ExpenseAdapter(expenses) { expense: Expense ->
-            if (expense.photoUri != null) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(expense.photoUri.toUri(), "image/*")
-                startActivity(intent)
-            } else {
+            if (expense.photoUri != null)
+            {
+                try
+                {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(expense.photoUri.toUri(), "image/*")
+                    startActivity(intent)
+                }
+                catch (e: Exception)
+                {
+                    Toast.makeText(this, "Unable to open photo", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else
+            {
                 Toast.makeText(this, "No photo attached", Toast.LENGTH_SHORT).show()
             }
         }
@@ -40,11 +51,12 @@ class ExpenseListActivity : AppCompatActivity() {
     private class ExpenseAdapter(
         private val list: List<Expense>,
         private val onPhotoClick: (Expense) -> Unit
-    ) : RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
-
+    ) : RecyclerView.Adapter<ExpenseAdapter.ViewHolder>()
+    {
         class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
+        {
             val tv = TextView(parent.context)
             tv.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -54,10 +66,12 @@ class ExpenseListActivity : AppCompatActivity() {
             return ViewHolder(tv)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ViewHolder, position: Int)
+        {
             val exp = list[position]
             var text = "${exp.amount} - ${exp.date} - ${exp.description}"
-            if (exp.photoUri != null) {
+            if (exp.photoUri != null)
+            {
                 text += " (Photo attached - tap to view)"
                 holder.tv.setOnClickListener { onPhotoClick(exp) }
             }

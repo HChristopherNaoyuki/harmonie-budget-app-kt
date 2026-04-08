@@ -36,7 +36,7 @@ class CategoryActivity : AppCompatActivity()
 
         // Load the initial list of categories for the logged-in user
         // (data isolation is enforced by the JsonHelper filename pattern)
-        val categories = JsonHelper.loadCategories(this, username).toMutableList()
+        val categories = JsonHelper.loadCategories(this.applicationContext, username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
 
@@ -45,15 +45,14 @@ class CategoryActivity : AppCompatActivity()
             if (name.isNotEmpty())
             {
                 val category = Category(0, name)
-                JsonHelper.saveCategory(this, username, category)
+                JsonHelper.saveCategory(this.applicationContext, username, category)
 
                 // Add the new category directly to the adapter's mutable list
                 // and notify only the newly inserted item
-                // (this uses a specific change event and resolves the lint rule)
                 adapter.addCategory(category)
 
                 etCategoryName.text.clear()
-                Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.category_added), Toast.LENGTH_SHORT).show()
             }
         }
 

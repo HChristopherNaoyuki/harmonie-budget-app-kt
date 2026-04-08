@@ -46,7 +46,7 @@ class ExpenseActivity : AppCompatActivity()
         btnReturnHome = findViewById(R.id.btn_return_home)
 
         // Populate category dropdown with user-specific categories
-        val categories = JsonHelper.loadCategories(this, username)
+        val categories = JsonHelper.loadCategories(this.applicationContext, username)
         val categoryNames = categories.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -113,14 +113,14 @@ class ExpenseActivity : AppCompatActivity()
                 val category = categories[selectedCategoryIndex]
 
                 val expense = Expense(0, amount, date, startTime, endTime, description, category.id, photoUri)
-                JsonHelper.saveExpense(this, username, expense)
+                JsonHelper.saveExpense(this.applicationContext, username, expense)
 
-                Toast.makeText(this, "Expense submitted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
                 finish()
             }
             else
             {
-                Toast.makeText(this, "Please fill all fields and select a category", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -15,12 +15,16 @@ class DashboardActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        username = intent.getStringExtra("username") ?: "admin"
+        username = intent.getStringExtra("username") ?: throw IllegalStateException("Username must be passed to DashboardActivity")
 
         bottomNav = findViewById(R.id.bottom_nav)
 
-        // Load HomeFragment by default (matches mockup)
-        loadFragment(HomeFragment())
+        // Only load the initial fragment if this is the first creation of the activity
+        // This prevents duplicate fragments on configuration change (rotation)
+        if (savedInstanceState == null)
+        {
+            loadFragment(HomeFragment())
+        }
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId)

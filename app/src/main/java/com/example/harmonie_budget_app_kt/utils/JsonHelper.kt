@@ -25,6 +25,7 @@ object JsonHelper
         return File(folder, fileName)
     }
 
+    @Synchronized
     fun saveUser(context: Context, user: User)
     {
         val file = getFile(context, "${user.username}.json")
@@ -43,6 +44,7 @@ object JsonHelper
         return gson.fromJson(json, User::class.java)
     }
 
+    @Synchronized
     fun saveCategory(context: Context, username: String, category: Category)
     {
         val file = getFile(context, "${username}_categories.json")
@@ -70,6 +72,7 @@ object JsonHelper
         return gson.fromJson(file.readText(), listType)
     }
 
+    @Synchronized
     fun saveExpense(context: Context, username: String, expense: Expense)
     {
         val file = getFile(context, "${username}_expenses.json")
@@ -97,6 +100,7 @@ object JsonHelper
         return gson.fromJson(file.readText(), listType)
     }
 
+    @Synchronized
     fun saveGoal(context: Context, username: String, goal: Goal)
     {
         val file = getFile(context, "${username}_goals.json")
@@ -104,8 +108,6 @@ object JsonHelper
         file.writeText(json)
     }
 
-    // loadGoal is kept and now actively used by GoalActivity.kt
-    // (required by Part 2 of the assignment for budget goals)
     fun loadGoal(context: Context, username: String): Goal?
     {
         val file = getFile(context, "${username}_goals.json")
@@ -117,7 +119,6 @@ object JsonHelper
         return gson.fromJson(json, Goal::class.java)
     }
 
-    // Export data for More screen (Part 2 requirement)
     fun exportData(context: Context, username: String): Boolean
     {
         val exportFolder = File(context.filesDir, "budget_data/export_$username")
@@ -143,7 +144,6 @@ object JsonHelper
         return true
     }
 
-    // Reset progress for More screen (Part 2 requirement)
     fun resetProgress(context: Context, username: String): Boolean
     {
         val files = listOf(
