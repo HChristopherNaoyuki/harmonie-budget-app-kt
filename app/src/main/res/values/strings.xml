@@ -49,6 +49,7 @@
     <!--
         Expense entry strings
         Required by Part 2 (date, start/end times, description, category, optional photo).
+        The save button text is changed to "Submit" as requested in the issue.
     -->
     <string name="hint_category_id">Category</string>
     <string name="hint_amount">Amount</string>

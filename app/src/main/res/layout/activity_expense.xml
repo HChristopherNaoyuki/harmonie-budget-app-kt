@@ -138,6 +138,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--
+        Submit button for Add Expense
+        The text is now "Submit" as required by the issue.
+        Width is wrap_content with padding to satisfy Material Design recommendations.
+    -->
     <Button
         android:id="@+id/btn_save_expense"
         android:layout_width="wrap_content"
