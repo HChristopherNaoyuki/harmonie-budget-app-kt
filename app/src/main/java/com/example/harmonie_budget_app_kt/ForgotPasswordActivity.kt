@@ -24,6 +24,7 @@ class ForgotPasswordActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
+        // Bind all views declared in the corrected layout file
         etUsername = findViewById(R.id.et_username)
         etNewPassword = findViewById(R.id.et_new_password)
         etConfirmNewPassword = findViewById(R.id.et_confirm_new_password)
@@ -34,15 +35,15 @@ class ForgotPasswordActivity : AppCompatActivity()
         tvNewPasswordTitle = findViewById(R.id.tv_new_password_title)
         layoutNewPassword = findViewById(R.id.layout_new_password)
 
-        // Layout for new password is hidden until username is verified
+        // The new password section starts hidden until the username is verified
         layoutNewPassword.visibility = android.view.View.GONE
 
         btnSend.setOnClickListener {
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
             {
-                // Username exists check would be performed here using JsonHelper
-                // For this example we assume a successful check
+                // Username verification logic would be performed here using JsonHelper
+                // For this implementation we assume verification succeeds
                 tvNewPasswordTitle.visibility = android.view.View.VISIBLE
                 layoutNewPassword.visibility = android.view.View.VISIBLE
                 Toast.makeText(this, "Username verified", Toast.LENGTH_SHORT).show()
@@ -59,9 +60,7 @@ class ForgotPasswordActivity : AppCompatActivity()
 
             if (newPass.isNotEmpty() && confirmPass.isNotEmpty() && newPass == confirmPass)
             {
-                // Password change logic would be performed here
-                // Example regex for password requirements (at least 8 characters, letter, number, special)
-                // The following uses raw string to simplify the dollar sign
+                // Password requirements check (minimum 8 characters with letter, number, special character)
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
                 if (passwordRegex.matches(newPass))
                 {
