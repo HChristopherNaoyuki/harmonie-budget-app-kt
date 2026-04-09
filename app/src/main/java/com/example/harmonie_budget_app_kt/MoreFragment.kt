@@ -104,16 +104,4 @@ class MoreFragment : Fragment()
 
         return view
     }
-
-    companion object
-    {
-        fun newInstance(username: String): MoreFragment
-        {
-            val fragment = MoreFragment()
-            val args = Bundle()
-            args.putString("username", username)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 }

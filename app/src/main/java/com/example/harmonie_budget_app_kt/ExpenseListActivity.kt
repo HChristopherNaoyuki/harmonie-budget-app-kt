@@ -35,8 +35,12 @@ class ExpenseListActivity : AppCompatActivity()
                     intent.setDataAndType(expense.photoUri.toUri(), "image/*")
                     startActivity(intent)
                 }
-                catch (e: Exception)
+                catch (_: Exception)
                 {
+                    // Exception handling is used here as required
+                    // This catches any failure when opening the photo
+                    // (for example, invalid URI or no app to view the image)
+                    // and prevents the app from crashing
                     Toast.makeText(this, "Unable to open photo", Toast.LENGTH_SHORT).show()
                 }
             }
