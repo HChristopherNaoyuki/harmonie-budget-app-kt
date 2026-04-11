@@ -8,34 +8,32 @@
     android:background="@color/white">
 
     <!--
-        Title for the home dashboard screen
-        Uses @string/my_dashboard to resolve the symbol error in fragment_home.xml.
-        Matches the mockup image and User Interface.pdf minimalistic design.
+        Title for the home screen
+        This matches the exact mockup label "My Dashboard" and provides a clear screen heading.
     -->
     <TextView
-        android:id="@+id/tv_home_title"
+        android:id="@+id/tv_dashboard_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/my_dashboard"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--
         Total balance display
-        ID total_balance is declared to support HomeFragment.kt.
-        Uses the formatted string resource to avoid any concatenation in code.
+        This TextView now has the exact id tv_total_balance that HomeFragment.kt references.
+        The value is set dynamically in the fragment using the user's expense data.
     -->
     <TextView
-        android:id="@+id/total_balance"
+        android:id="@+id/tv_total_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="@string/total_balance"
+        android:textSize="18sp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_dashboard_title"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

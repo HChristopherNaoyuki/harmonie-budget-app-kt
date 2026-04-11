@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HarmonieBudget">
 
-        <!-- Main welcome screen (two buttons: Login and Register) -->
+        <!--
+            Main welcome screen (two buttons: Login and Register)
+            This is the launcher activity as required by the project template.
+        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -60,7 +63,7 @@
             android:name=".ExpenseListActivity"
             android:exported="false" />
 
-        <!-- Category totals screen (now declared to fix L-01) -->
+        <!-- Category totals screen -->
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />
