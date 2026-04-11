@@ -2,40 +2,29 @@
 <resources>
 
     <!--
-        Base theme for the application
-        This theme is referenced in AndroidManifest.xml and provides the clean, minimalistic appearance required by the project.
-        It inherits from MaterialComponents to ensure consistent Material Design styling across all screens.
-        The NoActionBar variant is used because all activities manage their own navigation without a system action bar.
+        Light theme for the application.
+        This is the base theme referenced by AndroidManifest.xml.
+        It inherits from Theme.MaterialComponents.DayNight.NoActionBar to ensure a clean, minimalistic look with no system action bar.
+        All activities manage their own navigation, so NoActionBar is required.
+        This file defines the style exactly once.
     -->
     <style name="Theme.HarmonieBudget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <!-- Status bar color -->
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <!-- Secondary brand color -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <!-- Background color for all screens -->
-        <item name="android:windowBackground">@color/white</item>
-        <!-- Text color for light backgrounds -->
-        <item name="android:textColor">@android:color/black</item>
-    </style>
 
-    <!--
-        Night mode variant of the theme
-        This ensures consistent appearance when the device is in dark mode.
-        It inherits from the same base to avoid any visual inconsistencies between light and dark themes.
-    -->
-    <style name="Theme.HarmonieBudget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color in dark mode -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <!-- Status bar color in dark mode -->
+        <!-- Primary brand color used for buttons and accents -->
+        <item name="colorPrimary">@color/purple_500</item>
+
+        <!-- Status bar color in light mode -->
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <!-- Secondary brand color in dark mode -->
-        <item name="colorSecondary">@color/teal_700</item>
-        <!-- Background color for all screens in dark mode -->
-        <item name="android:windowBackground">@color/black</item>
-        <!-- Text color for dark backgrounds -->
-        <item name="android:textColor">@android:color/white</item>
+
+        <!-- Secondary brand color used for secondary elements -->
+        <item name="colorSecondary">@color/teal_200</item>
+
+        <!-- Background color for all screens (white for light mode) -->
+        <item name="android:windowBackground">@color/white</item>
+
+        <!-- Default text color for light backgrounds -->
+        <item name="android:textColor">@android:color/black</item>
+
     </style>
 
 </resources>
