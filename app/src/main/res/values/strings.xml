@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--
-        Application-wide strings
-        These strings are extracted directly from the mockup image,
-        User Interface.pdf design principles (clean, minimalistic labels),
-        OPSC6311POE.pdf Part 2 requirements, and OPSC6311-PROCESS-DOCUMENT.pdf.
-        No hardcoded text is permitted anywhere in the app.
-    -->
+    <!-- Application-wide strings -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!--
-        Welcome / Login / Register / Forgot Password screen strings
-        Matches the exact mockup layout (two buttons on welcome screen, full forms on subsequent screens).
-    -->
+    <!-- Welcome, Login, Register, Forgot Password screen strings -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
@@ -32,25 +23,18 @@
     <string name="change_password">Change Password</string>
     <string name="new_password_title">New Password</string>
 
-    <!--
-        Goal screen strings
-        Required by Part 2 of OPSC6311POE.pdf for minimum and maximum monthly goals.
-    -->
+    <!-- Goal screen strings -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
     <string name="hint_min_goal">Minimum monthly goal</string>
     <string name="hint_max_goal">Maximum monthly goal</string>
     <string name="btn_save_goals">Save Goals</string>
 
-    <!--
-        Category screen strings
-    -->
+    <!-- Category screen strings -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
     <string name="category_added">Category added</string>
 
-    <!--
-        Expense entry strings
-    -->
+    <!-- Expense entry strings -->
     <string name="hint_category_id">Category</string>
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
@@ -64,9 +48,7 @@
     <string name="hint_to_date">To Date</string>
     <string name="btn_filter">Filter</string>
 
-    <!--
-        More screen strings
-    -->
+    <!-- More screen strings -->
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to the budget_data folder.</string>
     <string name="reset_progress_title">Reset Progress</string>
@@ -82,18 +64,14 @@
     <string name="data_exported">Data exported</string>
     <string name="progress_reset">Progress reset</string>
 
-    <!--
-        Navigation bar strings
-    -->
+    <!-- Navigation bar strings -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
     <string name="nav_transactions">Transactions</string>
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!--
-        Dashboard / Budget / Transactions / Budgets screen strings
-    -->
+    <!-- Dashboard / Budget / Transactions / Budgets screen strings -->
     <string name="budget_title">Budget</string>
     <string name="edit_budget">Edit Budget</string>
     <string name="detect_budget">Detect Budget</string>
@@ -106,18 +84,24 @@
     <string name="add_expense">Add Expense</string>
     <string name="my_dashboard">My Dashboard</string>
 
-    <!--
-        Common error and feedback messages
-    -->
+    <!-- New strings for the redesigned Home page -->
+    <string name="greetings">Greetings, %1$s!</string>
+    <string name="monthly_budget">Monthly budget: %1$.2f - %2$.2f</string>
+    <string name="within_budget">Within Budget</string>
+    <string name="near_budget_limit">Near Budget Limit</string>
+    <string name="over_budget">Over Budget</string>
+    <string name="all_time_spending">All-time spending</string>
+    <string name="category_total">%1$s: %2$.2f</string>
+    <string name="no_expenses_logged">No expenses logged yet</string>
+
+    <!-- Common error and feedback messages -->
     <string name="error_invalid_credentials">Invalid username or password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
     <string name="error_username_taken">Username is already taken</string>
     <string name="please_fill_all_fields">Please fill all fields and select a category</string>
 
-    <!--
-        Navigation buttons used on multiple screens
-    -->
+    <!-- Navigation buttons used on multiple screens -->
     <string name="home_button">Home</string>
     <string name="return_home">Return Home</string>
     <string name="sign_up_from_login">Sign Up</string>
