@@ -45,14 +45,17 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Populate category dropdown with user-specific categories
+        // Load user-specific categories
         val categories = JsonHelper.loadCategories(this.applicationContext, username)
+        if (categories.isEmpty())
+        {
+            Toast.makeText(this, "Please create at least one category first", Toast.LENGTH_LONG).show()
+        }
         val categoryNames = categories.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
-        // Date picker on click
         etDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -66,7 +69,6 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
-        // Start time picker on click
         etStartTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -80,7 +82,6 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
-        // End time picker on click
         etEndTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -107,8 +108,20 @@ class ExpenseActivity : AppCompatActivity()
             val description = etDescription.text.toString().trim()
             val selectedCategoryIndex = spinnerCategory.selectedItemPosition
 
-            if (amountStr.isNotEmpty() && date.isNotEmpty() && startTime.isNotEmpty() && endTime.isNotEmpty() && description.isNotEmpty() && selectedCategoryIndex >= 0)
+            if (amountStr.isNotEmpty() && date.isNotEmpty() && startTime.isNotEmpty() && endTime.isNotEmpty() && description.isNotEmpty())
             {
+                if (categories.isEmpty())
+                {
+                    Toast.makeText(this, "Please create at least one category first", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                if (selectedCategoryIndex < 0 || selectedCategoryIndex >= categories.size)
+                {
+                    Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 val amount = amountStr.toDoubleOrNull() ?: 0.0
                 val category = categories[selectedCategoryIndex]
 

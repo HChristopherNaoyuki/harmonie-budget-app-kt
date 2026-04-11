@@ -34,8 +34,6 @@ class CategoryActivity : AppCompatActivity()
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Load the initial list of categories for the logged-in user
-        // (data isolation is enforced by the JsonHelper filename pattern)
         val categories = JsonHelper.loadCategories(this.applicationContext, username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
@@ -44,11 +42,12 @@ class CategoryActivity : AppCompatActivity()
             val name = etCategoryName.text.toString().trim()
             if (name.isNotEmpty())
             {
-                val category = Category(0, name)
+                // Assign unique auto-increment ID
+                // (fixes L-16)
+                val nextId = if (categories.isEmpty()) 1 else categories.maxOf { it.id } + 1
+                val category = Category(nextId, name)
                 JsonHelper.saveCategory(this.applicationContext, username, category)
 
-                // Add the new category directly to the adapter's mutable list
-                // and notify only the newly inserted item
                 adapter.addCategory(category)
 
                 etCategoryName.text.clear()
@@ -84,10 +83,6 @@ class CategoryActivity : AppCompatActivity()
 
         override fun getItemCount(): Int = list.size
 
-        // Adds a single category and notifies only the inserted position
-        // This uses a specific change event (notifyItemInserted) instead of
-        // notifyDataSetChanged, addressing the Android lint recommendation
-        // for better performance and RecyclerView efficiency.
         fun addCategory(category: Category)
         {
             list.add(category)

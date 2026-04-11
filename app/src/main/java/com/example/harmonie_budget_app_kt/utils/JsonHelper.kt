@@ -11,12 +11,10 @@ import java.io.File
 
 object JsonHelper
 {
-    // Gson instance created once and reused for all JSON operations
     private val gson: Gson by lazy { Gson() }
 
     private fun getFile(context: Context, fileName: String): File
     {
-        // Create dedicated budget_data folder if it does not exist (Part 2 requirement)
         val folder = File(context.filesDir, "budget_data")
         if (!folder.exists())
         {
@@ -138,7 +136,14 @@ object JsonHelper
             if (source.exists())
             {
                 val dest = File(exportFolder, fileName)
-                source.copyTo(dest, overwrite = true)
+                try
+                {
+                    source.copyTo(dest, overwrite = true)
+                }
+                catch (_: Exception)
+                {
+                    return false
+                }
             }
         }
         return true
@@ -147,7 +152,6 @@ object JsonHelper
     fun resetProgress(context: Context, username: String): Boolean
     {
         val files = listOf(
-            "${username}.json",
             "${username}_categories.json",
             "${username}_expenses.json",
             "${username}_goals.json"

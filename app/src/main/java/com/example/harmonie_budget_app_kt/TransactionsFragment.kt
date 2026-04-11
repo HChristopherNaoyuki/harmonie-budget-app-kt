@@ -1,6 +1,6 @@
-// app/kotlin+java/com.example.harmonie_budget_app_kt/TransactionsFragment.kt
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,27 +8,44 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 
-/**
- * TransactionsFragment
- * Handles category management as shown in the "Transactions" tab of the image.
- * Button opens the full CategoryActivity for adding and viewing categories.
- * Clean card layout with minimal design.
- */
-class TransactionsFragment : Fragment() {
+class TransactionsFragment : Fragment()
+{
+    private lateinit var username: String
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
 
-        val btnManageCategories = view.findViewById<Button>(R.id.btn_manage_categories)
+        // Username is received from DashboardActivity arguments
+        // This ensures user-specific data isolation for all operations
+        username = arguments?.getString("username") ?: "admin"
 
+        val btnManageCategories: Button = view.findViewById(R.id.btn_manage_categories)
+
+        // Start CategoryActivity and pass the username
+        // (fixes L-05)
         btnManageCategories.setOnClickListener {
-            // Open full CategoryActivity
-            startActivity(android.content.Intent(requireContext(), CategoryActivity::class.java))
+            val intent = Intent(requireContext(), CategoryActivity::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
         }
 
         return view
+    }
+
+    companion object
+    {
+        fun newInstance(username: String): TransactionsFragment
+        {
+            val fragment = TransactionsFragment()
+            val args = Bundle()
+            args.putString("username", username)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

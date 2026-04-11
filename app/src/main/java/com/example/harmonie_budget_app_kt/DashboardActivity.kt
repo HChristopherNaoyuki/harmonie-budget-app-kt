@@ -15,15 +15,18 @@ class DashboardActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+        // Username is received from LoginActivity or RegisterActivity
+        // This value is required for all user-specific data isolation
         username = intent.getStringExtra("username") ?: throw IllegalStateException("Username must be passed to DashboardActivity")
 
         bottomNav = findViewById(R.id.bottom_nav)
 
-        // Only load the initial fragment if this is the first creation of the activity
+        // Only load the initial fragment on first creation
         // This prevents duplicate fragments on configuration change (rotation)
+        // (fixes L-06)
         if (savedInstanceState == null)
         {
-            loadFragment(HomeFragment())
+            loadFragment(HomeFragment.newInstance(username))
         }
 
         bottomNav.setOnItemSelectedListener { item ->
@@ -31,27 +34,27 @@ class DashboardActivity : AppCompatActivity()
             {
                 R.id.nav_home ->
                 {
-                    loadFragment(HomeFragment())
+                    loadFragment(HomeFragment.newInstance(username))
                     true
                 }
                 R.id.nav_budget ->
                 {
-                    loadFragment(BudgetFragment())
+                    loadFragment(BudgetFragment.newInstance(username))
                     true
                 }
                 R.id.nav_transactions ->
                 {
-                    loadFragment(TransactionsFragment())
+                    loadFragment(TransactionsFragment.newInstance(username))
                     true
                 }
                 R.id.nav_budgets ->
                 {
-                    loadFragment(BudgetsFragment())
+                    loadFragment(BudgetsFragment.newInstance(username))
                     true
                 }
                 R.id.nav_more ->
                 {
-                    loadFragment(MoreFragment())
+                    loadFragment(MoreFragment.newInstance(username))
                     true
                 }
                 else -> false

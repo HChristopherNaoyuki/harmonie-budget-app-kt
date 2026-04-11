@@ -6,6 +6,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.harmonie_budget_app_kt.models.User
+import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 class ForgotPasswordActivity : AppCompatActivity()
 {
@@ -24,7 +26,6 @@ class ForgotPasswordActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
-        // Bind all views declared in the corrected layout file
         etUsername = findViewById(R.id.et_username)
         etNewPassword = findViewById(R.id.et_new_password)
         etConfirmNewPassword = findViewById(R.id.et_confirm_new_password)
@@ -35,18 +36,23 @@ class ForgotPasswordActivity : AppCompatActivity()
         tvNewPasswordTitle = findViewById(R.id.tv_new_password_title)
         layoutNewPassword = findViewById(R.id.layout_new_password)
 
-        // The new password section starts hidden until the username is verified
         layoutNewPassword.visibility = android.view.View.GONE
 
         btnSend.setOnClickListener {
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
             {
-                // Username verification logic would be performed here using JsonHelper
-                // For this implementation we assume verification succeeds
-                tvNewPasswordTitle.visibility = android.view.View.VISIBLE
-                layoutNewPassword.visibility = android.view.View.VISIBLE
-                Toast.makeText(this, "Username verified", Toast.LENGTH_SHORT).show()
+                val user = JsonHelper.loadUser(this, username)
+                if (user != null)
+                {
+                    tvNewPasswordTitle.visibility = android.view.View.VISIBLE
+                    layoutNewPassword.visibility = android.view.View.VISIBLE
+                    Toast.makeText(this, "Username verified", Toast.LENGTH_SHORT).show()
+                }
+                else
+                {
+                    Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show()
+                }
             }
             else
             {
@@ -60,12 +66,17 @@ class ForgotPasswordActivity : AppCompatActivity()
 
             if (newPass.isNotEmpty() && confirmPass.isNotEmpty() && newPass == confirmPass)
             {
-                // Password requirements check (minimum 8 characters with letter, number, special character)
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
                 if (passwordRegex.matches(newPass))
                 {
-                    Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
-                    finish()
+                    val user = JsonHelper.loadUser(this, etUsername.text.toString().trim())
+                    if (user != null)
+                    {
+                        val updatedUser = User(user.name, user.surname, user.username, newPass)
+                        JsonHelper.saveUser(this, updatedUser)
+                        Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
                 }
                 else
                 {

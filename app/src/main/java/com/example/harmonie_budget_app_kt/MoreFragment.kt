@@ -23,8 +23,8 @@ class MoreFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
-        // Username is passed safely via fragment arguments
-        // This survives configuration changes and process death
+        // Username is received from DashboardActivity arguments
+        // This ensures user-specific data isolation for all operations
         username = arguments?.getString("username") ?: "admin"
 
         // Export Data card
@@ -34,7 +34,6 @@ class MoreFragment : Fragment()
             layoutExportContent.isVisible = !layoutExportContent.isVisible
             if (layoutExportContent.isVisible)
             {
-                // Perform file I/O on a background thread to prevent ANR
                 Thread {
                     val success = JsonHelper.exportData(requireContext().applicationContext, username)
                     requireActivity().runOnUiThread {
@@ -54,7 +53,6 @@ class MoreFragment : Fragment()
             layoutResetContent.isVisible = !layoutResetContent.isVisible
             if (layoutResetContent.isVisible)
             {
-                // Perform file I/O on a background thread to prevent ANR
                 Thread {
                     val success = JsonHelper.resetProgress(requireContext().applicationContext, username)
                     requireActivity().runOnUiThread {
@@ -88,20 +86,28 @@ class MoreFragment : Fragment()
             layoutVersionContent.isVisible = !layoutVersionContent.isVisible
         }
 
-        // Log Out card
+        // Log Out card (immediate action, no toggle)
+        // (fixes L-08)
         val tvLogOutTitle: TextView = view.findViewById(R.id.tv_log_out_title)
-        val layoutLogOutContent: View = view.findViewById(R.id.layout_log_out_content)
         tvLogOutTitle.setOnClickListener {
-            layoutLogOutContent.isVisible = !layoutLogOutContent.isVisible
-            if (layoutLogOutContent.isVisible)
-            {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                requireActivity().finish()
-            }
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            requireActivity().finish()
         }
 
         return view
+    }
+
+    companion object
+    {
+        fun newInstance(username: String): MoreFragment
+        {
+            val fragment = MoreFragment()
+            val args = Bundle()
+            args.putString("username", username)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

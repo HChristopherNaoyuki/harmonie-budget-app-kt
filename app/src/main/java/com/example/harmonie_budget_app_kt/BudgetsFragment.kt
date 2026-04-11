@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import androidx.fragment.app.Fragment
 
 class BudgetsFragment : Fragment()
 {
-    private lateinit var btnViewTotals: Button
+    private lateinit var username: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,12 +20,32 @@ class BudgetsFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_budgets, container, false)
 
-        // Resolve the btn_view_totals ID declared in fragment_budgets.xml
-        btnViewTotals = view.findViewById(R.id.btn_view_totals)
+        // Username is received from DashboardActivity arguments
+        // This ensures user-specific data isolation for all operations
+        username = arguments?.getString("username") ?: "admin"
 
-        // The button is now present and can be wired to a listener in future expansions
-        // (no action is attached here because the fragment only needs the ID to compile)
+        val btnViewTotals: Button = view.findViewById(R.id.btn_view_totals)
+
+        // Start CategoryTotalActivity and pass the username
+        // (fixes L-02)
+        btnViewTotals.setOnClickListener {
+            val intent = Intent(requireContext(), CategoryTotalActivity::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }
 
         return view
+    }
+
+    companion object
+    {
+        fun newInstance(username: String): BudgetsFragment
+        {
+            val fragment = BudgetsFragment()
+            val args = Bundle()
+            args.putString("username", username)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

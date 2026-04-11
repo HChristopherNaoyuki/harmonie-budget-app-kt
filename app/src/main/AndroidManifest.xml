@@ -8,40 +8,63 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HarmonieBudgetAppKt">
-        <activity
-            android:name=".ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
+        android:theme="@style/Theme.HarmonieBudget">
+
+        <!-- Main welcome screen (two buttons: Login and Register) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Login screen -->
         <activity
-            android:name=".DashboardActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
-        <activity
-            android:name=".CategoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ExpenseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ExpenseListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".GoalActivity"
-            android:exported="false" />
+
+        <!-- Register screen -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
+
+        <!-- Forgot password screen -->
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+
+        <!-- Dashboard with bottom navigation (5 tabs) -->
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+
+        <!-- Category management screen -->
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+
+        <!-- Expense entry screen -->
+        <activity
+            android:name=".ExpenseActivity"
+            android:exported="false" />
+
+        <!-- Goal setting screen -->
+        <activity
+            android:name=".GoalActivity"
+            android:exported="false" />
+
+        <!-- Expense list with period filter -->
+        <activity
+            android:name=".ExpenseListActivity"
+            android:exported="false" />
+
+        <!-- Category totals screen (now declared to fix L-01) -->
+        <activity
+            android:name=".CategoryTotalActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
