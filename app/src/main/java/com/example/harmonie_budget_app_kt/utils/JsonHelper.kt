@@ -15,6 +15,7 @@ object JsonHelper
 
     private fun getFile(context: Context, fileName: String): File
     {
+        // Create the dedicated folder for saved information if it does not exist
         val folder = File(context.filesDir, "budget_data")
         if (!folder.exists())
         {
@@ -151,6 +152,7 @@ object JsonHelper
 
     fun resetProgress(context: Context, username: String): Boolean
     {
+        // Reset only data files, never the user credentials file
         val files = listOf(
             "${username}_categories.json",
             "${username}_expenses.json",
