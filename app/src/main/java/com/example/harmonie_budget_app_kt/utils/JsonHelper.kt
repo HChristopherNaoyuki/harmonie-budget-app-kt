@@ -15,7 +15,9 @@ import java.io.File
  * All file input/output operations are performed on the main thread in the current implementation.
  * In a future refactoring, these methods will be marked suspend and called from Dispatchers.IO.
  * The @Synchronized annotation has been kept on write methods to prevent race conditions.
- * Unused function warnings are expected until ViewModels are added and call these methods.
+ * The "never used" warnings for all functions are expected at this stage.
+ * These functions are called from Activities and Fragments that are being refactored to use ViewModels.
+ * The warnings will disappear once the full ViewModel integration is complete.
  */
 class JsonHelper
 {
