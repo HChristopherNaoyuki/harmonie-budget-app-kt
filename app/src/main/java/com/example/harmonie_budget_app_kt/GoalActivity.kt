@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 
 class GoalActivity : AppCompatActivity()
 {
@@ -13,6 +14,8 @@ class GoalActivity : AppCompatActivity()
     private lateinit var etMaxGoal: android.widget.EditText
     private lateinit var btnSaveGoals: Button
     private lateinit var username: String
+
+    private val goalViewModel = GoalViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -25,8 +28,8 @@ class GoalActivity : AppCompatActivity()
         etMaxGoal = findViewById(R.id.et_max_goal)
         btnSaveGoals = findViewById(R.id.btn_save_goals)
 
-        // Load existing goal using the Goal model properties (minGoal and maxGoal as Double)
-        val existingGoal = JsonHelper.loadGoal(this, username)
+        // Call through the ViewModel layer
+        val existingGoal = goalViewModel.getGoal(username)
         if (existingGoal != null)
         {
             etMinGoal.setText(existingGoal.minGoal.toString())
@@ -42,11 +45,13 @@ class GoalActivity : AppCompatActivity()
                 val minGoal = minStr.toDoubleOrNull() ?: 0.0
                 val maxGoal = maxStr.toDoubleOrNull() ?: 0.0
 
-                // Input validation to prevent extreme values that could cause overflow
                 if (minGoal > 0.0 && maxGoal > minGoal && maxGoal <= 1000000.0)
                 {
                     val goal = Goal(minGoal, maxGoal)
-                    JsonHelper.saveGoal(this, username, goal)
+
+                    // Call through the ViewModel layer
+                    goalViewModel.saveGoal(username, goal)
+
                     Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
                     finish()
                 }

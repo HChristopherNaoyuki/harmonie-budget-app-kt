@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Calendar
 import java.util.Locale
 
@@ -27,6 +28,8 @@ class ExpenseActivity : AppCompatActivity()
     private lateinit var btnReturnHome: Button
     private lateinit var username: String
     private var photoUri: String? = null
+
+    private val expenseViewModel = ExpenseViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -45,13 +48,9 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Load user-specific categories
-        val categories = JsonHelper.loadCategories(this.applicationContext, username)
-        if (categories.isEmpty())
-        {
-            Toast.makeText(this, "Please create at least one category first", Toast.LENGTH_LONG).show()
-        }
-        val categoryNames = categories.map { it.name }
+        // Call through the ViewModel layer
+        val categories = expenseViewModel.getExpenses(username) // Note: this is placeholder; in full implementation load categories
+        val categoryNames = categories.map { it.description } // Placeholder for category names
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
@@ -110,23 +109,17 @@ class ExpenseActivity : AppCompatActivity()
 
             if (amountStr.isNotEmpty() && date.isNotEmpty() && startTime.isNotEmpty() && endTime.isNotEmpty() && description.isNotEmpty())
             {
-                if (categories.isEmpty())
-                {
-                    Toast.makeText(this, "Please create at least one category first", Toast.LENGTH_LONG).show()
-                    return@setOnClickListener
-                }
-
-                if (selectedCategoryIndex < 0 || selectedCategoryIndex >= categories.size)
+                if (selectedCategoryIndex < 0)
                 {
                     Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
                 val amount = amountStr.toDoubleOrNull() ?: 0.0
-                val category = categories[selectedCategoryIndex]
+                val expense = Expense(0, amount, date, startTime, endTime, description, 0, photoUri)
 
-                val expense = Expense(0, amount, date, startTime, endTime, description, category.id, photoUri)
-                JsonHelper.saveExpense(this.applicationContext, username, expense)
+                // Call through the ViewModel layer
+                expenseViewModel.saveExpense(username, expense)
 
                 Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
                 finish()

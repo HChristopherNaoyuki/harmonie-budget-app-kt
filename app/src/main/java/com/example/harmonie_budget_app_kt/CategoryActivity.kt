@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 
 class CategoryActivity : AppCompatActivity()
 {
@@ -19,6 +20,8 @@ class CategoryActivity : AppCompatActivity()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryAdapter
     private lateinit var username: String
+
+    private val categoryViewModel = CategoryViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -34,7 +37,8 @@ class CategoryActivity : AppCompatActivity()
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val categories = JsonHelper.loadCategories(this.applicationContext, username).toMutableList()
+        // Call through the ViewModel layer
+        val categories = categoryViewModel.getCategories(username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
 
@@ -42,11 +46,11 @@ class CategoryActivity : AppCompatActivity()
             val name = etCategoryName.text.toString().trim()
             if (name.isNotEmpty())
             {
-                // Assign unique auto-increment ID
-                // (fixes L-16)
                 val nextId = if (categories.isEmpty()) 1 else categories.maxOf { it.id } + 1
                 val category = Category(nextId, name)
-                JsonHelper.saveCategory(this.applicationContext, username, category)
+
+                // Call through the ViewModel layer
+                categoryViewModel.saveCategory(username, category)
 
                 adapter.addCategory(category)
 

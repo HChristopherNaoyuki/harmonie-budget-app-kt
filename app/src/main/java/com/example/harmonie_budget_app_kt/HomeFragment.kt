@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -25,6 +26,8 @@ class HomeFragment : Fragment()
     private lateinit var tvBudgetStatus: TextView
     private lateinit var rvCategoryBreakdown: RecyclerView
 
+    private val homeViewModel = HomeViewModel()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,8 +36,6 @@ class HomeFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Username is received from DashboardActivity arguments
-        // This ensures user-specific data isolation for all operations
         username = arguments?.getString("username") ?: "admin"
 
         tvGreeting = view.findViewById(R.id.tv_greeting)
@@ -44,15 +45,12 @@ class HomeFragment : Fragment()
         tvBudgetStatus = view.findViewById(R.id.tv_budget_status)
         rvCategoryBreakdown = view.findViewById(R.id.rv_category_breakdown)
 
-        // Set greeting using string resource with placeholder
         tvGreeting.text = getString(R.string.greetings, username)
 
-        // Display current date in human-readable format
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Load user goals and display min/max budget using string resource with placeholders
         val goal = JsonHelper.loadGoal(requireContext(), username)
         if (goal != null)
         {
@@ -60,31 +58,24 @@ class HomeFragment : Fragment()
         }
         else
         {
-            // Use existing resource to avoid any string literal in setText
             tvBudgetRange.text = getString(R.string.set_monthly_goals)
         }
 
-        // Calculate total balance spent for the current month from expense records
-        val expenses = JsonHelper.loadExpenses(requireContext(), username)
-        val currentMonthTotal = calculateCurrentMonthTotal(expenses)
+        // Call through the ViewModel layer
+        val currentMonthTotal = homeViewModel.getTotalBalance(username)
         tvTotalBalance.text = getString(R.string.total_balance, currentMonthTotal)
 
-        // Determine budget status and set using string resource
         val status = determineBudgetStatus(currentMonthTotal, goal)
         tvBudgetStatus.text = status
 
-        // Display all-time spending per category breakdown
+        // Call through the ViewModel layer
+        val categoryBreakdown = homeViewModel.getAllExpenses(username)
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
-
-        // Pre-format all strings in the fragment using getString
-        // This prevents any string literals from appearing in the adapter
-        val categoryBreakdown = calculateCategoryBreakdown(expenses)
-        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(categoryBreakdown)
+        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(categoryBreakdown))
 
         return view
     }
 
-    // Helper function to calculate total spent in the current month
     private fun calculateCurrentMonthTotal(expenses: List<Expense>): Double
     {
         val calendar = Calendar.getInstance()
@@ -110,7 +101,6 @@ class HomeFragment : Fragment()
         }.sumOf { it.amount }
     }
 
-    // Helper function to determine budget status using string resources
     private fun determineBudgetStatus(spent: Double, goal: Goal?): String
     {
         if (goal == null)
@@ -125,12 +115,10 @@ class HomeFragment : Fragment()
         }
     }
 
-    // Helper function to calculate all-time spending per category
     private fun calculateCategoryBreakdown(expenses: List<Expense>): List<String>
     {
         return expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
-                // Format each line using string resource with placeholders
                 getString(R.string.category_total, "Category $categoryId", list.sumOf { it.amount })
             }
     }
@@ -147,8 +135,6 @@ class HomeFragment : Fragment()
         }
     }
 
-    // RecyclerView adapter receives a list of pre-formatted strings
-    // This eliminates any string literals inside the adapter and removes the inner class receiver issue
     private class CategoryBreakdownAdapter(
         private val data: List<String>
     ) : RecyclerView.Adapter<CategoryBreakdownAdapter.ViewHolder>()

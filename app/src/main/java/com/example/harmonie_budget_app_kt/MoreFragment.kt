@@ -10,10 +10,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.MoreViewModel
 
 class MoreFragment : Fragment()
 {
     private lateinit var username: String
+
+    private val moreViewModel = MoreViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,8 +26,6 @@ class MoreFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
-        // Username is received from DashboardActivity arguments
-        // This ensures user-specific data isolation for all operations
         username = arguments?.getString("username") ?: "admin"
 
         // Export Data card
@@ -34,15 +35,12 @@ class MoreFragment : Fragment()
             layoutExportContent.isVisible = !layoutExportContent.isVisible
             if (layoutExportContent.isVisible)
             {
-                Thread {
-                    val success = JsonHelper.exportData(requireContext().applicationContext, username)
-                    requireActivity().runOnUiThread {
-                        if (success)
-                        {
-                            Toast.makeText(requireContext(), getString(R.string.data_exported), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }.start()
+                // Call through the ViewModel layer
+                val success = moreViewModel.exportData(username)
+                if (success)
+                {
+                    Toast.makeText(requireContext(), getString(R.string.data_exported), Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -53,15 +51,12 @@ class MoreFragment : Fragment()
             layoutResetContent.isVisible = !layoutResetContent.isVisible
             if (layoutResetContent.isVisible)
             {
-                Thread {
-                    val success = JsonHelper.resetProgress(requireContext().applicationContext, username)
-                    requireActivity().runOnUiThread {
-                        if (success)
-                        {
-                            Toast.makeText(requireContext(), getString(R.string.progress_reset), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }.start()
+                // Call through the ViewModel layer
+                val success = moreViewModel.resetProgress(username)
+                if (success)
+                {
+                    Toast.makeText(requireContext(), getString(R.string.progress_reset), Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -86,8 +81,7 @@ class MoreFragment : Fragment()
             layoutVersionContent.isVisible = !layoutVersionContent.isVisible
         }
 
-        // Log Out card (immediate action, no toggle)
-        // (fixes L-08)
+        // Log Out card
         val tvLogOutTitle: TextView = view.findViewById(R.id.tv_log_out_title)
         tvLogOutTitle.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
