@@ -10,10 +10,18 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
+import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * ExpenseActivity allows the user to create a new expense entry.
+ * It loads the user's categories into a spinner for selection.
+ * The selected category is used when saving the expense.
+ * All data operations go through the appropriate ViewModel layer.
+ * This ensures separation of concerns and resolves the category selection issue.
+ */
 class ExpenseActivity : AppCompatActivity()
 {
     private lateinit var etAmount: EditText
@@ -28,7 +36,11 @@ class ExpenseActivity : AppCompatActivity()
     private lateinit var username: String
     private var photoUri: String? = null
 
+    private val categoryViewModel = CategoryViewModel()
     private val expenseViewModel = ExpenseViewModel()
+
+    // Store the loaded categories so we can retrieve the selected category ID
+    private var categoriesList: List<com.example.harmonie_budget_app_kt.models.Category> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -47,13 +59,16 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Call through the ViewModel layer
-        val categories = expenseViewModel.getExpenses(this, username) // placeholder for category list
-        val categoryNames = categories.map { it.description }
+        // Load user-specific categories through the ViewModel
+        categoriesList = categoryViewModel.getCategories(this, username)
+
+        // Populate the spinner with category names
+        val categoryNames = categoriesList.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
+        // Date picker
         etDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -67,6 +82,7 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
+        // Start time picker
         etStartTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -80,6 +96,7 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
+        // End time picker
         etEndTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -104,20 +121,31 @@ class ExpenseActivity : AppCompatActivity()
             val startTime = etStartTime.text.toString().trim()
             val endTime = etEndTime.text.toString().trim()
             val description = etDescription.text.toString().trim()
-            val selectedCategoryIndex = spinnerCategory.selectedItemPosition
+            val selectedIndex = spinnerCategory.selectedItemPosition
 
             if (amountStr.isNotEmpty() && date.isNotEmpty() && startTime.isNotEmpty() && endTime.isNotEmpty() && description.isNotEmpty())
             {
-                if (selectedCategoryIndex < 0)
+                if (categoriesList.isEmpty() || selectedIndex < 0 || selectedIndex >= categoriesList.size)
                 {
-                    Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Please create at least one category first and select a category", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
 
                 val amount = amountStr.toDoubleOrNull() ?: 0.0
-                val expense = Expense(0, amount, date, startTime, endTime, description, 0, photoUri)
+                val selectedCategory = categoriesList[selectedIndex]
 
-                // Call through the ViewModel layer
+                val expense = Expense(
+                    id = 0,
+                    amount = amount,
+                    date = date,
+                    startTime = startTime,
+                    endTime = endTime,
+                    description = description,
+                    categoryId = selectedCategory.id,
+                    photoUri = photoUri
+                )
+
+                // Save through the ViewModel layer
                 expenseViewModel.saveExpense(this, username, expense)
 
                 Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
