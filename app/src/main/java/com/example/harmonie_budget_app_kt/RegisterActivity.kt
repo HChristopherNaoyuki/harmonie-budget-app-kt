@@ -6,7 +6,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
 class RegisterActivity : AppCompatActivity()
 {
@@ -18,6 +18,8 @@ class RegisterActivity : AppCompatActivity()
     private lateinit var btnRegister: Button
     private lateinit var btnHome: Button
     private lateinit var btnLogIn: Button
+
+    private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -52,16 +54,17 @@ class RegisterActivity : AppCompatActivity()
                 return@setOnClickListener
             }
 
-            // Check for duplicate username before saving
-            // (fixes L-22)
-            if (JsonHelper.loadUser(this, username) != null)
+            // Call through the ViewModel layer
+            if (userViewModel.loadUser(this, username) != null)
             {
                 Toast.makeText(this, getString(R.string.error_username_taken), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val user = User(name, surname, username, password)
-            JsonHelper.saveUser(this, user)
+
+            // Call through the ViewModel layer
+            userViewModel.saveUser(this, user)
 
             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
             finish()

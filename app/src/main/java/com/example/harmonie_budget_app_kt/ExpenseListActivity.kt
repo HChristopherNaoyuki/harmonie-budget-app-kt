@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.harmonie_budget_app_kt.models.Expense
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import androidx.core.net.toUri
 
 class ExpenseListActivity : AppCompatActivity()
 {
+    private val expenseViewModel = ExpenseViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,8 @@ class ExpenseListActivity : AppCompatActivity()
 
         rvExpenses.layoutManager = LinearLayoutManager(this)
 
-        val expenses = JsonHelper.loadExpenses(this, username)
+        // Call through the ViewModel layer
+        val expenses = expenseViewModel.getExpenses(this, username)
 
         val adapter = ExpenseAdapter(expenses) { expense: Expense ->
             if (expense.photoUri != null)
@@ -37,10 +40,6 @@ class ExpenseListActivity : AppCompatActivity()
                 }
                 catch (_: Exception)
                 {
-                    // Exception handling is used here as required
-                    // This catches any failure when opening the photo
-                    // (for example, invalid URI or no app to view the image)
-                    // and prevents the app from crashing
                     Toast.makeText(this, "Unable to open photo", Toast.LENGTH_SHORT).show()
                 }
             }

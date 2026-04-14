@@ -7,7 +7,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
 class ForgotPasswordActivity : AppCompatActivity()
