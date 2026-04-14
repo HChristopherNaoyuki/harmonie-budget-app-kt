@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
@@ -15,19 +16,19 @@ class MoreViewModel : ViewModel()
 
     /**
      * Exports the user's data.
-     * This method is called from MoreFragment when the user chooses to export data.
+     * Context is required by JsonHelper.
      */
-    fun exportData(username: String): Boolean
+    fun exportData(context: Context, username: String): Boolean
     {
-        return jsonHelper.exportData(/* context not needed in this call pattern */)
+        return jsonHelper.exportData(context, username)
     }
 
     /**
      * Resets the user's progress data.
-     * This method is called from MoreFragment when the user chooses to reset progress.
+     * Context is required by JsonHelper.
      */
-    fun resetProgress(username: String): Boolean
+    fun resetProgress(context: Context, username: String): Boolean
     {
-        return jsonHelper.resetProgress(/* context not needed in this call pattern */)
+        return jsonHelper.resetProgress(context, username)
     }
 }

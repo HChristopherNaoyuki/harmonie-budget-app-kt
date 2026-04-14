@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
 class ForgotPasswordActivity : AppCompatActivity()
 {
@@ -20,6 +21,8 @@ class ForgotPasswordActivity : AppCompatActivity()
     private lateinit var btnLogIn: Button
     private lateinit var tvNewPasswordTitle: TextView
     private lateinit var layoutNewPassword: android.view.View
+
+    private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -42,7 +45,8 @@ class ForgotPasswordActivity : AppCompatActivity()
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
             {
-                val user = JsonHelper.loadUser(this, username)
+                // Call through the ViewModel layer
+                val user = userViewModel.loadUser(this, username)
                 if (user != null)
                 {
                     tvNewPasswordTitle.visibility = android.view.View.VISIBLE
@@ -69,11 +73,14 @@ class ForgotPasswordActivity : AppCompatActivity()
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
                 if (passwordRegex.matches(newPass))
                 {
-                    val user = JsonHelper.loadUser(this, etUsername.text.toString().trim())
+                    val user = userViewModel.loadUser(this, etUsername.text.toString().trim())
                     if (user != null)
                     {
                         val updatedUser = User(user.name, user.surname, user.username, newPass)
-                        JsonHelper.saveUser(this, updatedUser)
+
+                        // Call through the ViewModel layer
+                        userViewModel.saveUser(this, updatedUser)
+
                         Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
                         finish()
                     }

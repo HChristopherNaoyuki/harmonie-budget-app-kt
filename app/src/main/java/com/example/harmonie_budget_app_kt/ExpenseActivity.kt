@@ -10,7 +10,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Expense
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Calendar
 import java.util.Locale
@@ -49,8 +48,8 @@ class ExpenseActivity : AppCompatActivity()
         btnReturnHome = findViewById(R.id.btn_return_home)
 
         // Call through the ViewModel layer
-        val categories = expenseViewModel.getExpenses(username) // Note: this is placeholder; in full implementation load categories
-        val categoryNames = categories.map { it.description } // Placeholder for category names
+        val categories = expenseViewModel.getExpenses(this, username) // placeholder for category list
+        val categoryNames = categories.map { it.description }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
@@ -119,7 +118,7 @@ class ExpenseActivity : AppCompatActivity()
                 val expense = Expense(0, amount, date, startTime, endTime, description, 0, photoUri)
 
                 // Call through the ViewModel layer
-                expenseViewModel.saveExpense(username, expense)
+                expenseViewModel.saveExpense(this, username, expense)
 
                 Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
                 finish()

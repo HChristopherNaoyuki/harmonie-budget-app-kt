@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
@@ -16,19 +17,19 @@ class GoalViewModel : ViewModel()
 
     /**
      * Returns the goal for the given user.
-     * This method is called from GoalActivity to load existing goals.
+     * Context is required by JsonHelper.
      */
-    fun getGoal(username: String): Goal?
+    fun getGoal(context: Context, username: String): Goal?
     {
-        return jsonHelper.loadGoal(/* context not needed in this call pattern */)
+        return jsonHelper.loadGoal(context, username)
     }
 
     /**
      * Saves the goal for the user.
-     * This method is called from GoalActivity when the user saves goals.
+     * Context is required by JsonHelper.
      */
-    fun saveGoal(username: String, goal: Goal)
+    fun saveGoal(context: Context, username: String, goal: Goal)
     {
-        jsonHelper.saveGoal(/* context not needed in this call pattern */, username, goal)
+        jsonHelper.saveGoal(context, username, goal)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
@@ -16,19 +17,19 @@ class CategoryViewModel : ViewModel()
 
     /**
      * Returns the list of categories for the given user.
-     * This method is called from CategoryActivity to populate the RecyclerView.
+     * Context is required by JsonHelper.
      */
-    fun getCategories(username: String): List<Category>
+    fun getCategories(context: Context, username: String): List<Category>
     {
-        return jsonHelper.loadCategories(/* context not needed in this call pattern */)
+        return jsonHelper.loadCategories(context, username)
     }
 
     /**
      * Saves a new category for the user.
-     * This method is called from CategoryActivity when the user adds a category.
+     * Context is required by JsonHelper.
      */
-    fun saveCategory(username: String, category: Category)
+    fun saveCategory(context: Context, username: String, category: Category)
     {
-        jsonHelper.saveCategory(/* context not needed in this call pattern */, username, category)
+        jsonHelper.saveCategory(context, username, category)
     }
 }

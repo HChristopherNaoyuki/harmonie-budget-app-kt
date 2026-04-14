@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.MoreViewModel
 
 class MoreFragment : Fragment()
@@ -36,7 +35,7 @@ class MoreFragment : Fragment()
             if (layoutExportContent.isVisible)
             {
                 // Call through the ViewModel layer
-                val success = moreViewModel.exportData(username)
+                val success = moreViewModel.exportData(requireContext(), username)
                 if (success)
                 {
                     Toast.makeText(requireContext(), getString(R.string.data_exported), Toast.LENGTH_SHORT).show()
@@ -52,7 +51,7 @@ class MoreFragment : Fragment()
             if (layoutResetContent.isVisible)
             {
                 // Call through the ViewModel layer
-                val success = moreViewModel.resetProgress(username)
+                val success = moreViewModel.resetProgress(requireContext(), username)
                 if (success)
                 {
                     Toast.makeText(requireContext(), getString(R.string.progress_reset), Toast.LENGTH_SHORT).show()

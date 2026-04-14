@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
@@ -16,19 +17,19 @@ class ExpenseViewModel : ViewModel()
 
     /**
      * Returns the list of expenses for the given user.
-     * This method is called from ExpenseActivity and ExpenseListActivity.
+     * Context is required by JsonHelper.
      */
-    fun getExpenses(username: String): List<Expense>
+    fun getExpenses(context: Context, username: String): List<Expense>
     {
-        return jsonHelper.loadExpenses(/* context not needed in this call pattern */)
+        return jsonHelper.loadExpenses(context, username)
     }
 
     /**
      * Saves a new expense for the user.
-     * This method is called from ExpenseActivity when the user submits an expense.
+     * Context is required by JsonHelper.
      */
-    fun saveExpense(username: String, expense: Expense)
+    fun saveExpense(context: Context, username: String, expense: Expense)
     {
-        jsonHelper.saveExpense(/* context not needed in this call pattern */, username, expense)
+        jsonHelper.saveExpense(context, username, expense)
     }
 }

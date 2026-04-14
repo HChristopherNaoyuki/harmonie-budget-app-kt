@@ -5,7 +5,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Goal
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 
 class GoalActivity : AppCompatActivity()
@@ -29,7 +28,7 @@ class GoalActivity : AppCompatActivity()
         btnSaveGoals = findViewById(R.id.btn_save_goals)
 
         // Call through the ViewModel layer
-        val existingGoal = goalViewModel.getGoal(username)
+        val existingGoal = goalViewModel.getGoal(this, username)
         if (existingGoal != null)
         {
             etMinGoal.setText(existingGoal.minGoal.toString())
@@ -50,7 +49,7 @@ class GoalActivity : AppCompatActivity()
                     val goal = Goal(minGoal, maxGoal)
 
                     // Call through the ViewModel layer
-                    goalViewModel.saveGoal(username, goal)
+                    goalViewModel.saveGoal(this, username, goal)
 
                     Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
                     finish()

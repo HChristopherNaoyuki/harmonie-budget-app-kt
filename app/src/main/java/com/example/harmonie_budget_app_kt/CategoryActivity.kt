@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Category
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 
 class CategoryActivity : AppCompatActivity()
@@ -38,7 +37,7 @@ class CategoryActivity : AppCompatActivity()
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Call through the ViewModel layer
-        val categories = categoryViewModel.getCategories(username).toMutableList()
+        val categories = categoryViewModel.getCategories(this, username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
 
@@ -50,7 +49,7 @@ class CategoryActivity : AppCompatActivity()
                 val category = Category(nextId, name)
 
                 // Call through the ViewModel layer
-                categoryViewModel.saveCategory(username, category)
+                categoryViewModel.saveCategory(this, username, category)
 
                 adapter.addCategory(category)
 

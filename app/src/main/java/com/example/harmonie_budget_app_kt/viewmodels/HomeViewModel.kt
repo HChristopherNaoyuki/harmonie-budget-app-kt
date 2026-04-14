@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
@@ -17,20 +18,21 @@ class HomeViewModel : ViewModel()
     /**
      * Returns the total balance spent by the user.
      * It loads all expenses and sums the amount field.
-     * This method is called from HomeFragment to display the total balance.
+     * Context is required by JsonHelper.
      */
-    fun getTotalBalance(username: String): Double
+    fun getTotalBalance(context: Context, username: String): Double
     {
-        val expenses = jsonHelper.loadExpenses(/* context not needed in this call pattern */)
+        val expenses = jsonHelper.loadExpenses(context, username)
         return expenses.sumOf { it.amount }
     }
 
     /**
      * Returns the list of all expenses for the user.
      * This is used for category breakdown calculations in the HomeFragment.
+     * Context is required by JsonHelper.
      */
-    fun getAllExpenses(username: String): List<Expense>
+    fun getAllExpenses(context: Context, username: String): List<Expense>
     {
-        return jsonHelper.loadExpenses(/* context not needed in this call pattern */)
+        return jsonHelper.loadExpenses(context, username)
     }
 }

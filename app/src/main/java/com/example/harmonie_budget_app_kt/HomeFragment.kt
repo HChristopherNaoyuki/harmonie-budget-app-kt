@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -62,16 +61,16 @@ class HomeFragment : Fragment()
         }
 
         // Call through the ViewModel layer
-        val currentMonthTotal = homeViewModel.getTotalBalance(username)
+        val currentMonthTotal = homeViewModel.getTotalBalance(requireContext(), username)
         tvTotalBalance.text = getString(R.string.total_balance, currentMonthTotal)
 
         val status = determineBudgetStatus(currentMonthTotal, goal)
         tvBudgetStatus.text = status
 
         // Call through the ViewModel layer
-        val categoryBreakdown = homeViewModel.getAllExpenses(username)
+        val expenses = homeViewModel.getAllExpenses(requireContext(), username)
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
-        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(categoryBreakdown))
+        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses))
 
         return view
     }
