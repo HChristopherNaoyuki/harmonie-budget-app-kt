@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
+import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,6 +27,7 @@ class HomeFragment : Fragment()
     private lateinit var rvCategoryBreakdown: RecyclerView
 
     private val homeViewModel = HomeViewModel()
+    private val goalViewModel = GoalViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +52,8 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        val goal = JsonHelper.loadGoal(requireContext(), username)
+        // Call through the ViewModel layer
+        val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
             tvBudgetRange.text = getString(R.string.monthly_budget, goal.minGoal, goal.maxGoal)
@@ -74,31 +76,6 @@ class HomeFragment : Fragment()
         rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses))
 
         return view
-    }
-
-    private fun calculateCurrentMonthTotal(expenses: List<Expense>): Double
-    {
-        val calendar = Calendar.getInstance()
-        val currentYear = calendar.get(Calendar.YEAR)
-        val currentMonth = calendar.get(Calendar.MONTH)
-
-        return expenses.filter { expense ->
-            val expenseDate = try
-            {
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(expense.date)
-            }
-            catch (_: Exception)
-            {
-                null
-            }
-            if (expenseDate != null)
-            {
-                val cal = Calendar.getInstance()
-                cal.time = expenseDate
-                cal.get(Calendar.YEAR) == currentYear && cal.get(Calendar.MONTH) == currentMonth
-            }
-            else false
-        }.sumOf { it.amount }
     }
 
     private fun determineBudgetStatus(spent: Double, goal: Goal?): String
