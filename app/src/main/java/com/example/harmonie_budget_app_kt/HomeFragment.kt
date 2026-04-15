@@ -52,7 +52,7 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Call through the ViewModel layer
+        // Call through the ViewModel layer to load the goal
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
