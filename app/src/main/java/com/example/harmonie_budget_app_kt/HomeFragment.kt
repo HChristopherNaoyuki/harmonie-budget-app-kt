@@ -1,10 +1,15 @@
 package com.example.harmonie_budget_app_kt
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +30,8 @@ class HomeFragment : Fragment()
     private lateinit var tvTotalBalance: TextView
     private lateinit var tvBudgetStatus: TextView
     private lateinit var rvCategoryBreakdown: RecyclerView
+    private lateinit var tvUserId: TextView
+    private lateinit var btnCopyUserId: Button
 
     private val homeViewModel = HomeViewModel()
     private val goalViewModel = GoalViewModel()
@@ -45,6 +52,8 @@ class HomeFragment : Fragment()
         tvTotalBalance = view.findViewById(R.id.tv_total_balance)
         tvBudgetStatus = view.findViewById(R.id.tv_budget_status)
         rvCategoryBreakdown = view.findViewById(R.id.rv_category_breakdown)
+        tvUserId = view.findViewById(R.id.tv_user_id)
+        btnCopyUserId = view.findViewById(R.id.btn_copy_user_id)
 
         tvGreeting.text = getString(R.string.greetings, username)
 
@@ -52,7 +61,16 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Call through the ViewModel layer to load the goal
+        // Display logged-in user's User ID (for prototype, use username as placeholder)
+        tvUserId.text = username
+
+        btnCopyUserId.setOnClickListener {
+            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("User ID", username)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(requireContext(), getString(R.string.user_id_copied), Toast.LENGTH_SHORT).show()
+        }
+
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
@@ -63,14 +81,12 @@ class HomeFragment : Fragment()
             tvBudgetRange.text = getString(R.string.set_monthly_goals)
         }
 
-        // Call through the ViewModel layer
         val currentMonthTotal = homeViewModel.getTotalBalance(requireContext(), username)
         tvTotalBalance.text = getString(R.string.total_balance, currentMonthTotal)
 
         val status = determineBudgetStatus(currentMonthTotal, goal)
         tvBudgetStatus.text = status
 
-        // Call through the ViewModel layer
         val expenses = homeViewModel.getAllExpenses(requireContext(), username)
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
         rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses))

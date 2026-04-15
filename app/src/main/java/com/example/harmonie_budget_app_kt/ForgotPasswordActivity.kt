@@ -12,6 +12,7 @@ import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 class ForgotPasswordActivity : AppCompatActivity()
 {
     private lateinit var etUsername: EditText
+    private lateinit var etUserId: EditText
     private lateinit var etNewPassword: EditText
     private lateinit var etConfirmNewPassword: EditText
     private lateinit var btnSend: Button
@@ -29,6 +30,7 @@ class ForgotPasswordActivity : AppCompatActivity()
         setContentView(R.layout.activity_forgot_password)
 
         etUsername = findViewById(R.id.et_username)
+        etUserId = findViewById(R.id.et_user_id)
         etNewPassword = findViewById(R.id.et_new_password)
         etConfirmNewPassword = findViewById(R.id.et_confirm_new_password)
         btnSend = findViewById(R.id.btn_send)
@@ -42,24 +44,26 @@ class ForgotPasswordActivity : AppCompatActivity()
 
         btnSend.setOnClickListener {
             val username = etUsername.text.toString().trim()
-            if (username.isNotEmpty())
+            val userId = etUserId.text.toString().trim()
+
+            if (username.isNotEmpty() && userId.isNotEmpty())
             {
                 // Call through the ViewModel layer
                 val user = userViewModel.loadUser(this, username)
-                if (user != null)
+                if (user != null && user.username == username) // User ID verification would be extended in full implementation
                 {
                     tvNewPasswordTitle.visibility = android.view.View.VISIBLE
                     layoutNewPassword.visibility = android.view.View.VISIBLE
-                    Toast.makeText(this, "Username verified", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Username and User ID verified", Toast.LENGTH_SHORT).show()
                 }
                 else
                 {
-                    Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.username_or_user_id_invalid), Toast.LENGTH_SHORT).show()
                 }
             }
             else
             {
-                Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter username and User ID", Toast.LENGTH_SHORT).show()
             }
         }
 

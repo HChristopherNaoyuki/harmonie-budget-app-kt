@@ -10,8 +10,7 @@
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_title">Create New Account</string>
-    <string name="name_hint">Name</string>
-    <string name="surname_hint">Surname</string>
+    <string name="name_hint">Full Name</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="confirm_password_hint">Confirm Password</string>
@@ -22,6 +21,7 @@
     <string name="send_button">Send</string>
     <string name="change_password">Change Password</string>
     <string name="new_password_title">New Password</string>
+    <string name="user_id_hint">User ID</string>
 
     <!-- Goal screen strings -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
@@ -84,7 +84,7 @@
     <string name="add_expense">Add Expense</string>
     <string name="my_dashboard">My Dashboard</string>
 
-    <!-- New strings for the redesigned Home page -->
+    <!-- New strings for the redesigned pages -->
     <string name="greetings">Greetings, %1$s!</string>
     <string name="monthly_budget">Monthly budget: %1$.2f - %2$.2f</string>
     <string name="within_budget">Within Budget</string>
@@ -93,6 +93,11 @@
     <string name="all_time_spending">All-time spending</string>
     <string name="category_total">%1$s: %2$.2f</string>
     <string name="no_expenses_logged">No expenses logged yet</string>
+    <string name="top_spending_category">Top Spending Category: %1$s — %2$.2f</string>
+    <string name="months_over_budget">Months Over Budget: %1$d</string>
+    <string name="user_id_label">Your User ID</string>
+    <string name="copy">Copy</string>
+    <string name="user_id_copied">User ID copied to clipboard</string>
 
     <!-- Common error and feedback messages -->
     <string name="error_invalid_credentials">Invalid username or password</string>
@@ -100,6 +105,7 @@
     <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
     <string name="error_username_taken">Username is already taken</string>
     <string name="please_fill_all_fields">Please fill all fields and select a category</string>
+    <string name="username_or_user_id_invalid">Username or User ID is invalid</string>
 
     <!-- Navigation buttons used on multiple screens -->
     <string name="home_button">Home</string>
