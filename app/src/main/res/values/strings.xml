@@ -113,4 +113,7 @@
     <string name="sign_up_from_login">Sign Up</string>
     <string name="log_in_from_forgot">Log In</string>
 
+    <!-- Category totals screen title -->
+    <string name="category_totals_title">Category Totals</string>
+
 </resources>

@@ -16,7 +16,7 @@ import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
  * CategoryTotalActivity displays the total spent per category.
  * It includes a custom PieChartView to visualize the percentage of all-time spending per category.
  * The pie chart is drawn using Canvas to avoid external dependencies.
- * This addresses the pie chart requirement.
+ * Paint and RectF objects are preallocated to avoid object allocations during draw operations.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -68,25 +68,17 @@ class CategoryTotalActivity : AppCompatActivity()
 
     /**
      * Custom PieChartView drawn with Canvas.
-     * This is a simple implementation using standard Android Canvas to draw a pie chart.
-     * Colors are assigned sequentially.
-     * It shows the percentage of all-time spending per category as requested.
+     * Paint and RectF objects are preallocated in the constructor to avoid allocations during onDraw.
+     * This satisfies the "Avoid object allocations during draw/layout operations" guideline.
      */
     private class PieChartView(
         context: Context,
         private val data: List<Pair<String, Double>>
     ) : View(context)
     {
-        private val paint = Paint()
-        private val textPaint = Paint()
-
-        init
-        {
-            paint.isAntiAlias = true
-            textPaint.isAntiAlias = true
-            textPaint.textSize = 36f
-            textPaint.color = Color.BLACK
-        }
+        private val paint: Paint = Paint().apply { isAntiAlias = true }
+        private val textPaint: Paint = Paint().apply { isAntiAlias = true; textSize = 36f; color = Color.BLACK }
+        private val rect: RectF = RectF()
 
         override fun onDraw(canvas: Canvas)
         {
@@ -95,7 +87,7 @@ class CategoryTotalActivity : AppCompatActivity()
             val total = data.sumOf { it.second }
             if (total == 0.0) return
 
-            val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+            rect.set(0f, 0f, width.toFloat(), height.toFloat())
 
             var startAngle = 0f
             val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN)
