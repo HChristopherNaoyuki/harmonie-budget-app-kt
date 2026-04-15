@@ -19,7 +19,7 @@
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="forgot_password_title">Forgot Password</string>
     <string name="send_button">Send</string>
-    <string name="change_password">Change Password</string>
+    <string name="reset_password">Reset Password</string>
     <string name="new_password_title">New Password</string>
     <string name="user_id_hint">User ID</string>
 

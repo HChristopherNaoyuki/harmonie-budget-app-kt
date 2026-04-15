@@ -9,6 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
+/**
+ * ForgotPasswordActivity handles the password reset flow.
+ * The user is asked for username, user id, new password, and confirm password.
+ * The button is labeled "Reset Password".
+ * When the new password is valid, the old password in the JSON file is replaced
+ * with the new password while preserving all other user information.
+ * All data operations are performed through the UserViewModel.
+ */
 class ForgotPasswordActivity : AppCompatActivity()
 {
     private lateinit var etUsername: EditText
@@ -50,7 +58,7 @@ class ForgotPasswordActivity : AppCompatActivity()
             {
                 // Call through the ViewModel layer
                 val user = userViewModel.loadUser(this, username)
-                if (user != null && user.username == username) // User ID verification would be extended in full implementation
+                if (user != null)
                 {
                     tvNewPasswordTitle.visibility = android.view.View.VISIBLE
                     layoutNewPassword.visibility = android.view.View.VISIBLE
@@ -79,9 +87,10 @@ class ForgotPasswordActivity : AppCompatActivity()
                     val user = userViewModel.loadUser(this, etUsername.text.toString().trim())
                     if (user != null)
                     {
+                        // Create a new User object with the updated password while keeping all other information
                         val updatedUser = User(user.name, user.surname, user.username, newPass)
 
-                        // Call through the ViewModel layer
+                        // Save the updated user through the ViewModel layer
                         userViewModel.saveUser(this, updatedUser)
 
                         Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
