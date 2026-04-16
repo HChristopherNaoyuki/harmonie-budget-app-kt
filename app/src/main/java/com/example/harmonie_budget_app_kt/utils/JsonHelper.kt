@@ -9,23 +9,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 
-/**
- * JsonHelper manages all JSON file operations for user-specific data.
- * The class is a regular class (not an object) so it can be instantiated and injected where needed.
- * All file input/output operations are performed on the main thread in the current implementation.
- * In a future refactoring, these methods will be marked suspend and called from Dispatchers.IO.
- * The @Synchronized annotation has been kept on write methods to prevent race conditions.
- * The "never used" warnings for all functions are expected at this stage.
- * These functions are called from Activities and Fragments that are being refactored to use ViewModels.
- * The warnings will disappear once the full ViewModel integration is complete.
- */
 class JsonHelper
 {
     private val gson: Gson by lazy { Gson() }
 
     private fun getFile(context: Context, fileName: String): File
     {
-        // Create the dedicated folder for saved information if it does not exist
         val folder = File(context.filesDir, "budget_data")
         if (!folder.exists())
         {
@@ -52,7 +41,6 @@ class JsonHelper
         return gson.fromJson(json, User::class.java)
     }
 
-    @Synchronized
     fun saveCategory(context: Context, username: String, category: Category)
     {
         val file = getFile(context, "${username}_categories.json")
@@ -80,7 +68,6 @@ class JsonHelper
         return gson.fromJson(file.readText(), listType)
     }
 
-    @Synchronized
     fun saveExpense(context: Context, username: String, expense: Expense)
     {
         val file = getFile(context, "${username}_expenses.json")
@@ -93,7 +80,11 @@ class JsonHelper
         {
             mutableListOf()
         }
-        list.add(expense)
+
+        val maxId = list.maxOfOrNull { it.id } ?: 0
+        val newExpense = expense.copy(id = maxId + 1)
+        list.add(newExpense)
+
         file.writeText(gson.toJson(list))
     }
 
@@ -108,7 +99,6 @@ class JsonHelper
         return gson.fromJson(file.readText(), listType)
     }
 
-    @Synchronized
     fun saveGoal(context: Context, username: String, goal: Goal)
     {
         val file = getFile(context, "${username}_goals.json")
@@ -161,7 +151,6 @@ class JsonHelper
 
     fun resetProgress(context: Context, username: String): Boolean
     {
-        // Reset only data files, never the user credentials file
         val files = listOf(
             "${username}_categories.json",
             "${username}_expenses.json",
