@@ -5,10 +5,10 @@
         Application-wide string resources for the Harmonie Budget app.
         All strings are defined here to eliminate hardcoded values in layout files
         and activities, ensuring consistency and easier maintenance.
-        This file has been corrected as part of the Part 2 prototype updates.
-        The new string "create_account_button" was added to resolve the
-        "Hardcoded string 'Create Account'" warning reported in activity_register.xml.
-        No other strings were modified.
+        This file has been updated as part of the Part 2 prototype corrections.
+        New strings "send_button" and "confirm_button" were added to resolve the
+        hardcoded string warnings in activity_forgot_password.xml.
+        The string "create_account_button" remains from the previous correction.
         All strings are verified against the project requirements in OPSC6311POE.pdf.
     -->
 
@@ -29,7 +29,7 @@
     <string name="log_in_button">Log In</string>
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="forgot_password_title">Forgot Password</string>
-    <string name="send_button">Send</string>
+    <string name="send_button">SEND</string>
     <string name="reset_password">Reset Password</string>
     <string name="new_password_title">New Password</string>
     <string name="user_id_hint">User ID</string>
@@ -127,12 +127,15 @@
     <!-- Category totals screen title -->
     <string name="category_totals_title">Category Totals</string>
 
-    <!--
-        Correction added for activity_register.xml
-        The button text "Create Account" was previously hardcoded.
-        It is now defined here as a string resource to satisfy Android best practices
-        and remove the hardcoded string warning.
-    -->
+    <!-- String for Register page Create Account button -->
     <string name="create_account_button">Create Account</string>
+
+    <!--
+        New strings added to resolve hardcoded string warnings in activity_forgot_password.xml.
+        "send_button" matches the uppercase text shown in the image.
+        "confirm_button" matches the text on the password change button.
+    -->
+    <string name="send_button">SEND</string>
+    <string name="confirm_button">Confirm</string>
 
 </resources>

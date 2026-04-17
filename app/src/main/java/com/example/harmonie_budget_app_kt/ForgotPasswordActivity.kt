@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -97,7 +98,7 @@ class ForgotPasswordActivity : AppCompatActivity()
         }
 
         btnLogIn.setOnClickListener {
-            val intent = android.content.Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
