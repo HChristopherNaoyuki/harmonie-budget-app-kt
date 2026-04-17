@@ -161,3 +161,7 @@ To clone this project directly in Android Studio:
 7. Run the app on an emulator or physical device with API 24 or higher.
 
 ---
+
+**End of Document**
+
+---
