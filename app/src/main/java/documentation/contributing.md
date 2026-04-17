@@ -48,7 +48,7 @@ login registration, expense categories,
 expense entries amount, date, description,
 category, photo attachment camera gallery,
 monthly budget goals, category totals, local
-database RoomDB, graphs, progress dashboard,
+database, graphs, progress dashboard,
 and gamification badges rewards. Adds at
 least 2 own innovative features as per the
 design document. Creates the app icon and
@@ -66,7 +66,7 @@ feature against the rubrics: login,
 categories, entries, photo storage, budget
 goals min max, period filtering, category
 totals, graph, progress dashboard,
-gamification. Checks UI UX consistency
+gamification. Checks UI/UX consistency
 layouts, fonts, colors and handles invalid
 inputs no crashes. Writes automated unit
 tests for main functionality. Creates the
