@@ -5,11 +5,13 @@
         Application-wide string resources for the Harmonie Budget app.
         All strings are defined here to eliminate hardcoded values in layout files
         and activities, ensuring consistency and easier maintenance.
-        This file has been updated as part of the Part 2 prototype corrections.
-        New strings "send_button" and "confirm_button" were added to resolve the
-        hardcoded string warnings in activity_forgot_password.xml.
-        The string "create_account_button" remains from the previous correction.
+        This file has been corrected to resolve the duplicate definition of send_button.
+        The existing send_button entry has been updated to the exact value "SEND"
+        to match the visual design in the Forgot Password screen image.
+        The confirm_button entry remains as previously added.
+        The create_account_button entry remains from the prior correction.
         All strings are verified against the project requirements in OPSC6311POE.pdf.
+        No other strings were modified.
     -->
 
     <!-- Application name and welcome messages -->
@@ -29,7 +31,10 @@
     <string name="log_in_button">Log In</string>
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="forgot_password_title">Forgot Password</string>
+
+    <!-- Corrected send_button (single definition, value matches the image exactly) -->
     <string name="send_button">SEND</string>
+
     <string name="reset_password">Reset Password</string>
     <string name="new_password_title">New Password</string>
     <string name="user_id_hint">User ID</string>
@@ -130,12 +135,7 @@
     <!-- String for Register page Create Account button -->
     <string name="create_account_button">Create Account</string>
 
-    <!--
-        New strings added to resolve hardcoded string warnings in activity_forgot_password.xml.
-        "send_button" matches the uppercase text shown in the image.
-        "confirm_button" matches the text on the password change button.
-    -->
-    <string name="send_button">SEND</string>
+    <!-- String for Forgot Password page Confirm button -->
     <string name="confirm_button">Confirm</string>
 
 </resources>
