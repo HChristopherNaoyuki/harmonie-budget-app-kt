@@ -10,8 +10,7 @@
 ## 1. Project Overview
 Harmonie Budget Tracker is an Android mobile application developed in Kotlin. 
 It helps users track expenses, manage categories, set monthly budget goals, 
-and view spending summaries using local JSON file storage. This repository 
-contains the complete Part 2 prototype.
+and view spending summaries using local JSON file storage.
 
 ## 2. Team Members and Roles
 - Project Manager / Researcher and Designer: [Murendeni](https://github.com/MurendeniMakhavhu)
