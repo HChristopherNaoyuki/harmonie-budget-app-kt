@@ -9,14 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
-/**
- * ForgotPasswordActivity handles the password reset flow.
- * The user is asked for username, user id, new password, and confirm password.
- * The button is labeled "Reset Password".
- * When the new password is valid, the old password in the JSON file is replaced
- * with the new password while preserving all other user information.
- * All data operations are performed through the UserViewModel.
- */
 class ForgotPasswordActivity : AppCompatActivity()
 {
     private lateinit var etUsername: EditText
@@ -29,7 +21,6 @@ class ForgotPasswordActivity : AppCompatActivity()
     private lateinit var btnLogIn: Button
     private lateinit var tvNewPasswordTitle: TextView
     private lateinit var layoutNewPassword: android.view.View
-
     private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -53,10 +44,8 @@ class ForgotPasswordActivity : AppCompatActivity()
         btnSend.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val userId = etUserId.text.toString().trim()
-
             if (username.isNotEmpty() && userId.isNotEmpty())
             {
-                // Call through the ViewModel layer
                 val user = userViewModel.loadUser(this, username)
                 if (user != null)
                 {
@@ -78,7 +67,6 @@ class ForgotPasswordActivity : AppCompatActivity()
         btnChangePassword.setOnClickListener {
             val newPass = etNewPassword.text.toString().trim()
             val confirmPass = etConfirmNewPassword.text.toString().trim()
-
             if (newPass.isNotEmpty() && confirmPass.isNotEmpty() && newPass == confirmPass)
             {
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
@@ -87,12 +75,8 @@ class ForgotPasswordActivity : AppCompatActivity()
                     val user = userViewModel.loadUser(this, etUsername.text.toString().trim())
                     if (user != null)
                     {
-                        // Create a new User object with the updated password while keeping all other information
                         val updatedUser = User(user.name, user.surname, user.username, newPass)
-
-                        // Save the updated user through the ViewModel layer
                         userViewModel.saveUser(this, updatedUser)
-
                         Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
                         finish()
                     }
