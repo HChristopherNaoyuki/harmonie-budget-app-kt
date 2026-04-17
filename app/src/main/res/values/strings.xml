@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Application-wide strings -->
+    <!--
+        Application-wide string resources for the Harmonie Budget app.
+        All strings are defined here to eliminate hardcoded values in layout files
+        and activities, ensuring consistency and easier maintenance.
+        This file has been corrected as part of the Part 2 prototype updates.
+        The new string "create_account_button" was added to resolve the
+        "Hardcoded string 'Create Account'" warning reported in activity_register.xml.
+        No other strings were modified.
+        All strings are verified against the project requirements in OPSC6311POE.pdf.
+    -->
+
+    <!-- Application name and welcome messages -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Welcome, Login, Register, Forgot Password screen strings -->
+    <!-- Login, Register, and Forgot Password screen strings -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
@@ -71,7 +82,7 @@
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Dashboard / Budget / Transactions / Budgets screen strings -->
+    <!-- Dashboard, Budget, Transactions, and Budgets screen strings -->
     <string name="budget_title">Budget</string>
     <string name="edit_budget">Edit Budget</string>
     <string name="detect_budget">Detect Budget</string>
@@ -84,7 +95,7 @@
     <string name="add_expense">Add Expense</string>
     <string name="my_dashboard">My Dashboard</string>
 
-    <!-- New strings for the redesigned pages -->
+    <!-- New strings for the redesigned Home and other pages -->
     <string name="greetings">Greetings, %1$s!</string>
     <string name="monthly_budget">Monthly budget: %1$.2f - %2$.2f</string>
     <string name="within_budget">Within Budget</string>
@@ -115,5 +126,13 @@
 
     <!-- Category totals screen title -->
     <string name="category_totals_title">Category Totals</string>
+
+    <!--
+        Correction added for activity_register.xml
+        The button text "Create Account" was previously hardcoded.
+        It is now defined here as a string resource to satisfy Android best practices
+        and remove the hardcoded string warning.
+    -->
+    <string name="create_account_button">Create Account</string>
 
 </resources>

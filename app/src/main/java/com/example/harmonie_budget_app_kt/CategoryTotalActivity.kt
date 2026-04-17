@@ -72,7 +72,7 @@ class CategoryTotalActivity : AppCompatActivity()
             var startAngle = 0f
             val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN)
 
-            data.forEachIndexed { index, (label, value) ->
+            data.forEachIndexed { index, (_, value) ->
                 val sweepAngle = (value / total * 360).toFloat()
                 paint.color = colors[index % colors.size]
                 canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
