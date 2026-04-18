@@ -17,6 +17,7 @@ import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.HomeViewModel
+import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -35,6 +36,7 @@ class HomeFragment : Fragment()
 
     private val homeViewModel = HomeViewModel()
     private val goalViewModel = GoalViewModel()
+    private val userViewModel = UserViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,12 +63,13 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Display logged-in user's User ID (for prototype, use username as placeholder)
-        tvUserId.text = username
+        // Load the full User object so we display the exact generated User ID
+        val user = userViewModel.loadUser(requireContext(), username)
+        tvUserId.text = user?.userId ?: username
 
         btnCopyUserId.setOnClickListener {
             val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("User ID", username)
+            val clip = ClipData.newPlainText("User ID", tvUserId.text.toString())
             clipboard.setPrimaryClip(clip)
             Toast.makeText(requireContext(), getString(R.string.user_id_copied), Toast.LENGTH_SHORT).show()
         }

@@ -70,7 +70,15 @@ class RegisterActivity : AppCompatActivity()
             generatedUserId = generateUserId(username)
             tvGeneratedUserId.text = generatedUserId
 
-            val user = User(name, "", username, password)
+            // Create User object with the generated userId so it is saved permanently
+            val user = User(
+                name = name,
+                surname = "",
+                username = username,
+                password = password,
+                userId = generatedUserId
+            )
+
             userViewModel.saveUser(this, user)
             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
             finish()
