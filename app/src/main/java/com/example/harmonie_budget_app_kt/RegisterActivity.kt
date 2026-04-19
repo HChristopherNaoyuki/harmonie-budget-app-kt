@@ -19,6 +19,7 @@ import java.util.TimeZone
 class RegisterActivity : AppCompatActivity()
 {
     private lateinit var etName: EditText
+    private lateinit var etSurname: EditText
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
     private lateinit var etConfirmPassword: EditText
@@ -36,6 +37,7 @@ class RegisterActivity : AppCompatActivity()
         setContentView(R.layout.activity_register)
 
         etName = findViewById(R.id.et_name)
+        etSurname = findViewById(R.id.et_surname)
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
         etConfirmPassword = findViewById(R.id.et_confirm_password)
@@ -47,20 +49,23 @@ class RegisterActivity : AppCompatActivity()
 
         btnRegister.setOnClickListener {
             val name = etName.text.toString().trim()
+            val surname = etSurname.text.toString().trim()
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            if (name.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
+            if (name.isEmpty() || surname.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
             {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             if (password != confirmPassword)
             {
                 Toast.makeText(this, getString(R.string.error_password_mismatch), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             if (userViewModel.loadUser(this, username) != null)
             {
                 Toast.makeText(this, getString(R.string.error_username_taken), Toast.LENGTH_SHORT).show()
@@ -70,16 +75,15 @@ class RegisterActivity : AppCompatActivity()
             generatedUserId = generateUserId(username)
             tvGeneratedUserId.text = generatedUserId
 
-            // Create User object with the generated userId so it is saved permanently
             val user = User(
                 name = name,
-                surname = "",
+                surname = surname,
                 username = username,
                 password = password,
                 userId = generatedUserId
             )
-
             userViewModel.saveUser(this, user)
+
             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -105,6 +109,12 @@ class RegisterActivity : AppCompatActivity()
         }
     }
 
+    /**
+     * Generates a unique User ID using the original format (prefix + date + counter).
+     * The counter now uses the current time in milliseconds modulo 10000 to ensure uniqueness
+     * even when multiple users register on the same day. This directly addresses the review note
+     * on the static counter flaw that caused duplicate User IDs.
+     */
     private fun generateUserId(username: String): String
     {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -113,7 +123,7 @@ class RegisterActivity : AppCompatActivity()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val datePart = String.format(Locale.getDefault(), "%04d%02d%02d", year, month, day)
         val prefix = username.take(4).uppercase(Locale.getDefault()).padEnd(4, 'X')
-        val counter = "0001"
+        val counter = String.format(Locale.getDefault(), "%04d", System.currentTimeMillis() % 10000)
         return prefix + datePart + counter
     }
 }

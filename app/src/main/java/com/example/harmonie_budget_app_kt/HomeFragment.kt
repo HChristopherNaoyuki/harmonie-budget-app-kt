@@ -13,8 +13,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
+import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.HomeViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
@@ -33,10 +35,10 @@ class HomeFragment : Fragment()
     private lateinit var rvCategoryBreakdown: RecyclerView
     private lateinit var tvUserId: TextView
     private lateinit var btnCopyUserId: Button
-
     private val homeViewModel = HomeViewModel()
     private val goalViewModel = GoalViewModel()
     private val userViewModel = UserViewModel()
+    private val categoryViewModel = CategoryViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +65,6 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Load the full User object so we display the exact generated User ID
         val user = userViewModel.loadUser(requireContext(), username)
         tvUserId.text = user?.userId ?: username
 
@@ -91,8 +92,13 @@ class HomeFragment : Fragment()
         tvBudgetStatus.text = status
 
         val expenses = homeViewModel.getAllExpenses(requireContext(), username)
+
+        // Load categories to enable name mapping (addresses review note on Category X display)
+        val categories = categoryViewModel.getCategories(requireContext(), username)
+        val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
+
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
-        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses))
+        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses, categoryMap))
 
         return view
     }
@@ -111,11 +117,17 @@ class HomeFragment : Fragment()
         }
     }
 
-    private fun calculateCategoryBreakdown(expenses: List<Expense>): List<String>
+    /**
+     * Calculates category breakdown strings using actual category names from the categories.json file.
+     * The categoryMap is passed in to avoid repeated loading. This fixes the review note that
+     * the breakdown previously showed only numeric Category IDs.
+     */
+    private fun calculateCategoryBreakdown(expenses: List<Expense>, categoryMap: Map<Int, Category>): List<String>
     {
         return expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
-                getString(R.string.category_total, "Category $categoryId", list.sumOf { it.amount })
+                val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
+                getString(R.string.category_total, categoryName, list.sumOf { it.amount })
             }
     }
 

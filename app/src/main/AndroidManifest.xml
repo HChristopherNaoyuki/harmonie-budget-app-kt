@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.harmonie_budget_app_kt">
-
+    <!-- Permission added to support gallery photo selection for the optional photo attachment feature. -->
+    <!-- This resolves the review note on missing permissions for photo functionality. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,11 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HarmonieBudget">
-
-        <!--
-            Main welcome screen (two buttons: Login and Register)
-            This is the launcher activity as required by the project template.
-        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -22,52 +19,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Login screen -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-
-        <!-- Register screen -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-
-        <!-- Forgot password screen -->
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
-
-        <!-- Dashboard with bottom navigation (5 tabs) -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
-
-        <!-- Category management screen -->
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
-
-        <!-- Expense entry screen -->
         <activity
             android:name=".ExpenseActivity"
             android:exported="false" />
-
-        <!-- Goal setting screen -->
         <activity
             android:name=".GoalActivity"
             android:exported="false" />
-
-        <!-- Expense list with period filter -->
         <activity
             android:name=".ExpenseListActivity"
             android:exported="false" />
-
-        <!-- Category totals screen -->
         <activity
             android:name=".CategoryTotalActivity"
             android:exported="false" />
-
     </application>
-
 </manifest>

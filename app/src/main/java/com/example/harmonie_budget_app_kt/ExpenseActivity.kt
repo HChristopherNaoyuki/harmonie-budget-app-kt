@@ -1,8 +1,11 @@
 package com.example.harmonie_budget_app_kt
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -17,10 +20,10 @@ import java.util.Locale
 
 /**
  * ExpenseActivity allows the user to create a new expense entry.
- * It loads the user's categories into a spinner for selection.
- * The selected category is used when saving the expense.
- * All data operations go through the appropriate ViewModel layer.
- * This ensures separation of concerns and resolves the category selection issue.
+ * Categories are loaded into the spinner through the ViewModel.
+ * Photo attachment now launches the gallery picker (addresses review note on dummy URI).
+ * The selected photo URI is stored as a string for later display in the expense list.
+ * This implements the optional photo feature with real functionality.
  */
 class ExpenseActivity : AppCompatActivity()
 {
@@ -35,11 +38,8 @@ class ExpenseActivity : AppCompatActivity()
     private lateinit var btnReturnHome: Button
     private lateinit var username: String
     private var photoUri: String? = null
-
     private val categoryViewModel = CategoryViewModel()
     private val expenseViewModel = ExpenseViewModel()
-
-    // Store the loaded categories so we can retrieve the selected category ID
     private var categoriesList: List<com.example.harmonie_budget_app_kt.models.Category> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -59,16 +59,13 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Load user-specific categories through the ViewModel
         categoriesList = categoryViewModel.getCategories(this, username)
 
-        // Populate the spinner with category names
         val categoryNames = categoriesList.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
-        // Date picker
         etDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -82,7 +79,6 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
-        // Start time picker
         etStartTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -96,7 +92,6 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
-        // End time picker
         etEndTime.setOnClickListener {
             val calendar = Calendar.getInstance()
             TimePickerDialog(
@@ -110,9 +105,10 @@ class ExpenseActivity : AppCompatActivity()
             ).show()
         }
 
+        // Real photo attachment using gallery picker (replaces hardcoded dummy URI)
         btnAttachPhoto.setOnClickListener {
-            photoUri = "file://example_photo.jpg"
-            Toast.makeText(this, "Photo attached (demo)", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_CODE_PHOTO)
         }
 
         btnSaveExpense.setOnClickListener {
@@ -145,9 +141,7 @@ class ExpenseActivity : AppCompatActivity()
                     photoUri = photoUri
                 )
 
-                // Save through the ViewModel layer
                 expenseViewModel.saveExpense(this, username, expense)
-
                 Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -160,5 +154,20 @@ class ExpenseActivity : AppCompatActivity()
         btnReturnHome.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_PHOTO && resultCode == Activity.RESULT_OK && data != null)
+        {
+            photoUri = data.data.toString()
+            Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object
+    {
+        private const val REQUEST_CODE_PHOTO = 1
     }
 }

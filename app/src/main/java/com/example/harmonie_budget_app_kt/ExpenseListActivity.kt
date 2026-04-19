@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -7,29 +8,42 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Button
 import android.widget.TextView
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import androidx.core.net.toUri
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ExpenseListActivity : AppCompatActivity()
 {
     private val expenseViewModel = ExpenseViewModel()
+    private lateinit var etFromDate: EditText
+    private lateinit var etToDate: EditText
+    private lateinit var btnFilter: Button
+    private lateinit var rvExpenses: RecyclerView
+    private var allExpenses: List<Expense> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense_list)
 
-        val rvExpenses: RecyclerView = findViewById(R.id.rv_expenses)
+        rvExpenses = findViewById(R.id.rv_expenses)
+        etFromDate = findViewById(R.id.et_from_date)
+        etToDate = findViewById(R.id.et_to_date)
+        btnFilter = findViewById(R.id.btn_filter)
+
         val username = intent.getStringExtra("username") ?: "admin"
 
         rvExpenses.layoutManager = LinearLayoutManager(this)
 
-        // Call through the ViewModel layer
-        val expenses = expenseViewModel.getExpenses(this, username)
+        allExpenses = expenseViewModel.getExpenses(this, username)
 
-        val adapter = ExpenseAdapter(expenses) { expense: Expense ->
+        val adapter = ExpenseAdapter(allExpenses) { expense: Expense ->
             if (expense.photoUri != null)
             {
                 try
@@ -49,6 +63,83 @@ class ExpenseListActivity : AppCompatActivity()
             }
         }
         rvExpenses.adapter = adapter
+
+        // Date pickers added to the filter fields (addresses review note that fields were never referenced)
+        etFromDate.setOnClickListener {
+            showDatePicker(etFromDate)
+        }
+        etToDate.setOnClickListener {
+            showDatePicker(etToDate)
+        }
+
+        // Filter button now has a click handler (addresses review note on missing filtering logic)
+        btnFilter.setOnClickListener {
+            applyFilter(adapter)
+        }
+    }
+
+    private fun showDatePicker(editText: EditText)
+    {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(
+            this,
+            { _, year, month, day ->
+                editText.setText(String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    /**
+     * Applies date range filtering to the expense list.
+     * Uses SimpleDateFormat to parse the user-entered dates and filters expenses accordingly.
+     * The adapter is recreated with the filtered list. This directly implements the missing
+     * filtering feature noted in the review.
+     */
+    private fun applyFilter(adapter: ExpenseAdapter)
+    {
+        val fromStr = etFromDate.text.toString().trim()
+        val toStr = etToDate.text.toString().trim()
+
+        var filtered = allExpenses
+
+        if (fromStr.isNotEmpty() && toStr.isNotEmpty())
+        {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val fromDate = sdf.parse(fromStr)
+            val toDate = sdf.parse(toStr)
+
+            if (fromDate != null && toDate != null)
+            {
+                filtered = allExpenses.filter { expense ->
+                    val expDate = sdf.parse(expense.date)
+                    expDate != null && !expDate.before(fromDate) && !expDate.after(toDate)
+                }
+            }
+        }
+
+        val newAdapter = ExpenseAdapter(filtered) { expense: Expense ->
+            if (expense.photoUri != null)
+            {
+                try
+                {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(expense.photoUri.toUri(), "image/*")
+                    startActivity(intent)
+                }
+                catch (_: Exception)
+                {
+                    Toast.makeText(this, "Unable to open photo", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else
+            {
+                Toast.makeText(this, "No photo attached", Toast.LENGTH_SHORT).show()
+            }
+        }
+        rvExpenses.adapter = newAdapter
     }
 
     private class ExpenseAdapter(

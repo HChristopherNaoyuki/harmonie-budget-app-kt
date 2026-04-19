@@ -44,11 +44,12 @@ class ForgotPasswordActivity : AppCompatActivity()
 
         btnSend.setOnClickListener {
             val username = etUsername.text.toString().trim()
-            val userId = etUserId.text.toString().trim()
-            if (username.isNotEmpty() && userId.isNotEmpty())
+            val userIdEntered = etUserId.text.toString().trim()
+
+            if (username.isNotEmpty() && userIdEntered.isNotEmpty())
             {
                 val user = userViewModel.loadUser(this, username)
-                if (user != null)
+                if (user != null && user.userId == userIdEntered)
                 {
                     tvNewPasswordTitle.visibility = android.view.View.VISIBLE
                     layoutNewPassword.visibility = android.view.View.VISIBLE
@@ -68,15 +69,17 @@ class ForgotPasswordActivity : AppCompatActivity()
         btnChangePassword.setOnClickListener {
             val newPass = etNewPassword.text.toString().trim()
             val confirmPass = etConfirmNewPassword.text.toString().trim()
+
             if (newPass.isNotEmpty() && confirmPass.isNotEmpty() && newPass == confirmPass)
             {
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
                 if (passwordRegex.matches(newPass))
                 {
-                    val user = userViewModel.loadUser(this, etUsername.text.toString().trim())
+                    val username = etUsername.text.toString().trim()
+                    val user = userViewModel.loadUser(this, username)
                     if (user != null)
                     {
-                        val updatedUser = User(user.name, user.surname, user.username, newPass)
+                        val updatedUser = User(user.name, user.surname, user.username, newPass, user.userId)
                         userViewModel.saveUser(this, updatedUser)
                         Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
                         finish()
