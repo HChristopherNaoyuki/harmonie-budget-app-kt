@@ -11,15 +11,14 @@
     <string name="create_account_title">Create New Account</string>
 
     <!-- Exact strings from the mock-up -->
-    <string name="create_new_account">Create new Account</string>
+    <string name="create_new_account">Create Account</string>
     <string name="already_registered_log_in">Already Registered? Log In here.</string>
     <string name="full_name_hint">FULL NAME</string>
     <string name="username_hint">USERNAME</string>
     <string name="password_hint">PASSWORD</string>
     <string name="confirm_password_hint">CONFIRM PASSWORD</string>
     <string name="user_id_label">USER ID</string>
-    <string name="generate_user_id_button">Generate User ID</string>
-    <string name="copy_user_id_button">Copy User ID</string>
+    <string name="generate_and_copy_user_id">Generate and copy User ID</string>
     <string name="sign_up_button">Sign up</string>
 
     <!-- Forgot Password screen strings -->

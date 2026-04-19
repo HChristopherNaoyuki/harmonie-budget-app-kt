@@ -24,7 +24,6 @@ class RegisterActivity : AppCompatActivity()
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnRegister: Button
     private lateinit var btnGenerateUserId: Button
-    private lateinit var btnCopyUserId: Button
     private lateinit var tvGeneratedUserId: TextView
     private lateinit var tvAlreadyRegistered: TextView
     private val userViewModel = UserViewModel()
@@ -41,7 +40,6 @@ class RegisterActivity : AppCompatActivity()
         etConfirmPassword = findViewById(R.id.et_confirm_password)
         btnRegister = findViewById(R.id.btn_register)
         btnGenerateUserId = findViewById(R.id.btn_generate_user_id)
-        btnCopyUserId = findViewById(R.id.btn_copy_user_id)
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
@@ -51,30 +49,26 @@ class RegisterActivity : AppCompatActivity()
             finish()
         }
 
+        /*
+            The single button now generates the User ID, displays it,
+            and automatically copies it to the clipboard.
+            This matches the mock-up button label "Generate and copy User ID".
+        */
         btnGenerateUserId.setOnClickListener {
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
             {
                 generatedUserId = generateUserId(username)
                 tvGeneratedUserId.text = generatedUserId
+
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("User ID", generatedUserId)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this, "User ID generated and copied to clipboard", Toast.LENGTH_SHORT).show()
             }
             else
             {
                 Toast.makeText(this, "Please enter a username first", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        btnCopyUserId.setOnClickListener {
-            if (generatedUserId.isNotEmpty())
-            {
-                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("User ID", generatedUserId)
-                clipboard.setPrimaryClip(clip)
-                Toast.makeText(this, "User ID copied to clipboard", Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
-                Toast.makeText(this, "Generate a User ID first", Toast.LENGTH_SHORT).show()
             }
         }
 
