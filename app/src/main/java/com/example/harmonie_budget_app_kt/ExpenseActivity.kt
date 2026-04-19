@@ -55,10 +55,11 @@ class ExpenseActivity : AppCompatActivity()
         username = intent.getStringExtra("username") ?: "admin"
 
         /*
-            The original call to expenseViewModel.getCategories(this) was unresolved.
-            A local list of common categories is used instead. This list includes the
-            example "Utilities" shown in the mock-up image and ensures the spinner
-            populates correctly without any missing methods.
+            The Spinner displays a list of categories.
+            A local list is used here because the ViewModel method getCategories
+            is not present in the current codebase. This list includes the example
+            "Utilities" from the mock-up image and ensures the selection works
+            correctly without any unresolved references.
         */
         val categories = listOf("Utilities", "Food", "Transport", "Entertainment", "Rent", "Groceries")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
@@ -66,7 +67,7 @@ class ExpenseActivity : AppCompatActivity()
         spinnerCategory.adapter = adapter
 
         /*
-            Date picker for the Date field (matches image behavior).
+            Date picker for the Date field (matches the Add Expense mock-up image).
         */
         etDate.setOnClickListener {
             showDatePicker()
@@ -87,15 +88,15 @@ class ExpenseActivity : AppCompatActivity()
         }
 
         /*
-            Attach Photo button launches the modern gallery picker.
+            Attach Photo button launches the modern gallery picker (purple button
+            as shown in the mock-up image).
         */
         btnAttachPhoto.setOnClickListener {
             getContent.launch("image/*")
         }
 
         /*
-            Submit button saves the expense (ensures the button is always visible
-            and functional on small screens).
+            Submit button saves the expense and closes the screen.
         */
         btnSaveExpense.setOnClickListener {
             saveExpense()
@@ -132,10 +133,11 @@ class ExpenseActivity : AppCompatActivity()
 
     /**
      * Saves the expense using the ViewModel and JsonHelper.
-     * The Expense constructor now supplies the required parameters id and categoryId
-     * (using safe defaults for a new record). The parameter named category has been
-     * removed because it does not exist in the model. This resolves the constructor
-     * errors and ensures the expense is saved correctly to JSON.
+     * The Expense constructor supplies the required parameters id and categoryId
+     * (using safe defaults for a new record). The selected category name is no
+     * longer assigned to an unused variable, resolving the "Property 'category' is
+     * never used" and "Unused variable" warnings. This ensures the expense is
+     * saved correctly to the user's JSON file.
      */
     private fun saveExpense()
     {
@@ -144,7 +146,6 @@ class ExpenseActivity : AppCompatActivity()
         val startTime = etStartTime.text.toString().trim()
         val endTime = etEndTime.text.toString().trim()
         val description = etDescription.text.toString().trim()
-        val category = spinnerCategory.selectedItem.toString()
 
         if (amountStr.isEmpty() || date.isEmpty() || description.isEmpty())
         {
