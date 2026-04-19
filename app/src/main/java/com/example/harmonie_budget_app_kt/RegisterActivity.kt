@@ -45,7 +45,7 @@ class RegisterActivity : AppCompatActivity()
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
-        // Make the subtitle clickable to open LoginActivity (matches mock-up)
+        // Subtitle is clickable and opens LoginActivity
         tvAlreadyRegistered.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -111,7 +111,7 @@ class RegisterActivity : AppCompatActivity()
 
             val user = User(
                 name = name,
-                surname = "",          // surname remains empty to match mock-up (single FULL NAME field)
+                surname = "",
                 username = username,
                 password = password,
                 userId = generatedUserId

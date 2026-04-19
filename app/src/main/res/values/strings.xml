@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!--
-        Application-wide string resources for the Harmonie Budget app.
-        All strings are defined here to eliminate hardcoded values in layout files
-        and activities, ensuring consistency and easier maintenance.
-        This file has been corrected to resolve the duplicate definition of send_button.
-        The existing send_button entry has been updated to the exact value "SEND"
-        to match the visual design in the Forgot Password screen image.
-        The confirm_button entry remains as previously added.
-        The create_account_button entry remains from the prior correction.
-        All strings are verified against the project requirements in OPSC6311POE.pdf.
-        No other strings were modified.
-    -->
-
     <!-- Application name and welcome messages -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
@@ -23,18 +9,25 @@
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_title">Create New Account</string>
+
+    <!-- Exact strings from the mock-up (added to fix all hardcoded string warnings) -->
+    <string name="create_new_account">Create new Account</string>
+    <string name="already_registered_log_in">Already Registered? Log In here.</string>
+    <string name="full_name_hint">FULL NAME</string>
+    <string name="username_hint">USERNAME</string>
+    <string name="password_hint">PASSWORD</string>
+    <string name="confirm_password_hint">CONFIRM PASSWORD</string>
+    <string name="user_id_label">USER ID</string>
+    <string name="generate_user_id_button">Generate User ID</string>
+    <string name="copy_user_id_button">Copy User ID</string>
+    <string name="sign_up_button">Sign up</string>
+
     <string name="name_hint">Full Name</string>
-    <string name="username_hint">Username</string>
-    <string name="password_hint">Password</string>
-    <string name="confirm_password_hint">Confirm Password</string>
-    <string name="sign_up_button">Sign Up</string>
+    <string name="sign_up_from_login">Sign Up</string>
+    <string name="log_in_from_forgot">Log In</string>
     <string name="log_in_button">Log In</string>
-    <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="forgot_password_title">Forgot Password</string>
-
-    <!-- Corrected send_button (single definition, value matches the image exactly) -->
     <string name="send_button">SEND</string>
-
     <string name="reset_password">Reset Password</string>
     <string name="new_password_title">New Password</string>
     <string name="user_id_hint">User ID</string>
@@ -132,10 +125,9 @@
     <!-- Category totals screen title -->
     <string name="category_totals_title">Category Totals</string>
 
-    <!-- String for Register page Create Account button -->
+    <!-- String for Register page Create Account button (kept for compatibility) -->
     <string name="create_account_button">Create Account</string>
 
     <!-- String for Forgot Password page Confirm button -->
     <string name="confirm_button">Confirm</string>
-
 </resources>
