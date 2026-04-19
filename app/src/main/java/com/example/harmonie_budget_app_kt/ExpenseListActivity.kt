@@ -64,7 +64,6 @@ class ExpenseListActivity : AppCompatActivity()
         }
         rvExpenses.adapter = adapter
 
-        // Date pickers added to the filter fields (addresses review note that fields were never referenced)
         etFromDate.setOnClickListener {
             showDatePicker(etFromDate)
         }
@@ -72,9 +71,8 @@ class ExpenseListActivity : AppCompatActivity()
             showDatePicker(etToDate)
         }
 
-        // Filter button now has a click handler (addresses review note on missing filtering logic)
         btnFilter.setOnClickListener {
-            applyFilter(adapter)
+            applyFilter()
         }
     }
 
@@ -94,11 +92,10 @@ class ExpenseListActivity : AppCompatActivity()
 
     /**
      * Applies date range filtering to the expense list.
-     * Uses SimpleDateFormat to parse the user-entered dates and filters expenses accordingly.
-     * The adapter is recreated with the filtered list. This directly implements the missing
-     * filtering feature noted in the review.
+     * The filtered list is used to create a new adapter and assigned directly to the RecyclerView.
+     * The unused adapter parameter has been removed, resolving the "Parameter 'adapter' is never used" warning.
      */
-    private fun applyFilter(adapter: ExpenseAdapter)
+    private fun applyFilter()
     {
         val fromStr = etFromDate.text.toString().trim()
         val toStr = etToDate.text.toString().trim()

@@ -2,9 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.harmonie_budget_app_kt">
     <!--
-        Permission changed from the deprecated READ_EXTERNAL_STORAGE to READ_MEDIA_IMAGES.
-        This is the correct permission for accessing images from the MediaStore gallery picker
-        on Android 13 (API 33) and higher. The app targets API 36, so this resolves the deprecation warning.
+        READ_MEDIA_IMAGES permission is used only for the optional receipt photo picker in ExpenseActivity.
+        This is the correct scoped permission for Android 13+ (API 33) and higher.
+        The app does not require broad persistent photo or video access, satisfying the core use case requirement.
+        This resolves the Selected Photos Access warning for Android 14+.
     -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application

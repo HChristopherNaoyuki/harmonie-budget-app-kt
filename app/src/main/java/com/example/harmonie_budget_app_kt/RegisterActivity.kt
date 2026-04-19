@@ -45,7 +45,6 @@ class RegisterActivity : AppCompatActivity()
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
-        // Subtitle is clickable and opens LoginActivity
         tvAlreadyRegistered.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
