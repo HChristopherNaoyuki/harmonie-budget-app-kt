@@ -9,8 +9,8 @@ import com.example.harmonie_budget_app_kt.models.Goal
  * Example local unit test, which will execute on the development machine (host).
  * These tests verify pure logic and utility functions that do not require Android Context.
  * All tests are written in Allman style with detailed professional comments.
- * Tests cover core functionality, edge cases, and expected failure scenarios.
- * This class has been fully corrected to eliminate all unresolved references and warnings.
+ * This class has been fully corrected to eliminate all warnings, unused imports,
+ * and failing assertions.
  */
 class ExampleUnitTest
 {
@@ -66,37 +66,49 @@ class ExampleUnitTest
 
     /**
      * Tests Expense ID generation logic used in JsonHelper.saveExpense.
-     * Verifies incremental IDs are correctly assigned when saving multiple expenses.
+     * Verifies incremental IDs are correctly assigned using pure in-memory logic.
+     * This test no longer calls real file I/O to avoid environment-dependent failures.
      */
     @Test
     fun expenseIdGeneration_incrementsCorrectly()
     {
         val expenses = mutableListOf<Expense>()
-        val maxId = expenses.maxOfOrNull { it.id } ?: 0
-        val newId = maxId + 1
-        assertEquals(1, newId)  // first expense
+
+        // First expense
+        val maxId1 = expenses.maxOfOrNull { it.id } ?: 0
+        val newId1 = maxId1 + 1
+        assertEquals(1, newId1)
 
         expenses.add(Expense(1, 10.0, "2026-04-19", "09:00", "10:00", "Test", 1))
-        val nextId = expenses.maxOfOrNull { it.id } ?: 0 + 1
-        assertEquals(2, nextId)
+
+        // Second expense
+        val maxId2 = expenses.maxOfOrNull { it.id } ?: 0
+        val newId2 = maxId2 + 1
+        assertEquals(2, newId2)
     }
 
     /**
      * Tests Goal validation logic from GoalActivity.
-     * Uses variables to avoid IntelliJ "always true" warnings while keeping the logic clear.
+     * Uses named variables to make conditions clear and eliminate IntelliJ warnings
+     * about expressions that are always true or always false.
      */
     @Test
     fun goalValidation_acceptsValidGoals()
     {
         val minGoal = 100.0
         val maxGoal = 500.0
-        val isValid = (maxGoal > minGoal) && (minGoal > 0.0) && (maxGoal <= 1000000.0)
+        val maxIsGreaterThanMin = (maxGoal > minGoal)
+        val minIsPositive = (minGoal > 0.0)
+        val maxIsWithinLimit = (maxGoal <= 1000000.0)
+        val isValid = maxIsGreaterThanMin && minIsPositive && maxIsWithinLimit
+
         assertTrue(isValid)
     }
 
     /**
      * Tests Goal validation rejects invalid cases.
-     * Uses variables to avoid IntelliJ "always false" warnings while keeping the logic clear.
+     * Uses named variables to make conditions clear and eliminate IntelliJ warnings
+     * about expressions that are always true or always false.
      */
     @Test
     fun goalValidation_rejectsInvalidGoals()
@@ -106,8 +118,14 @@ class ExampleUnitTest
         val negativeMin = -10.0
         val exceedsLimit = 1000001.0
 
-        assertFalse((maxNotGreater > minEqual) && (minEqual > 0.0))
-        assertFalse((negativeMin > 0.0))
-        assertFalse((100.0 > 0.0) && (exceedsLimit <= 1000000.0))
+        val maxNotGreaterThanMin = (maxNotGreater > minEqual)
+        val minIsPositive = (minEqual > 0.0)
+        assertFalse(maxNotGreaterThanMin && minIsPositive)
+
+        val negativeMinIsPositive = (negativeMin > 0.0)
+        assertFalse(negativeMinIsPositive)
+
+        val withinLimit = (100.0 > 0.0) && (exceedsLimit <= 1000000.0)
+        assertFalse(withinLimit)
     }
 }
