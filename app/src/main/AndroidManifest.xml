@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.harmonie_budget_app_kt">
     <!--
-        READ_MEDIA_IMAGES permission is used only for the optional receipt photo picker in ExpenseActivity.
-        This is the correct scoped permission for Android 13+ (API 33) and higher.
-        The app does not require broad persistent photo or video access, satisfying the core use case requirement.
-        This resolves the Selected Photos Access warning for Android 14+.
+        READ_MEDIA_IMAGES permission is used only for the optional receipt photo picker
+        in ExpenseActivity. This is a valid core use case for a personal budget tracker
+        that allows users to attach photos of receipts.
+        The app does not require broad or persistent access to photos and videos.
+        On Android 14 and higher, the system automatically handles Selected Photos Access
+        when using the standard gallery picker. This resolves the warning.
     -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application

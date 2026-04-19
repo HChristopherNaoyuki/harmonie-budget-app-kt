@@ -67,7 +67,7 @@ class RegisterActivity : AppCompatActivity()
         btnCopyUserId.setOnClickListener {
             if (generatedUserId.isNotEmpty())
             {
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("User ID", generatedUserId)
                 clipboard.setPrimaryClip(clip)
                 Toast.makeText(this, "User ID copied to clipboard", Toast.LENGTH_SHORT).show()
