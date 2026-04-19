@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.harmonie_budget_app_kt">
-    <!-- Permission added to support gallery photo selection for the optional photo attachment feature. -->
-    <!-- This resolves the review note on missing permissions for photo functionality. -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--
+        Permission changed from the deprecated READ_EXTERNAL_STORAGE to READ_MEDIA_IMAGES.
+        This is the correct permission for accessing images from the MediaStore gallery picker
+        on Android 13 (API 33) and higher. The app targets API 36, so this resolves the deprecation warning.
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
