@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Application name and welcome messages -->
+    <!--
+        Application name and welcome messages.
+        These are used in the launcher and main dashboard.
+    -->
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Login, Register, and Forgot Password screen strings -->
+    <!--
+        Login, Register, and Forgot Password screen strings.
+        These match the exact text shown in all authentication layouts and mock-ups.
+    -->
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_title">Create New Account</string>
 
-    <!-- Exact strings from the mock-up -->
+    <!--
+        Exact strings from the latest registration mock-up.
+        Title changed to "Create Account" to match the current image.
+        Subtitle, field hints, and buttons are identical to the provided mock-up.
+    -->
     <string name="create_new_account">Create Account</string>
     <string name="already_registered_log_in">Already Registered? Log In here.</string>
     <string name="full_name_hint">FULL NAME</string>
@@ -21,38 +31,60 @@
     <string name="generate_and_copy_user_id">Generate and copy User ID</string>
     <string name="sign_up_button">Sign up</string>
 
-    <!-- Forgot Password screen strings -->
+    <!--
+        Forgot Password screen strings.
+        These resolve earlier resource linking errors.
+    -->
     <string name="forgot_password_title">Forgot Password</string>
     <string name="user_id_hint">User ID</string>
     <string name="send_button">SEND</string>
     <string name="new_password_title">New Password</string>
 
-    <!-- Goal screen strings -->
+    <!--
+        Goal screen strings.
+        Used in GoalActivity for setting monthly budget limits.
+    -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
     <string name="hint_min_goal">Minimum monthly goal</string>
     <string name="hint_max_goal">Maximum monthly goal</string>
     <string name="btn_save_goals">Save Goals</string>
 
-    <!-- Category screen strings -->
+    <!--
+        Category screen strings.
+        Used in CategoryActivity for adding and managing expense categories.
+    -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
     <string name="category_added">Category added</string>
 
-    <!-- Expense entry strings -->
-    <string name="hint_category_id">Category</string>
+    <!--
+        Expense entry strings.
+        These are used in the ExpenseActivity layout to match the provided mock-up image exactly.
+        All field hints, button text, and titles are defined here so the layout displays correctly.
+    -->
+    <string name="add_expense_title">Add Expense</string>
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
     <string name="hint_start_time">Start Time</string>
     <string name="hint_end_time">End Time</string>
     <string name="hint_description">Description</string>
-    <string name="btn_attach_photo">Attach Photo</string>
+    <string name="hint_category_id">Category</string>
+    <string name="btn_attach_photo">ATTACH PHOTO</string>
     <string name="btn_save_expense">Submit</string>
     <string name="expense_submitted">Expense submitted</string>
+
+    <!--
+        Expense list filtering strings.
+        Used in ExpenseListActivity for date range filters.
+    -->
     <string name="hint_from_date">From Date</string>
     <string name="hint_to_date">To Date</string>
     <string name="btn_filter">Filter</string>
 
-    <!-- More screen strings -->
+    <!--
+        More screen strings.
+        Used in the navigation drawer or More fragment for export, reset, about, and help.
+    -->
     <string name="export_data_title">Export Data</string>
     <string name="export_data_content">Your data has been exported to the budget_data folder.</string>
     <string name="reset_progress_title">Reset Progress</string>
@@ -68,14 +100,20 @@
     <string name="data_exported">Data exported</string>
     <string name="progress_reset">Progress reset</string>
 
-    <!-- Navigation bar strings -->
+    <!--
+        Navigation bar strings.
+        Used for the bottom navigation or drawer items.
+    -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
     <string name="nav_transactions">Transactions</string>
     <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Dashboard, Budget, Transactions, and Budgets screen strings -->
+    <!--
+        Dashboard, Budget, Transactions, and Budgets screen strings.
+        These support the HomeFragment and related views.
+    -->
     <string name="budget_title">Budget</string>
     <string name="edit_budget">Edit Budget</string>
     <string name="detect_budget">Detect Budget</string>
@@ -88,7 +126,10 @@
     <string name="add_expense">Add Expense</string>
     <string name="my_dashboard">My Dashboard</string>
 
-    <!-- New strings for the redesigned Home and other pages -->
+    <!--
+        New strings for the redesigned Home and other pages.
+        These are used in dynamic text views and reports.
+    -->
     <string name="greetings">Greetings, %1$s!</string>
     <string name="monthly_budget">Monthly budget: %1$.2f - %2$.2f</string>
     <string name="within_budget">Within Budget</string>
@@ -102,7 +143,10 @@
     <string name="copy">Copy</string>
     <string name="user_id_copied">User ID copied to clipboard</string>
 
-    <!-- Common error and feedback messages -->
+    <!--
+        Common error and feedback messages.
+        These are displayed via Toast messages across multiple activities.
+    -->
     <string name="error_invalid_credentials">Invalid username or password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
@@ -110,21 +154,34 @@
     <string name="please_fill_all_fields">Please fill all fields and select a category</string>
     <string name="username_or_user_id_invalid">Username or User ID is invalid</string>
 
-    <!-- Navigation buttons used on multiple screens -->
+    <!--
+        Navigation buttons used on multiple screens.
+        These support links between login, register, and forgot password flows.
+    -->
     <string name="home_button">Home</string>
     <string name="return_home">Return Home</string>
     <string name="sign_up_from_login">Sign Up</string>
     <string name="log_in_from_forgot">Log In</string>
 
-    <!-- Category totals screen title -->
+    <!--
+        Category totals screen title.
+        Used in CategoryTotalActivity.
+    -->
     <string name="category_totals_title">Category Totals</string>
 
-    <!-- String for Register page Create Account button -->
+    <!--
+        String for Register page Create Account button (kept for consistency with earlier layouts).
+    -->
     <string name="create_account_button">Create Account</string>
 
-    <!-- String for Forgot Password page Confirm button -->
+    <!--
+        String for Forgot Password page Confirm button.
+    -->
     <string name="confirm_button">Confirm</string>
 
-    <!-- Log In button string used by activity_login.xml and activity_forgot_password.xml -->
+    <!--
+        Log In button string used by activity_login.xml and activity_forgot_password.xml.
+        This resolves the previous resource linking errors.
+    -->
     <string name="log_in_button">Log In</string>
 </resources>
