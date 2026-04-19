@@ -10,7 +10,7 @@
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_title">Create New Account</string>
 
-    <!-- Exact strings from the mock-up (added to fix all hardcoded string warnings) -->
+    <!-- Exact strings from the mock-up (no duplicates) -->
     <string name="create_new_account">Create new Account</string>
     <string name="already_registered_log_in">Already Registered? Log In here.</string>
     <string name="full_name_hint">FULL NAME</string>
@@ -21,16 +21,6 @@
     <string name="generate_user_id_button">Generate User ID</string>
     <string name="copy_user_id_button">Copy User ID</string>
     <string name="sign_up_button">Sign up</string>
-
-    <string name="name_hint">Full Name</string>
-    <string name="sign_up_from_login">Sign Up</string>
-    <string name="log_in_from_forgot">Log In</string>
-    <string name="log_in_button">Log In</string>
-    <string name="forgot_password_title">Forgot Password</string>
-    <string name="send_button">SEND</string>
-    <string name="reset_password">Reset Password</string>
-    <string name="new_password_title">New Password</string>
-    <string name="user_id_hint">User ID</string>
 
     <!-- Goal screen strings -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
@@ -104,7 +94,6 @@
     <string name="no_expenses_logged">No expenses logged yet</string>
     <string name="top_spending_category">Top Spending Category: %1$s — %2$.2f</string>
     <string name="months_over_budget">Months Over Budget: %1$d</string>
-    <string name="user_id_label">Your User ID</string>
     <string name="copy">Copy</string>
     <string name="user_id_copied">User ID copied to clipboard</string>
 
