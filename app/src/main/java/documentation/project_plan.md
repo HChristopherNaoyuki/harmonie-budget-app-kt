@@ -22,9 +22,13 @@ criteria.
 
 ## 2. Project Timeline and Milestones
 Start of project: February 16, 2026
+
 Part 1 submission: March 24, 2026
+
 Part 2 submission: April 28, 2026
+
 Final submission: May 29, 2026
+
 The timeline ensures steady progress across
 all three submissions while allowing time
 for testing and documentation.
@@ -32,8 +36,10 @@ for testing and documentation.
 ## 3. Detailed Gantt Chart
 February 16 to March 24, 2026: Part 1
 Research, Planning and Design
+
 March 25 to April 28, 2026: Part 2
 Prototype development and testing
+
 April 29 to May 29, 2026: Part 3
 Final app development, gamification,
 graphs, video, and submission
@@ -56,11 +62,14 @@ and all submission files.
 
 ## 5. Team Responsibilities
 Project Manager leads Part 1 and overall
-coordination. Software Developer builds
-the app for Part 2 and Part 3. QA Tester
-handles testing, documentation, and video
-production. All members contribute to
-GitHub commits and final integration.
+coordination. 
+
+Software Developer builds the app for Part 
+2 and Part 3. 
+
+QA Tester handles testing, documentation, 
+and video production. All members contribute 
+to GitHub commits and final integration.
 
 ## 6. Risk Management and Contingency
 Risks include tight deadlines and technical

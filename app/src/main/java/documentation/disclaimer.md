@@ -1,14 +1,8 @@
 # Disclaimer
 
----
-
 **Last Updated: April 17, 2026** 
 
----
-
 ## Disclaimer Notice
-
----
 
 UNDER NO CIRCUMSTANCES SHOULD IMAGES OR EMOJIS BE INCLUDED
 DIRECTLY IN THE README FILE. ALL VISUAL MEDIA, INCLUDING
