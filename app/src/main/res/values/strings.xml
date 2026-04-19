@@ -10,7 +10,7 @@
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_title">Create New Account</string>
 
-    <!-- Exact strings from the mock-up (no duplicates) -->
+    <!-- Exact strings from the mock-up -->
     <string name="create_new_account">Create new Account</string>
     <string name="already_registered_log_in">Already Registered? Log In here.</string>
     <string name="full_name_hint">FULL NAME</string>
@@ -21,6 +21,12 @@
     <string name="generate_user_id_button">Generate User ID</string>
     <string name="copy_user_id_button">Copy User ID</string>
     <string name="sign_up_button">Sign up</string>
+
+    <!-- Forgot Password screen strings -->
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="user_id_hint">User ID</string>
+    <string name="send_button">SEND</string>
+    <string name="new_password_title">New Password</string>
 
     <!-- Goal screen strings -->
     <string name="set_monthly_goals">Set Monthly Goals</string>
@@ -114,9 +120,12 @@
     <!-- Category totals screen title -->
     <string name="category_totals_title">Category Totals</string>
 
-    <!-- String for Register page Create Account button (kept for compatibility) -->
+    <!-- String for Register page Create Account button -->
     <string name="create_account_button">Create Account</string>
 
     <!-- String for Forgot Password page Confirm button -->
     <string name="confirm_button">Confirm</string>
+
+    <!-- Log In button string used by activity_login.xml and activity_forgot_password.xml -->
+    <string name="log_in_button">Log In</string>
 </resources>
