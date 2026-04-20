@@ -49,11 +49,6 @@ class RegisterActivity : AppCompatActivity()
             finish()
         }
 
-        /*
-            The single button now generates the User ID, displays it,
-            and automatically copies it to the clipboard.
-            This matches the mock-up button label "Generate and copy User ID".
-        */
         btnGenerateUserId.setOnClickListener {
             val username = etUsername.text.toString().trim()
             if (username.isNotEmpty())
@@ -119,8 +114,7 @@ class RegisterActivity : AppCompatActivity()
     /**
      * Generates a unique User ID.
      * Uses the original format (prefix + date + counter) but replaces the static counter
-     * with a dynamic value based on current time milliseconds. This fixes the duplicate
-     * User ID issue identified in the code review.
+     * with a dynamic value based on current time milliseconds.
      */
     private fun generateUserId(username: String): String
     {

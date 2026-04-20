@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Amount field - gray background with purple accent underline (matches image) -->
+        <!-- Amount field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_amount"
             android:layout_width="0dp"
@@ -126,7 +126,7 @@
                 android:textColor="@android:color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Category spinner (matches "Utilities" example in the image) -->
+        <!-- Category spinner -->
         <Spinner
             android:id="@+id/spinner_category"
             android:layout_width="0dp"
@@ -137,7 +137,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Attach Photo button - purple, full width, exact match to the image -->
+        <!-- Attach Photo button - purple, full width -->
         <Button
             android:id="@+id/btn_attach_photo"
             android:layout_width="0dp"

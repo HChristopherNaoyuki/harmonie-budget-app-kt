@@ -62,10 +62,11 @@ class ExpenseActivity : AppCompatActivity()
             This is the same data saved by CategoryActivity and is not hard-coded.
             The list is built from the stored Category objects, ensuring the selection
             is restricted to user-created categories only.
-            The JsonHelper class is imported to resolve the unresolved reference.
+            JsonHelper is instantiated with no arguments (current constructor).
+            loadCategories is called with context and username to match the method signature.
         */
-        val jsonHelper = JsonHelper(this)
-        val categoryList = jsonHelper.loadCategories()
+        val jsonHelper = JsonHelper()
+        val categoryList = jsonHelper.loadCategories(this, username)
         val categories = categoryList.map { category: Category -> category.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
