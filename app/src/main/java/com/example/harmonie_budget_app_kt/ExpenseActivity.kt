@@ -32,8 +32,8 @@ class ExpenseActivity : AppCompatActivity()
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent())
     { uri: Uri? ->
-        uri?.let {
-            selectedPhotoUri = it
+        uri?.let { selectedUri: Uri ->
+            selectedPhotoUri = selectedUri
             Toast.makeText(this, "Photo attached", Toast.LENGTH_SHORT).show()
         }
     }
@@ -60,10 +60,11 @@ class ExpenseActivity : AppCompatActivity()
             This is the same data saved by CategoryActivity and is not hard-coded.
             The list is built from the stored Category objects, ensuring the selection
             is restricted to user-created categories only.
+            JsonHelper is resolved by using the existing class in the project.
         */
         val jsonHelper = JsonHelper(this)
         val categoryList = jsonHelper.loadCategories()
-        val categories = categoryList.map { it.name }
+        val categories = categoryList.map { category -> category.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
