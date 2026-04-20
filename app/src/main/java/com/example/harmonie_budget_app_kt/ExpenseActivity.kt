@@ -55,13 +55,15 @@ class ExpenseActivity : AppCompatActivity()
         username = intent.getStringExtra("username") ?: "admin"
 
         /*
-            The Spinner displays a list of categories.
-            A local list is used here because the ViewModel method getCategories
-            is not present in the current codebase. This list includes the example
-            "Utilities" from the mock-up image and ensures the selection works
-            correctly without any unresolved references.
+            The Spinner must display only the categories the user has created.
+            Categories are loaded directly from the JSON data file using JsonHelper.
+            This is the same data saved by CategoryActivity and is not hard-coded.
+            The list is built from the stored Category objects, ensuring the selection
+            is restricted to user-created categories only.
         */
-        val categories = listOf("Utilities", "Food", "Transport", "Entertainment", "Rent", "Groceries")
+        val jsonHelper = JsonHelper(this)
+        val categoryList = jsonHelper.loadCategories()
+        val categories = categoryList.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
@@ -134,10 +136,7 @@ class ExpenseActivity : AppCompatActivity()
     /**
      * Saves the expense using the ViewModel and JsonHelper.
      * The Expense constructor supplies the required parameters id and categoryId
-     * (using safe defaults for a new record). The selected category name is no
-     * longer assigned to an unused variable, resolving the "Property 'category' is
-     * never used" and "Unused variable" warnings. This ensures the expense is
-     * saved correctly to the user's JSON file.
+     * (using safe defaults for a new record).
      */
     private fun saveExpense()
     {

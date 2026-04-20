@@ -18,7 +18,7 @@
 
     <!--
         Exact strings from the latest registration mock-up.
-        Title changed to "Create Account" to match the current image.
+        Title is "Create Account" to match the current registration image.
         Subtitle, field hints, and buttons are identical to the provided mock-up.
     -->
     <string name="create_new_account">Create Account</string>
@@ -32,13 +32,13 @@
     <string name="sign_up_button">Sign up</string>
 
     <!--
-        Forgot Password screen strings.
-        These resolve earlier resource linking errors.
+        Forgot Password screen strings (exact match to the attached mock-up image).
+        These include the title, the "New Password" label, and button text.
+        All IDs in activity_forgot_password.xml now reference these keys.
     -->
     <string name="forgot_password_title">Forgot Password</string>
-    <string name="user_id_hint">User ID</string>
-    <string name="send_button">SEND</string>
-    <string name="new_password_title">New Password</string>
+    <string name="new_password_label">New Password</string>
+    <string name="reset_password_button">Reset Password</string>
 
     <!--
         Goal screen strings.

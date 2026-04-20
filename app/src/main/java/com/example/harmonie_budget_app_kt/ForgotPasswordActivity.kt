@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.User
@@ -14,14 +13,10 @@ class ForgotPasswordActivity : AppCompatActivity()
 {
     private lateinit var etUsername: EditText
     private lateinit var etUserId: EditText
-    private lateinit var etNewPassword: EditText
-    private lateinit var etConfirmNewPassword: EditText
-    private lateinit var btnSend: Button
-    private lateinit var btnChangePassword: Button
-    private lateinit var btnHome: Button
-    private lateinit var btnLogIn: Button
-    private lateinit var tvNewPasswordTitle: TextView
-    private lateinit var layoutNewPassword: android.view.View
+    private lateinit var etPassword: EditText
+    private lateinit var etConfirmPassword: EditText
+    private lateinit var btnResetPassword: Button
+    private lateinit var btnLogin: Button
     private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -31,78 +26,65 @@ class ForgotPasswordActivity : AppCompatActivity()
 
         etUsername = findViewById(R.id.et_username)
         etUserId = findViewById(R.id.et_user_id)
-        etNewPassword = findViewById(R.id.et_new_password)
-        etConfirmNewPassword = findViewById(R.id.et_confirm_new_password)
-        btnSend = findViewById(R.id.btn_send)
-        btnChangePassword = findViewById(R.id.btn_change_password)
-        btnHome = findViewById(R.id.btn_home)
-        btnLogIn = findViewById(R.id.btn_log_in)
-        tvNewPasswordTitle = findViewById(R.id.tv_new_password_title)
-        layoutNewPassword = findViewById(R.id.layout_new_password)
+        etPassword = findViewById(R.id.et_password)
+        etConfirmPassword = findViewById(R.id.et_confirm_password)
+        btnResetPassword = findViewById(R.id.btn_reset_password)
+        btnLogin = findViewById(R.id.btn_login)
 
-        layoutNewPassword.visibility = android.view.View.GONE
-
-        btnSend.setOnClickListener {
-            val username = etUsername.text.toString().trim()
-            val userIdEntered = etUserId.text.toString().trim()
-
-            if (username.isNotEmpty() && userIdEntered.isNotEmpty())
-            {
-                val user = userViewModel.loadUser(this, username)
-                if (user != null && user.userId == userIdEntered)
-                {
-                    tvNewPasswordTitle.visibility = android.view.View.VISIBLE
-                    layoutNewPassword.visibility = android.view.View.VISIBLE
-                    Toast.makeText(this, "Username and User ID verified", Toast.LENGTH_SHORT).show()
-                }
-                else
-                {
-                    Toast.makeText(this, getString(R.string.username_or_user_id_invalid), Toast.LENGTH_SHORT).show()
-                }
-            }
-            else
-            {
-                Toast.makeText(this, "Please enter username and User ID", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        btnChangePassword.setOnClickListener {
-            val newPass = etNewPassword.text.toString().trim()
-            val confirmPass = etConfirmNewPassword.text.toString().trim()
-
-            if (newPass.isNotEmpty() && confirmPass.isNotEmpty() && newPass == confirmPass)
-            {
-                val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
-                if (passwordRegex.matches(newPass))
-                {
-                    val username = etUsername.text.toString().trim()
-                    val user = userViewModel.loadUser(this, username)
-                    if (user != null)
-                    {
-                        val updatedUser = User(user.name, user.surname, user.username, newPass, user.userId)
-                        userViewModel.saveUser(this, updatedUser)
-                        Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                }
-                else
-                {
-                    Toast.makeText(this, "Password must be at least 8 characters with a letter, number, and special character", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else
-            {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        btnHome.setOnClickListener {
+        /*
+            The Login button returns the user to the login screen.
+            This matches the button label and position in the mock-up.
+        */
+        btnLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
-        btnLogIn.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+        /*
+            The Reset Password button performs the following steps:
+            1. Validates that all fields are filled.
+            2. Checks that the new passwords match.
+            3. Loads the user by username.
+            4. Verifies that the entered User ID matches the stored User ID.
+            5. Updates the password in the User object and saves it to JSON.
+            This ensures secure password reset using the existing data model.
+        */
+        btnResetPassword.setOnClickListener {
+            val username = etUsername.text.toString().trim()
+            val userId = etUserId.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+            val confirmPassword = etConfirmPassword.text.toString().trim()
+
+            if (username.isEmpty() || userId.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
+            {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (password != confirmPassword)
+            {
+                Toast.makeText(this, getString(R.string.error_password_mismatch), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val user = userViewModel.loadUser(this, username)
+            if (user == null || user.userId != userId)
+            {
+                Toast.makeText(this, getString(R.string.username_or_user_id_invalid), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val updatedUser = User(
+                name = user.name,
+                surname = user.surname,
+                username = user.username,
+                password = password,
+                userId = user.userId
+            )
+
+            userViewModel.saveUser(this, updatedUser)
+            Toast.makeText(this, "Password reset successfully", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
