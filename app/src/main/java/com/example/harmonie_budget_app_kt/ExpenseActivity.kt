@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Calendar
@@ -60,11 +61,12 @@ class ExpenseActivity : AppCompatActivity()
             This is the same data saved by CategoryActivity and is not hard-coded.
             The list is built from the stored Category objects, ensuring the selection
             is restricted to user-created categories only.
-            JsonHelper is resolved by using the existing class in the project.
+            The JsonHelper class and Category model are imported to resolve all
+            references.
         */
         val jsonHelper = JsonHelper(this)
         val categoryList = jsonHelper.loadCategories()
-        val categories = categoryList.map { category -> category.name }
+        val categories = categoryList.map { category: Category -> category.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
