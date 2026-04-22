@@ -3,9 +3,10 @@
     Drawable for the category Spinner background.
     Provides a light gray background with a dropdown arrow indicator on the right side.
     This ensures users can visually identify the Spinner as an interactive dropdown element.
+    The stroke color matches the application's purple accent theme.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background shape with rounded corners -->
+    <!-- Background shape with rounded corners and purple stroke -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#F0F0F0" />
@@ -13,7 +14,7 @@
             <stroke android:width="1dp" android:color="#6A1B9A" />
         </shape>
     </item>
-    <!-- Dropdown arrow icon positioned on the right side -->
+    <!-- Dropdown arrow icon positioned on the right side with 12dp end padding -->
     <item
         android:drawable="@android:drawable/arrow_down_float"
         android:gravity="center_vertical|end"

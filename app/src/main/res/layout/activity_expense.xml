@@ -1,172 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<!--
+    Add Expense screen layout.
+    Uses NestedScrollView with LinearLayout to ensure all input fields and the submit button
+    remain accessible on small screens through vertical scrolling.
+    All input fields use TextInputLayout for consistent Material Design appearance.
+    The submit button is positioned at the bottom and remains visible within the scrollable area.
+-->
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:fillViewport="true"
+    android:background="@color/white">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:background="@color/white">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Title - exact match to the image -->
+        <!-- Title centered at the top of the form -->
         <TextView
             android:id="@+id/tv_expense_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
             android:text="@string/add_expense_title"
-            android:textSize="24sp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <!-- Amount field -->
+        <!-- Amount input field with numberDecimal input type -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_amount"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
             app:boxBackgroundColor="#F0F0F0"
             app:boxStrokeColor="#6A1B9A"
-            app:layout_constraintTop_toBottomOf="@id/tv_expense_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_amount"
                 android:inputType="numberDecimal"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Date field - focusable=false prevents keyboard popup -->
+        <!-- Date input field with focusable=false to trigger DatePickerDialog -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_date"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             app:boxBackgroundColor="#F0F0F0"
             app:boxStrokeColor="#6A1B9A"
-            app:layout_constraintTop_toBottomOf="@id/til_amount"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_date"
                 android:textColor="@android:color/black"
+                android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Start Time field - focusable=false prevents keyboard popup -->
+        <!-- Start Time input field with focusable=false to trigger TimePickerDialog -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_start_time"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             app:boxBackgroundColor="#F0F0F0"
             app:boxStrokeColor="#6A1B9A"
-            app:layout_constraintTop_toBottomOf="@id/til_date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_start_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_start_time"
                 android:textColor="@android:color/black"
+                android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- End Time field - focusable=false prevents keyboard popup -->
+        <!-- End Time input field with focusable=false to trigger TimePickerDialog -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_end_time"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             app:boxBackgroundColor="#F0F0F0"
             app:boxStrokeColor="#6A1B9A"
-            app:layout_constraintTop_toBottomOf="@id/til_start_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_end_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_end_time"
                 android:textColor="@android:color/black"
+                android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description field -->
+        <!-- Description input field for expense details -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_description"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             app:boxBackgroundColor="#F0F0F0"
             app:boxStrokeColor="#6A1B9A"
-            app:layout_constraintTop_toBottomOf="@id/til_end_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_description"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Category spinner with dropdown icon for improved usability -->
-        <!-- The background attribute applies a drawable that includes a dropdown arrow indicator -->
+        <!-- Category spinner with dropdown background and fixed height -->
         <Spinner
             android:id="@+id/spinner_category"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/spinner_dropdown_background"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layout_constraintTop_toBottomOf="@id/til_description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:paddingEnd="12dp" />
 
-        <!-- Attach Photo button - purple, full width -->
+        <!-- Attach Photo button with purple accent color -->
         <Button
             android:id="@+id/btn_attach_photo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_attach_photo"
-            android:minHeight="48dp"
+            android:layout_marginBottom="12dp"
             android:backgroundTint="#6A1B9A"
+            android:minHeight="48dp"
+            android:text="@string/btn_attach_photo"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/spinner_category"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="14sp" />
 
-        <!-- Submit button - dark, full width -->
+        <!-- Submit button positioned at the bottom of the scrollable content -->
+        <!-- This ensures the button remains accessible on all screen sizes -->
         <Button
             android:id="@+id/btn_save_expense"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_save_expense"
-            android:minHeight="48dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="#2C2C2C"
+            android:minHeight="48dp"
+            android:text="@string/btn_save_expense"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/btn_attach_photo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="14sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

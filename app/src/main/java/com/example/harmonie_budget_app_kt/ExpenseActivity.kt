@@ -18,6 +18,17 @@ import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * ExpenseActivity handles the creation and submission of new expense records.
+ * It provides input fields for amount, date, time range, description, and category selection.
+ * Users may attach a photo receipt via the system gallery picker.
+ * All data is validated and persisted through the ExpenseViewModel layer.
+ *
+ * Layout Considerations:
+ * The activity uses a NestedScrollView with LinearLayout to ensure all fields and the submit button
+ * remain accessible on small screens (minimum supported API 24, 320dp width devices).
+ * The submit button is always reachable by scrolling, regardless of screen size or keyboard state.
+ */
 class ExpenseActivity : AppCompatActivity()
 {
     private val expenseViewModel = ExpenseViewModel()
@@ -32,6 +43,11 @@ class ExpenseActivity : AppCompatActivity()
     private var selectedPhotoUri: Uri? = null
     private var username: String = "admin"
 
+    /**
+     * Activity result launcher for the photo picker.
+     * Uses the modern GetContent contract to open the system gallery.
+     * Stores the selected URI for attachment to the expense record.
+     */
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent())
     { uri: Uri? ->
         uri?.let { selectedUri: Uri ->
@@ -45,6 +61,7 @@ class ExpenseActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense)
 
+        // Initialize view references from the layout
         etAmount = findViewById(R.id.et_amount)
         etDate = findViewById(R.id.et_date)
         etStartTime = findViewById(R.id.et_start_time)
@@ -54,6 +71,7 @@ class ExpenseActivity : AppCompatActivity()
         btnAttachPhoto = findViewById(R.id.btn_attach_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
 
+        // Retrieve username from intent for user-specific data isolation
         username = intent.getStringExtra("username") ?: "admin"
 
         /*
@@ -62,8 +80,6 @@ class ExpenseActivity : AppCompatActivity()
             This is the same data saved by CategoryActivity and is not hard-coded.
             The list is built from the stored Category objects, ensuring the selection
             is restricted to user-created categories only.
-            JsonHelper is instantiated with no arguments (current constructor).
-            loadCategories is called with context and username to match the method signature.
         */
         val jsonHelper = JsonHelper()
         val categoryList = jsonHelper.loadCategories(this, username)
@@ -73,7 +89,8 @@ class ExpenseActivity : AppCompatActivity()
         spinnerCategory.adapter = adapter
 
         /*
-            Date picker for the Date field (matches the Add Expense mock-up image).
+            Date picker for the Date field.
+            Opens a DatePickerDialog when the field receives focus or click.
         */
         etDate.setOnClickListener {
             showDatePicker()
@@ -81,6 +98,7 @@ class ExpenseActivity : AppCompatActivity()
 
         /*
             Start Time picker for the Start Time field.
+            Opens a TimePickerDialog when the field receives focus or click.
         */
         etStartTime.setOnClickListener {
             showTimePicker(etStartTime)
@@ -88,27 +106,34 @@ class ExpenseActivity : AppCompatActivity()
 
         /*
             End Time picker for the End Time field.
+            Opens a TimePickerDialog when the field receives focus or click.
         */
         etEndTime.setOnClickListener {
             showTimePicker(etEndTime)
         }
 
         /*
-            Attach Photo button launches the modern gallery picker (purple button
-            as shown in the mock-up image).
+            Attach Photo button launches the modern gallery picker.
+            Uses the purple accent color as specified in the layout.
         */
         btnAttachPhoto.setOnClickListener {
             getContent.launch("image/*")
         }
 
         /*
-            Submit button saves the expense and closes the screen.
+            Submit button validates input and saves the expense.
+            The button is positioned at the bottom of the scrollable layout,
+            ensuring it remains accessible on small screens.
         */
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
     }
 
+    /**
+     * Displays a DatePickerDialog configured with the current system date.
+     * The selected date is formatted as yyyy-MM-dd and inserted into the target EditText.
+     */
     private fun showDatePicker()
     {
         val calendar = Calendar.getInstance()
@@ -123,6 +148,12 @@ class ExpenseActivity : AppCompatActivity()
         ).show()
     }
 
+    /**
+     * Displays a TimePickerDialog configured with the current system time.
+     * The selected time is formatted as HH:mm and inserted into the target EditText.
+     *
+     * @param editText The EditText field to populate with the selected time
+     */
     private fun showTimePicker(editText: EditText)
     {
         val calendar = Calendar.getInstance()
@@ -138,9 +169,10 @@ class ExpenseActivity : AppCompatActivity()
     }
 
     /**
-     * Saves the expense using the ViewModel and JsonHelper.
-     * The Expense constructor supplies the required parameters id and categoryId
-     * (using safe defaults for a new record).
+     * Validates all required input fields and persists the expense record.
+     * Required fields: amount, date, description.
+     * The category selection is validated against the loaded category list.
+     * If validation passes, the expense is saved via the ViewModel and the activity finishes.
      */
     private fun saveExpense()
     {
@@ -150,6 +182,7 @@ class ExpenseActivity : AppCompatActivity()
         val endTime = etEndTime.text.toString().trim()
         val description = etDescription.text.toString().trim()
 
+        // Validate required fields
         if (amountStr.isEmpty() || date.isEmpty() || description.isEmpty())
         {
             Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT).show()
@@ -158,9 +191,22 @@ class ExpenseActivity : AppCompatActivity()
 
         val amount = amountStr.toDoubleOrNull() ?: 0.0
 
+        // Determine selected category ID from spinner position
+        val jsonHelper = JsonHelper()
+        val categoryList = jsonHelper.loadCategories(this, username)
+        val selectedCategoryPosition = spinnerCategory.selectedItemPosition
+        val categoryId = if (selectedCategoryPosition >= 0 && selectedCategoryPosition < categoryList.size)
+        {
+            categoryList[selectedCategoryPosition].id
+        }
+        else
+        {
+            0
+        }
+
         val expense = Expense(
             id = 0,
-            categoryId = 0,
+            categoryId = categoryId,
             amount = amount,
             date = date,
             startTime = startTime,
