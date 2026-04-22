@@ -19,13 +19,15 @@ import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
  * It includes a custom PieChartView to visualize the percentage of spending per category.
  * The pie chart is drawn using Canvas to avoid external dependencies.
  * Paint and RectF objects are preallocated to avoid object allocations during draw operations.
- * This implementation has been corrected to meet the following requirements:
+ *
+ * Enhancements in this version:
  * - Each category is calculated and displayed based on its exact percentage of the total.
  * - Chart segments accurately reflect the underlying expense data.
  * - Segments are visually separated by small gaps for clear distinction.
  * - A legend is drawn directly below the pie chart.
  * - The legend maps each segment to its category name using the same colors.
  * - The legend clearly labels each category and shows its percentage.
+ * - Percentage labels are drawn directly on each segment for immediate readability.
  * All calculations use the verified totals from expenses grouped by categoryId.
  * Category names are loaded from the user's categories.json file for meaningful labels.
  */
@@ -63,6 +65,7 @@ class CategoryTotalActivity : AppCompatActivity()
         val grandTotal = totals.values.sum()
 
         // Build pie data with real category names (fallback if category not found)
+        // Pair contains categoryName and percentage value
         val pieData = totals.map { (categoryId, amount) ->
             val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
             val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
@@ -73,12 +76,13 @@ class CategoryTotalActivity : AppCompatActivity()
         val pieChart = PieChartView(this, pieData)
         pieContainer.addView(pieChart)
 
-        // Text list of totals (kept for additional clarity)
+        // Text list of totals (kept for additional clarity below the chart)
         val builder = StringBuilder()
         for ((categoryId, total) in totals)
         {
             val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
-            builder.append("$categoryName: $total\n")
+            val percentage = if (grandTotal > 0) (total / grandTotal * 100) else 0.0
+            builder.append("$categoryName: ${String.format("%.2f", total)} (${String.format("%.1f", percentage)}%)\n")
         }
         if (totals.isEmpty())
         {
@@ -100,6 +104,7 @@ class CategoryTotalActivity : AppCompatActivity()
         private val data: List<Pair<String, Double>>  // Pair<categoryName, percentage>
     ) : View(context)
     {
+        // Preallocated Paint objects to avoid allocation during draw calls
         private val paint: Paint = Paint().apply { isAntiAlias = true }
         private val rect: RectF = RectF()
         private val legendPaint: Paint = Paint().apply { isAntiAlias = true }
@@ -107,6 +112,12 @@ class CategoryTotalActivity : AppCompatActivity()
             isAntiAlias = true
             textSize = 28f
             color = Color.BLACK
+        }
+        private val labelPaint: Paint = Paint().apply {
+            isAntiAlias = true
+            textSize = 24f
+            color = Color.WHITE
+            textAlign = Paint.Align.CENTER
         }
 
         override fun onDraw(canvas: Canvas)
@@ -122,30 +133,54 @@ class CategoryTotalActivity : AppCompatActivity()
             val pieHeight = (height * 0.65f).toInt()
             val pieSize = minOf(width, pieHeight)
             val left = (width - pieSize) / 2f
-            rect.set(left, 40f, left + pieSize, 40f + pieSize)
+            val top = 40f
+            rect.set(left, top, left + pieSize, top + pieSize)
 
             var startAngle = 0f
-            val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN)
-            val gap = 4f  // Small gap between segments for clear visual separation
+            // Expanded color palette for better distinction between categories
+            val colors = listOf(
+                Color.parseColor("#E53935"),  // Red
+                Color.parseColor("#1E88E5"),  // Blue
+                Color.parseColor("#43A047"),  // Green
+                Color.parseColor("#FDD835"),  // Yellow
+                Color.parseColor("#8E24AA"),  // Purple
+                Color.parseColor("#00ACC1"),  // Cyan
+                Color.parseColor("#FB8C00"),  // Orange
+                Color.parseColor("#3949AB")   // Indigo
+            )
+            val gap = 2f  // Small gap between segments for clear visual separation
 
             // Draw each pie segment
             data.forEachIndexed { index, (_, value) ->
                 val sweepAngle = (value / total * 360f - gap).toFloat().coerceAtLeast(0f)
                 paint.color = colors[index % colors.size]
                 canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
+
+                // Draw percentage label on the segment if large enough to be visible
+                if (sweepAngle > 15f)
+                {
+                    val midAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
+                    val radius = rect.width() / 3f  // Position at 1/3 of radius
+                    val labelX = rect.centerX() + (radius * kotlin.math.cos(midAngle)).toFloat()
+                    val labelY = rect.centerY() + (radius * kotlin.math.sin(midAngle)).toFloat()
+                    val percentageText = "${String.format("%.1f", value)}%"
+                    labelPaint.color = Color.WHITE
+                    canvas.drawText(percentageText, labelX, labelY + 8f, labelPaint)
+                }
+
                 startAngle += sweepAngle + gap
             }
 
             // Draw center circle to create a clean donut-style pie
             paint.color = Color.WHITE
-            canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 4f, paint)
+            canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 5f, paint)
 
             // Legend area starts below the pie
-            val legendStartY = pieHeight + 80f
-            val legendItemHeight = 40f
+            val legendStartY = pieHeight + 60f
+            val legendItemHeight = 48f
             val colorSize = 28f
 
-            // Draw legend items
+            // Draw legend items with category names and percentages
             data.forEachIndexed { index, (name, value) ->
                 val y = legendStartY + (index * legendItemHeight)
 
@@ -154,8 +189,9 @@ class CategoryTotalActivity : AppCompatActivity()
                 canvas.drawRect(40f, y, 40f + colorSize, y + colorSize, legendPaint)
 
                 // Category label and percentage
-                val percentageText = "${"%.1f".format(value)}%"
+                val percentageText = "${String.format("%.1f", value)}%"
                 textPaint.textSize = 28f
+                textPaint.color = Color.BLACK
                 canvas.drawText("$name: $percentageText", 90f, y + 26f, textPaint)
             }
         }

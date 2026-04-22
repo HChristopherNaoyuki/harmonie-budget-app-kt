@@ -44,7 +44,7 @@
                 android:textColor="@android:color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Date field - now includes focusable=false to resolve the warning -->
+        <!-- Date field - focusable=false prevents keyboard popup -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_date"
             android:layout_width="0dp"
@@ -65,7 +65,7 @@
                 android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Start Time field - now includes focusable=false to resolve the warning -->
+        <!-- Start Time field - focusable=false prevents keyboard popup -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_start_time"
             android:layout_width="0dp"
@@ -86,7 +86,7 @@
                 android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- End Time field - now includes focusable=false to resolve the warning -->
+        <!-- End Time field - focusable=false prevents keyboard popup -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_end_time"
             android:layout_width="0dp"
@@ -126,13 +126,16 @@
                 android:textColor="@android:color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Category spinner -->
+        <!-- Category spinner with dropdown icon for improved usability -->
+        <!-- The background attribute applies a drawable that includes a dropdown arrow indicator -->
         <Spinner
             android:id="@+id/spinner_category"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginTop="16dp"
-            android:background="#F0F0F0"
+            android:background="@drawable/spinner_dropdown_background"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layout_constraintTop_toBottomOf="@id/til_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
