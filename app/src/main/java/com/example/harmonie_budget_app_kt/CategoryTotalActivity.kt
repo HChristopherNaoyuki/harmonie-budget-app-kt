@@ -10,9 +10,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
+import java.util.Locale
 
 /**
  * CategoryTotalActivity displays the total spent per category.
@@ -30,6 +32,12 @@ import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
  * - Percentage labels are drawn directly on each segment for immediate readability.
  * All calculations use the verified totals from expenses grouped by categoryId.
  * Category names are loaded from the user's categories.json file for meaningful labels.
+ *
+ * Warnings addressed:
+ * - All String.format calls now explicitly specify Locale.US to ensure consistent
+ *   decimal formatting across all device locales.
+ * - Color.parseColor calls replaced with androidx.core.graphics.toColorInt extension
+ *   function for idiomatic Kotlin usage.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -82,7 +90,16 @@ class CategoryTotalActivity : AppCompatActivity()
         {
             val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
             val percentage = if (grandTotal > 0) (total / grandTotal * 100) else 0.0
-            builder.append("$categoryName: ${String.format("%.2f", total)} (${String.format("%.1f", percentage)}%)\n")
+            // Explicit Locale.US ensures consistent decimal point formatting
+            builder.append(
+                String.format(
+                    Locale.US,
+                    "%s: %.2f (%.1f%%)\n",
+                    categoryName,
+                    total,
+                    percentage
+                )
+            )
         }
         if (totals.isEmpty())
         {
@@ -98,6 +115,10 @@ class CategoryTotalActivity : AppCompatActivity()
      * Segments include small gaps for visual separation.
      * Legend uses the exact same colors as the pie segments and shows category name plus percentage.
      * All drawing uses preallocated Paint and RectF objects.
+     *
+     * Warnings addressed:
+     * - String.format calls use Locale.US explicitly.
+     * - Color.parseColor replaced with String.toColorInt() extension.
      */
     private class PieChartView(
         context: Context,
@@ -138,15 +159,16 @@ class CategoryTotalActivity : AppCompatActivity()
 
             var startAngle = 0f
             // Expanded color palette for better distinction between categories
+            // Using String.toColorInt() extension from androidx.core.graphics for idiomatic Kotlin
             val colors = listOf(
-                Color.parseColor("#E53935"),  // Red
-                Color.parseColor("#1E88E5"),  // Blue
-                Color.parseColor("#43A047"),  // Green
-                Color.parseColor("#FDD835"),  // Yellow
-                Color.parseColor("#8E24AA"),  // Purple
-                Color.parseColor("#00ACC1"),  // Cyan
-                Color.parseColor("#FB8C00"),  // Orange
-                Color.parseColor("#3949AB")   // Indigo
+                "#E53935".toColorInt(),  // Red
+                "#1E88E5".toColorInt(),  // Blue
+                "#43A047".toColorInt(),  // Green
+                "#FDD835".toColorInt(),  // Yellow
+                "#8E24AA".toColorInt(),  // Purple
+                "#00ACC1".toColorInt(),  // Cyan
+                "#FB8C00".toColorInt(),  // Orange
+                "#3949AB".toColorInt()   // Indigo
             )
             val gap = 2f  // Small gap between segments for clear visual separation
 
@@ -163,7 +185,8 @@ class CategoryTotalActivity : AppCompatActivity()
                     val radius = rect.width() / 3f  // Position at 1/3 of radius
                     val labelX = rect.centerX() + (radius * kotlin.math.cos(midAngle)).toFloat()
                     val labelY = rect.centerY() + (radius * kotlin.math.sin(midAngle)).toFloat()
-                    val percentageText = "${String.format("%.1f", value)}%"
+                    // Explicit Locale.US ensures consistent formatting of percentage text
+                    val percentageText = String.format(Locale.US, "%.1f%%", value)
                     labelPaint.color = Color.WHITE
                     canvas.drawText(percentageText, labelX, labelY + 8f, labelPaint)
                 }
@@ -189,7 +212,8 @@ class CategoryTotalActivity : AppCompatActivity()
                 canvas.drawRect(40f, y, 40f + colorSize, y + colorSize, legendPaint)
 
                 // Category label and percentage
-                val percentageText = "${String.format("%.1f", value)}%"
+                // Explicit Locale.US ensures consistent formatting of percentage text
+                val percentageText = String.format(Locale.US, "%.1f%%", value)
                 textPaint.textSize = 28f
                 textPaint.color = Color.BLACK
                 canvas.drawText("$name: $percentageText", 90f, y + 26f, textPaint)
