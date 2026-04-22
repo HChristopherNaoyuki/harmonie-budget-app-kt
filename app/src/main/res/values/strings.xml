@@ -190,4 +190,15 @@
         Added to resolve hardcoded string warning in fragment_home.xml.
     -->
     <string name="budget_overview">Budget Overview</string>
+
+    <!--
+        Section labels for minimalistic card-based layouts.
+        Added to resolve hardcoded string warnings in activity_category.xml,
+        activity_goal.xml, and activity_login.xml.
+    -->
+    <string name="new_category">NEW CATEGORY</string>
+    <string name="your_categories">YOUR CATEGORIES</string>
+    <string name="goal_details">GOAL DETAILS</string>
+    <string name="sign_in_to_continue">Sign in to continue</string>
+    <string name="credentials">CREDENTIALS</string>
 </resources>

@@ -3,6 +3,7 @@
     Manage Categories screen with minimalistic design.
     All original views and identifiers are preserved.
     Uses card-based grouping, refined spacing, and restrained typography.
+    Hardcoded strings replaced with @string references.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.05"
-                    android:text="NEW CATEGORY"
+                    android:text="@string/new_category"
                     android:textAllCaps="true"
                     android:textColor="#8E8E93"
                     android:textSize="12sp" />
@@ -105,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.05"
-                    android:text="YOUR CATEGORIES"
+                    android:text="@string/your_categories"
                     android:textAllCaps="true"
                     android:textColor="#8E8E93"
                     android:textSize="12sp" />

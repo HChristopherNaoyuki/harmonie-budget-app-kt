@@ -3,6 +3,7 @@
     Set Monthly Goals screen with minimalistic design.
     All original views and identifiers are preserved.
     Uses card-based grouping, refined spacing, and restrained typography.
+    Hardcoded string replaced with @string reference.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.05"
-                    android:text="GOAL DETAILS"
+                    android:text="@string/goal_details"
                     android:textAllCaps="true"
                     android:textColor="#8E8E93"
                     android:textSize="12sp" />
