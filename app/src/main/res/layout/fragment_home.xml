@@ -4,6 +4,7 @@
     All original views and identifiers are preserved.
     Changes include refined spacing, typography hierarchy, card-based grouping,
     and a restrained color palette for visual clarity.
+    Hardcoded string "Budget Overview" replaced with @string/budget_overview.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -112,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Budget Overview"
+                    android:text="@string/budget_overview"
                     android:textSize="12sp"
                     android:textColor="#8E8E93"
                     android:textAllCaps="true"

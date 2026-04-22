@@ -1,83 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!--
+    Set Monthly Goals screen with minimalistic design.
+    All original views and identifiers are preserved.
+    Uses card-based grouping, refined spacing, and restrained typography.
+-->
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp"
-    android:background="@color/white">
+    android:fillViewport="true"
+    android:background="#FAFAFA">
 
-    <TextView
-        android:id="@+id/tv_goal_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/set_monthly_goals"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_min_goal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_goal_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Title with increased prominence -->
+        <TextView
+            android:id="@+id/tv_goal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/set_monthly_goals"
+            android:textColor="#1C1C1E"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_min_goal"
+        <!-- Input card containing both goal fields -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_min_goal"
-            android:inputType="numberDecimal"
-            android:textColor="@android:color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="32dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:strokeWidth="0dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_max_goal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/til_min_goal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_max_goal"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.05"
+                    android:text="GOAL DETAILS"
+                    android:textAllCaps="true"
+                    android:textColor="#8E8E93"
+                    android:textSize="12sp" />
+
+                <!-- Minimum goal input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_min_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="#6A1B9A">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_min_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_min_goal"
+                        android:inputType="numberDecimal"
+                        android:textColor="#1C1C1E"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Maximum goal input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_max_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="#6A1B9A">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_max_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_max_goal"
+                        android:inputType="numberDecimal"
+                        android:textColor="#1C1C1E"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Save Goals button with full width and accent color -->
+        <Button
+            android:id="@+id/btn_save_goals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_max_goal"
-            android:inputType="numberDecimal"
-            android:textColor="@android:color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#007AFF"
+            android:minHeight="48dp"
+            android:text="@string/btn_save_goals"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/btn_save_goals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_save_goals"
-        android:minHeight="48dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:layout_marginTop="48dp"
-        app:layout_constraintTop_toBottomOf="@id/til_max_goal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Return Home button with subtle styling -->
+        <Button
+            android:id="@+id/btn_return_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#F0F0F0"
+            android:minHeight="48dp"
+            android:text="@string/return_home"
+            android:textColor="#8E8E93"
+            android:textSize="14sp"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
 
-    <Button
-        android:id="@+id/btn_return_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/return_home"
-        android:minHeight="48dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_save_goals"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

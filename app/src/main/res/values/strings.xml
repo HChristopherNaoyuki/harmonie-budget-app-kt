@@ -184,4 +184,10 @@
         This resolves the previous resource linking errors.
     -->
     <string name="log_in_button">Log In</string>
+
+    <!--
+        Budget Overview label for Home fragment card section.
+        Added to resolve hardcoded string warning in fragment_home.xml.
+    -->
+    <string name="budget_overview">Budget Overview</string>
 </resources>
