@@ -1,0 +1,63 @@
+# GitHub Actions workflow for CI pipeline for the Harmonie Budget Android application
+# This workflow automates building, testing, and packaging the application
+# It triggers on pushes and pull requests to the master branch
+
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Build release APK
+        run: ./gradlew assembleRelease
+
+      - name: Build release AAB (App Bundle)
+        run: ./gradlew app:bundleRelease
+
+      - name: Upload debug APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: harmonie-budget-debug-apk
+          path: app/build/outputs/apk/debug/
+          if-no-files-found: error
+
+      - name: Upload release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: harmonie-budget-release-apk
+          path: app/build/outputs/apk/release/
+          if-no-files-found: error
+
+      - name: Upload release AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: harmonie-budget-release-aab
+          path: app/build/outputs/bundle/release/
+          if-no-files-found: error
