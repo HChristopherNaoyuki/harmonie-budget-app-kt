@@ -22,6 +22,9 @@ import com.example.harmonie_budget_app_kt.viewmodels.MoreViewModel
  * Part 3 custom features:
  * - Export Data: Exports all user data (categories, expenses, goals, badges, streak) to JSON files
  * - Reset Progress: Clears all user progress data while preserving user account information
+ *
+ * Note: Kotlin lambda syntax requires the opening brace to be on the same line as the function call.
+ * The Allman style (braces on new lines) does not apply to lambda expressions in Kotlin.
  */
 class MoreFragment : Fragment()
 {
@@ -43,8 +46,8 @@ class MoreFragment : Fragment()
         val tvExportTitle: TextView = view.findViewById(R.id.tv_export_title)
         val layoutExportContent: View = view.findViewById(R.id.layout_export_content)
 
-        tvExportTitle.setOnClickListener
-        {
+        // Correct Kotlin lambda syntax: opening brace on same line as setOnClickListener
+        tvExportTitle.setOnClickListener {
             layoutExportContent.isVisible = !layoutExportContent.isVisible
             if (layoutExportContent.isVisible)
             {
@@ -61,8 +64,7 @@ class MoreFragment : Fragment()
         val tvResetTitle: TextView = view.findViewById(R.id.tv_reset_title)
         val layoutResetContent: View = view.findViewById(R.id.layout_reset_content)
 
-        tvResetTitle.setOnClickListener
-        {
+        tvResetTitle.setOnClickListener {
             layoutResetContent.isVisible = !layoutResetContent.isVisible
             if (layoutResetContent.isVisible)
             {
@@ -79,8 +81,7 @@ class MoreFragment : Fragment()
         val tvAboutTitle: TextView = view.findViewById(R.id.tv_about_title)
         val layoutAboutContent: View = view.findViewById(R.id.layout_about_content)
 
-        tvAboutTitle.setOnClickListener
-        {
+        tvAboutTitle.setOnClickListener {
             layoutAboutContent.isVisible = !layoutAboutContent.isVisible
         }
 
@@ -88,8 +89,7 @@ class MoreFragment : Fragment()
         val tvHelpTitle: TextView = view.findViewById(R.id.tv_help_title)
         val layoutHelpContent: View = view.findViewById(R.id.layout_help_content)
 
-        tvHelpTitle.setOnClickListener
-        {
+        tvHelpTitle.setOnClickListener {
             layoutHelpContent.isVisible = !layoutHelpContent.isVisible
         }
 
@@ -97,16 +97,14 @@ class MoreFragment : Fragment()
         val tvVersionTitle: TextView = view.findViewById(R.id.tv_version_title)
         val layoutVersionContent: View = view.findViewById(R.id.layout_version_content)
 
-        tvVersionTitle.setOnClickListener
-        {
+        tvVersionTitle.setOnClickListener {
             layoutVersionContent.isVisible = !layoutVersionContent.isVisible
         }
 
         // Log Out card - using correct ID from fragment_more.xml
         val tvLogOutTitle: TextView = view.findViewById(R.id.tv_log_out_title)
 
-        tvLogOutTitle.setOnClickListener
-        {
+        tvLogOutTitle.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
