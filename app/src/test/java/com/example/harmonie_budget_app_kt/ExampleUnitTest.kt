@@ -21,17 +21,82 @@ import java.util.TimeZone
  * - User ID generation logic
  * - Password validation regex
  * - Expense ID incrementation
- * - Goal validation logic
+ * - Goal validation logic (using a dedicated validation function)
  * - Category model behavior
  * - Expense model data integrity
  * - User model construction
  * - Badge model tests (Part 3 gamification)
  * - StreakData model tests (Part 3 gamification)
- * - Streak calculation logic
- * - Percentage calculation for progress bar
+ * - Streak calculation logic (using a dedicated function)
+ * - Percentage calculation for progress bar (using a dedicated function)
+ * - Budget badge logic (using a dedicated function)
  */
 class ExampleUnitTest
 {
+    // ==================== Helper Functions for Testing ====================
+
+    /**
+     * Validates a goal using the same rules as GoalActivity.
+     * This function isolates the validation logic for testing.
+     *
+     * @param minGoal The minimum monthly spending goal
+     * @param maxGoal The maximum monthly spending goal
+     * @return true if the goals are valid, false otherwise
+     */
+    private fun isValidGoal(minGoal: Double, maxGoal: Double): Boolean
+    {
+        return (minGoal > 0.0 && maxGoal > minGoal && maxGoal <= 1000000.0)
+    }
+
+    /**
+     * Calculates the new streak value based on the previous streak and days difference.
+     * This function isolates the streak calculation logic for testing.
+     *
+     * @param currentStreak The current streak count before the new expense
+     * @param daysDifference The number of days between the last expense and today
+     * @return The updated streak value
+     */
+    private fun calculateNewStreak(currentStreak: Int, daysDifference: Int): Int
+    {
+        return when (daysDifference)
+        {
+            1 -> currentStreak + 1
+            0 -> currentStreak
+            else -> 1
+        }
+    }
+
+    /**
+     * Calculates the progress percentage for the budget progress bar.
+     * This function isolates the percentage calculation logic for testing.
+     *
+     * @param spent The amount spent in the current month
+     * @param maxGoal The maximum monthly budget goal
+     * @return The percentage (capped between 0 and 100)
+     */
+    private fun calculateProgressPercentage(spent: Double, maxGoal: Double): Int
+    {
+        if (maxGoal <= 0)
+        {
+            return 0
+        }
+        val percentage = (spent / maxGoal) * 100.0
+        return percentage.toInt().coerceIn(0, 100)
+    }
+
+    /**
+     * Determines whether a budget badge should be awarded.
+     * This function isolates the badge logic for testing.
+     *
+     * @param totalSpent The total amount spent in the current month
+     * @param maxGoal The maximum monthly budget goal
+     * @return true if a budget badge should be awarded, false otherwise
+     */
+    private fun shouldAwardBudgetBadge(totalSpent: Double, maxGoal: Double): Boolean
+    {
+        return (totalSpent <= maxGoal && maxGoal > 0)
+    }
+
     // ==================== User ID Generation Tests ====================
 
     /**
@@ -175,24 +240,19 @@ class ExampleUnitTest
         assertEquals("Next ID should be 6, not 3", 6, newId)
     }
 
-    // ==================== Goal Validation Tests ====================
+    // ==================== Goal Validation Tests (Using Helper Function) ====================
 
     /**
-     * Tests Goal validation logic from GoalActivity.
-     * Uses named variables to make conditions clear.
+     * Tests Goal validation logic using the isValidGoal helper function.
      * Valid conditions: maxGoal > minGoal, minGoal > 0.0, maxGoal <= 1000000.0
      */
     @Test
     fun goalValidation_acceptsValidGoals()
     {
-        val minGoal = 100.0
-        val maxGoal = 500.0
-        val maxIsGreaterThanMin = (maxGoal > minGoal)
-        val minIsPositive = (minGoal > 0.0)
-        val maxIsWithinLimit = (maxGoal <= 1000000.0)
-        val isValid = maxIsGreaterThanMin && minIsPositive && maxIsWithinLimit
-
-        assertTrue("Valid goals should be accepted", isValid)
+        assertTrue("Valid goals should be accepted", isValidGoal(100.0, 500.0))
+        assertTrue("Boundary min goal", isValidGoal(0.01, 100.0))
+        assertTrue("Boundary max goal", isValidGoal(1.0, 1000000.0))
+        assertTrue("Large valid range", isValidGoal(1000.0, 500000.0))
     }
 
     /**
@@ -202,13 +262,18 @@ class ExampleUnitTest
     @Test
     fun goalValidation_rejectsEqualGoals()
     {
-        val minGoal = 500.0
-        val maxGoal = 500.0
-        val maxIsGreaterThanMin = (maxGoal > minGoal)
-        val minIsPositive = (minGoal > 0.0)
-        val isValid = maxIsGreaterThanMin && minIsPositive
+        assertFalse("Equal goals should be rejected", isValidGoal(500.0, 500.0))
+        assertFalse("Both zero", isValidGoal(0.0, 0.0))
+    }
 
-        assertFalse("Equal goals should be rejected", isValid)
+    /**
+     * Tests Goal validation rejects minimum greater than maximum.
+     */
+    @Test
+    fun goalValidation_rejectsMinGreaterThanMax()
+    {
+        assertFalse("Min greater than max should be rejected", isValidGoal(600.0, 500.0))
+        assertFalse("Min much larger than max", isValidGoal(10000.0, 100.0))
     }
 
     /**
@@ -217,13 +282,17 @@ class ExampleUnitTest
     @Test
     fun goalValidation_rejectsNegativeMinGoal()
     {
-        val minGoal = -10.0
-        val maxGoal = 100.0
-        val minIsPositive = (minGoal > 0.0)
-        val maxIsGreaterThanMin = (maxGoal > minGoal)
-        val isValid = minIsPositive && maxIsGreaterThanMin
+        assertFalse("Negative minimum goal should be rejected", isValidGoal(-10.0, 100.0))
+        assertFalse("Both negative", isValidGoal(-100.0, -50.0))
+    }
 
-        assertFalse("Negative minimum goal should be rejected", isValid)
+    /**
+     * Tests Goal validation rejects negative maximum values.
+     */
+    @Test
+    fun goalValidation_rejectsNegativeMaxGoal()
+    {
+        assertFalse("Negative maximum goal should be rejected", isValidGoal(10.0, -100.0))
     }
 
     /**
@@ -232,30 +301,17 @@ class ExampleUnitTest
     @Test
     fun goalValidation_rejectsExcessiveMaxGoal()
     {
-        val minGoal = 100.0
-        val maxGoal = 1000001.0
-        val maxIsWithinLimit = (maxGoal <= 1000000.0)
-        val maxIsGreaterThanMin = (maxGoal > minGoal)
-        val isValid = maxIsWithinLimit && maxIsGreaterThanMin
-
-        assertFalse("Max goal exceeding 1,000,000 should be rejected", isValid)
+        assertFalse("Max goal exceeding 1,000,000 should be rejected", isValidGoal(100.0, 1000001.0))
+        assertFalse("Max goal far exceeding limit", isValidGoal(1.0, 2000000.0))
     }
 
     /**
-     * Tests Goal validation at boundary values.
-     * Verifies that maxGoal = 1000000.0 is accepted.
+     * Tests Goal validation rejects minimum value of zero.
      */
     @Test
-    fun goalValidation_acceptsBoundaryMaxGoal()
+    fun goalValidation_rejectsZeroMinGoal()
     {
-        val minGoal = 1.0
-        val maxGoal = 1000000.0
-        val maxIsWithinLimit = (maxGoal <= 1000000.0)
-        val maxIsGreaterThanMin = (maxGoal > minGoal)
-        val minIsPositive = (minGoal > 0.0)
-        val isValid = maxIsWithinLimit && maxIsGreaterThanMin && minIsPositive
-
-        assertTrue("Boundary max goal should be accepted", isValid)
+        assertFalse("Zero minimum goal should be rejected", isValidGoal(0.0, 100.0))
     }
 
     // ==================== Category Model Tests ====================
@@ -517,7 +573,7 @@ class ExampleUnitTest
         assertEquals("Longest streak should also be 1", 1, streakData.longestStreak)
     }
 
-    // ==================== Part 3: Streak Calculation Logic Tests ====================
+    // ==================== Part 3: Streak Calculation Logic Tests (Using Helper Function) ====================
 
     /**
      * Tests streak calculation when expense is logged on consecutive days.
@@ -526,11 +582,8 @@ class ExampleUnitTest
     @Test
     fun streakCalculation_incrementsOnConsecutiveDays()
     {
-        val currentStreak = 5
-        val daysDifference = 1
-        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
-
-        assertEquals("Streak should increment by 1", 6, newStreak)
+        val result = calculateNewStreak(5, 1)
+        assertEquals("Streak should increment by 1", 6, result)
     }
 
     /**
@@ -540,11 +593,8 @@ class ExampleUnitTest
     @Test
     fun streakCalculation_remainsUnchangedOnSameDay()
     {
-        val currentStreak = 5
-        val daysDifference = 0
-        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
-
-        assertEquals("Streak should remain unchanged", 5, newStreak)
+        val result = calculateNewStreak(5, 0)
+        assertEquals("Streak should remain unchanged", 5, result)
     }
 
     /**
@@ -554,11 +604,8 @@ class ExampleUnitTest
     @Test
     fun streakCalculation_resetsOnGap()
     {
-        val currentStreak = 5
-        val daysDifference = 2
-        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
-
-        assertEquals("Streak should reset to 1", 1, newStreak)
+        val result = calculateNewStreak(5, 2)
+        assertEquals("Streak should reset to 1", 1, result)
     }
 
     /**
@@ -568,11 +615,18 @@ class ExampleUnitTest
     @Test
     fun streakCalculation_resetsOnLargeGap()
     {
-        val currentStreak = 10
-        val daysDifference = 7
-        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
+        val result = calculateNewStreak(10, 7)
+        assertEquals("Streak should reset to 1 for any gap greater than 1", 1, result)
+    }
 
-        assertEquals("Streak should reset to 1 for any gap > 1", 1, newStreak)
+    /**
+     * Tests streak calculation when starting from zero (first expense ever).
+     */
+    @Test
+    fun streakCalculation_startsAtOneForFirstExpense()
+    {
+        val result = calculateNewStreak(0, 1)
+        assertEquals("First expense should set streak to 1", 1, result)
     }
 
     /**
@@ -603,7 +657,7 @@ class ExampleUnitTest
         assertEquals("Longest streak should remain at previous record", 10, newLongestStreak)
     }
 
-    // ==================== Percentage Calculation Tests ====================
+    // ==================== Percentage Calculation Tests (Using Helper Function) ====================
 
     /**
      * Tests simple arithmetic for percentage calculation.
@@ -620,60 +674,64 @@ class ExampleUnitTest
     }
 
     /**
-     * Tests percentage calculation with zero whole.
-     * Verifies that division by zero is handled safely.
-     */
-    @Test
-    fun percentageCalculation_handlesZeroWhole()
-    {
-        val part = 25.0
-        val whole = 0.0
-        val percentage = if (whole > 0) (part / whole) * 100.0 else 0.0
-
-        assertEquals("Percentage should be zero when whole is zero", 0.0, percentage, 0.001)
-    }
-
-    /**
-     * Tests percentage calculation for progress bar (spending relative to max goal).
-     * Verifies that spending exactly at the max goal produces 100 percent.
+     * Tests progress percentage calculation for various spending scenarios.
      */
     @Test
     fun progressPercentage_calculatesCorrectly()
     {
-        val spent = 500.0
-        val maxGoal = 500.0
-        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+        // Test normal case: spending at exactly 50 percent of max goal
+        val percentage50 = calculateProgressPercentage(250.0, 500.0)
+        assertEquals("50 percent spending should return 50", 50, percentage50)
 
-        assertEquals("Percentage should be 100 when spending equals max goal", 100.0, percentage, 0.001)
+        // Test spending at exactly max goal
+        val percentage100 = calculateProgressPercentage(500.0, 500.0)
+        assertEquals("100 percent spending should return 100", 100, percentage100)
+
+        // Test spending below max goal
+        val percentage25 = calculateProgressPercentage(125.0, 500.0)
+        assertEquals("25 percent spending should return 25", 25, percentage25)
     }
 
     /**
-     * Tests percentage calculation for overspending (exceeding max goal).
+     * Tests progress percentage calculation for overspending (exceeding max goal).
      * Verifies that percentage is capped at 100 percent for visual display.
      */
     @Test
     fun progressPercentage_capsAt100Percent()
     {
-        val spent = 750.0
-        val maxGoal = 500.0
-        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+        val percentage = calculateProgressPercentage(750.0, 500.0)
+        assertEquals("Percentage should be capped at 100 for overspending", 100, percentage)
 
-        assertEquals("Percentage should be capped at 100 for overspending", 100.0, percentage, 0.001)
+        val percentageExtreme = calculateProgressPercentage(2000.0, 500.0)
+        assertEquals("Extreme overspending should also be capped at 100", 100, percentageExtreme)
     }
 
     /**
-     * Tests percentage calculation for spending below the max goal.
-     * Verifies that the correct percentage is displayed.
+     * Tests progress percentage calculation when max goal is zero or negative.
+     * Verifies that percentage returns 0 to avoid division by zero.
      */
     @Test
-    fun progressPercentage_calculatesBelowMax()
+    fun progressPercentage_handlesInvalidMaxGoal()
     {
-        val spent = 250.0
-        val maxGoal = 500.0
-        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+        val percentageZeroGoal = calculateProgressPercentage(100.0, 0.0)
+        assertEquals("Zero max goal should return 0", 0, percentageZeroGoal)
 
-        assertEquals("Percentage should be 50 when spending is half of max goal", 50.0, percentage, 0.001)
+        val percentageNegativeGoal = calculateProgressPercentage(100.0, -50.0)
+        assertEquals("Negative max goal should return 0", 0, percentageNegativeGoal)
     }
+
+    /**
+     * Tests progress percentage with zero spent.
+     * Verifies that 0 percent is returned.
+     */
+    @Test
+    fun progressPercentage_zeroSpent()
+    {
+        val percentage = calculateProgressPercentage(0.0, 500.0)
+        assertEquals("Zero spent should return 0", 0, percentage)
+    }
+
+    // ==================== String Formatting Tests ====================
 
     /**
      * Tests string formatting with Locale.US for consistent decimal output.
@@ -724,30 +782,66 @@ class ExampleUnitTest
     }
 
     /**
-     * Tests budget badge awarding condition.
-     * Verifies that the budget badge is awarded when spending is within the max goal.
+     * Tests that only appropriate badges are awarded for intermediate streaks.
+     * Verifies that a streak of 10 days awards only the 3 and 7 day badges.
+     */
+    @Test
+    fun streakMilestone_awardsIntermediateBadges()
+    {
+        val currentStreak = 10
+        val milestones = listOf(3, 7, 14, 30)
+        val earnedBadges = milestones.filter { currentStreak >= it }
+
+        assertEquals("10 day streak should earn 2 badges", 2, earnedBadges.size)
+        assertTrue("Should include 3 day badge", earnedBadges.contains(3))
+        assertTrue("Should include 7 day badge", earnedBadges.contains(7))
+        assertFalse("Should not include 14 day badge", earnedBadges.contains(14))
+        assertFalse("Should not include 30 day badge", earnedBadges.contains(30))
+    }
+
+    // ==================== Part 3: Budget Badge Logic Tests (Using Helper Function) ====================
+
+    /**
+     * Tests budget badge awarding condition when spending is within budget.
+     * Verifies that the budget badge is awarded when totalSpent is less than or equal to maxGoal.
      */
     @Test
     fun budgetBadge_awardedWhenWithinBudget()
     {
-        val totalSpent = 400.0
-        val maxGoal = 500.0
-        val shouldAwardBadge = (totalSpent <= maxGoal && maxGoal > 0)
-
-        assertTrue("Budget badge should be awarded when spending is within max goal", shouldAwardBadge)
+        assertTrue("Spending exactly at max goal should award badge", shouldAwardBudgetBadge(500.0, 500.0))
+        assertTrue("Spending below max goal should award badge", shouldAwardBudgetBadge(400.0, 500.0))
+        assertTrue("Spending well below max goal should award badge", shouldAwardBudgetBadge(100.0, 500.0))
     }
 
     /**
      * Tests budget badge not awarded when overspending.
-     * Verifies that the budget badge is not awarded when spending exceeds the max goal.
+     * Verifies that the budget badge is not awarded when totalSpent exceeds maxGoal.
      */
     @Test
     fun budgetBadge_notAwardedWhenOverBudget()
     {
-        val totalSpent = 600.0
-        val maxGoal = 500.0
-        val shouldAwardBadge = (totalSpent <= maxGoal && maxGoal > 0)
+        assertFalse("Spending slightly above max goal should not award badge", shouldAwardBudgetBadge(501.0, 500.0))
+        assertFalse("Spending significantly above max goal should not award badge", shouldAwardBudgetBadge(1000.0, 500.0))
+    }
 
-        assertFalse("Budget badge should not be awarded when overspending", shouldAwardBadge)
+    /**
+     * Tests budget badge not awarded when maxGoal is zero or negative.
+     * Verifies that the budget badge requires a valid positive maxGoal.
+     */
+    @Test
+    fun budgetBadge_notAwardedForInvalidMaxGoal()
+    {
+        assertFalse("Zero max goal should not award badge", shouldAwardBudgetBadge(0.0, 0.0))
+        assertFalse("Negative max goal should not award badge", shouldAwardBudgetBadge(100.0, -50.0))
+    }
+
+    /**
+     * Tests budget badge when totalSpent is zero.
+     * Verifies that zero spending within a valid budget awards the badge.
+     */
+    @Test
+    fun budgetBadge_awardedForZeroSpending()
+    {
+        assertTrue("Zero spending within valid budget should award badge", shouldAwardBudgetBadge(0.0, 500.0))
     }
 }
