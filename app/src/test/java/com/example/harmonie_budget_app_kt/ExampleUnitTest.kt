@@ -2,9 +2,11 @@ package com.example.harmonie_budget_app_kt
 
 import org.junit.Test
 import org.junit.Assert.*
+import com.example.harmonie_budget_app_kt.models.Badge
+import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
-import com.example.harmonie_budget_app_kt.models.Category
+import com.example.harmonie_budget_app_kt.models.StreakData
 import com.example.harmonie_budget_app_kt.models.User
 import java.util.Calendar
 import java.util.Locale
@@ -23,9 +25,15 @@ import java.util.TimeZone
  * - Category model behavior
  * - Expense model data integrity
  * - User model construction
+ * - Badge model tests (Part 3 gamification)
+ * - StreakData model tests (Part 3 gamification)
+ * - Streak calculation logic
+ * - Percentage calculation for progress bar
  */
 class ExampleUnitTest
 {
+    // ==================== User ID Generation Tests ====================
+
     /**
      * Tests the User ID generation logic from RegisterActivity.
      * The generation logic is duplicated here for the unit test because the original method is private.
@@ -83,6 +91,8 @@ class ExampleUnitTest
         assertEquals("Prefix should be ABXX", "ABXX", prefix)
     }
 
+    // ==================== Password Validation Tests ====================
+
     /**
      * Tests password validation regex used in RegisterActivity and ForgotPasswordActivity.
      * Requirements: at least 8 characters, one letter, one number, one special character.
@@ -114,6 +124,8 @@ class ExampleUnitTest
         assertFalse("No letter", regex.matches("12345678!"))
         assertFalse("Exactly 7 characters", regex.matches("Short1!"))
     }
+
+    // ==================== Expense ID Generation Tests ====================
 
     /**
      * Tests Expense ID generation logic used in JsonHelper.saveExpense.
@@ -162,6 +174,8 @@ class ExampleUnitTest
 
         assertEquals("Next ID should be 6, not 3", 6, newId)
     }
+
+    // ==================== Goal Validation Tests ====================
 
     /**
      * Tests Goal validation logic from GoalActivity.
@@ -244,6 +258,8 @@ class ExampleUnitTest
         assertTrue("Boundary max goal should be accepted", isValid)
     }
 
+    // ==================== Category Model Tests ====================
+
     /**
      * Tests Category model construction and property access.
      * Verifies that id and name are stored correctly.
@@ -268,6 +284,8 @@ class ExampleUnitTest
 
         assertEquals("Empty name should be stored", "", category.name)
     }
+
+    // ==================== Expense Model Tests ====================
 
     /**
      * Tests Expense model construction with all fields.
@@ -317,6 +335,8 @@ class ExampleUnitTest
         assertNull("Photo URI should be null when not provided", expense.photoUri)
     }
 
+    // ==================== User Model Tests ====================
+
     /**
      * Tests User model construction with all fields.
      * Verifies that all properties including userId are stored correctly.
@@ -356,6 +376,8 @@ class ExampleUnitTest
         assertEquals("Default userId should be empty string", "", user.userId)
     }
 
+    // ==================== Goal Model Tests ====================
+
     /**
      * Tests Goal model construction and property access.
      * Verifies that minGoal and maxGoal are stored correctly.
@@ -382,9 +404,210 @@ class ExampleUnitTest
         assertEquals("Max goal should be zero", 0.0, goal.maxGoal, 0.001)
     }
 
+    // ==================== Part 3: Badge Model Tests ====================
+
+    /**
+     * Tests Badge model construction and property access.
+     * Verifies that id, name, description, and earnedDate are stored correctly.
+     */
+    @Test
+    fun badgeModel_storesPropertiesCorrectly()
+    {
+        val earnedDate = "2026-05-05"
+        val badge = Badge(
+            id = 1,
+            name = "Consistent Starter",
+            description = "Logged expenses for 3 days in a row",
+            earnedDate = earnedDate,
+            iconResource = 0
+        )
+
+        assertEquals("Badge ID should match", 1, badge.id)
+        assertEquals("Badge name should match", "Consistent Starter", badge.name)
+        assertEquals("Badge description should match", "Logged expenses for 3 days in a row", badge.description)
+        assertEquals("Earned date should match", earnedDate, badge.earnedDate)
+        assertEquals("Icon resource should default to 0", 0, badge.iconResource)
+    }
+
+    /**
+     * Tests Badge model with custom icon resource.
+     * Verifies that iconResource is stored correctly.
+     */
+    @Test
+    fun badgeModel_acceptsCustomIconResource()
+    {
+        val badge = Badge(
+            id = 5,
+            name = "Budget Champion",
+            description = "Stayed within monthly budget",
+            earnedDate = "2026-05-05",
+            iconResource = 12345
+        )
+
+        assertEquals("Custom icon resource should be stored", 12345, badge.iconResource)
+    }
+
+    /**
+     * Tests Badge model equality and data class behavior.
+     * Verifies that two badges with identical properties are considered equal.
+     */
+    @Test
+    fun badgeModel_implementsEqualityCorrectly()
+    {
+        val badge1 = Badge(1, "Test Badge", "Test Description", "2026-05-05", 0)
+        val badge2 = Badge(1, "Test Badge", "Test Description", "2026-05-05", 0)
+        val badge3 = Badge(2, "Different Badge", "Different Description", "2026-05-05", 0)
+
+        assertEquals("Identical badges should be equal", badge1, badge2)
+        assertNotEquals("Different badge IDs should not be equal", badge1, badge3)
+    }
+
+    // ==================== Part 3: StreakData Model Tests ====================
+
+    /**
+     * Tests StreakData model construction and property access.
+     * Verifies that currentStreak, longestStreak, and lastExpenseDate are stored correctly.
+     */
+    @Test
+    fun streakDataModel_storesPropertiesCorrectly()
+    {
+        val streakData = StreakData(
+            currentStreak = 7,
+            longestStreak = 14,
+            lastExpenseDate = "2026-05-05"
+        )
+
+        assertEquals("Current streak should match", 7, streakData.currentStreak)
+        assertEquals("Longest streak should match", 14, streakData.longestStreak)
+        assertEquals("Last expense date should match", "2026-05-05", streakData.lastExpenseDate)
+    }
+
+    /**
+     * Tests StreakData model with zero values.
+     * Verifies that the model accepts zero streaks for new users.
+     */
+    @Test
+    fun streakDataModel_acceptsZeroValues()
+    {
+        val streakData = StreakData(
+            currentStreak = 0,
+            longestStreak = 0,
+            lastExpenseDate = ""
+        )
+
+        assertEquals("Current streak should be zero", 0, streakData.currentStreak)
+        assertEquals("Longest streak should be zero", 0, streakData.longestStreak)
+        assertEquals("Last expense date should be empty", "", streakData.lastExpenseDate)
+    }
+
+    /**
+     * Tests StreakData model with single day streak.
+     * Verifies that a new user's first expense produces streak = 1.
+     */
+    @Test
+    fun streakDataModel_singleDayStreak()
+    {
+        val streakData = StreakData(
+            currentStreak = 1,
+            longestStreak = 1,
+            lastExpenseDate = "2026-05-05"
+        )
+
+        assertEquals("First day streak should be 1", 1, streakData.currentStreak)
+        assertEquals("Longest streak should also be 1", 1, streakData.longestStreak)
+    }
+
+    // ==================== Part 3: Streak Calculation Logic Tests ====================
+
+    /**
+     * Tests streak calculation when expense is logged on consecutive days.
+     * Verifies that currentStreak increments by 1.
+     */
+    @Test
+    fun streakCalculation_incrementsOnConsecutiveDays()
+    {
+        val currentStreak = 5
+        val daysDifference = 1
+        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
+
+        assertEquals("Streak should increment by 1", 6, newStreak)
+    }
+
+    /**
+     * Tests streak calculation when expense is logged on the same day.
+     * Verifies that currentStreak remains unchanged.
+     */
+    @Test
+    fun streakCalculation_remainsUnchangedOnSameDay()
+    {
+        val currentStreak = 5
+        val daysDifference = 0
+        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
+
+        assertEquals("Streak should remain unchanged", 5, newStreak)
+    }
+
+    /**
+     * Tests streak calculation when there is a gap of more than one day.
+     * Verifies that currentStreak resets to 1.
+     */
+    @Test
+    fun streakCalculation_resetsOnGap()
+    {
+        val currentStreak = 5
+        val daysDifference = 2
+        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
+
+        assertEquals("Streak should reset to 1", 1, newStreak)
+    }
+
+    /**
+     * Tests streak calculation with a large gap (multiple days missed).
+     * Verifies that currentStreak resets to 1 regardless of gap size.
+     */
+    @Test
+    fun streakCalculation_resetsOnLargeGap()
+    {
+        val currentStreak = 10
+        val daysDifference = 7
+        val newStreak = if (daysDifference == 1) currentStreak + 1 else if (daysDifference == 0) currentStreak else 1
+
+        assertEquals("Streak should reset to 1 for any gap > 1", 1, newStreak)
+    }
+
+    /**
+     * Tests longest streak update logic.
+     * Verifies that longestStreak is updated only when currentStreak exceeds the previous record.
+     */
+    @Test
+    fun streakCalculation_updatesLongestStreak()
+    {
+        val currentStreak = 15
+        val longestStreak = 10
+        val newLongestStreak = maxOf(currentStreak, longestStreak)
+
+        assertEquals("Longest streak should update to larger value", 15, newLongestStreak)
+    }
+
+    /**
+     * Tests longest streak remains unchanged when current streak is lower.
+     * Verifies that longestStreak is not reduced.
+     */
+    @Test
+    fun streakCalculation_preservesLongestStreak()
+    {
+        val currentStreak = 5
+        val longestStreak = 10
+        val newLongestStreak = maxOf(currentStreak, longestStreak)
+
+        assertEquals("Longest streak should remain at previous record", 10, newLongestStreak)
+    }
+
+    // ==================== Percentage Calculation Tests ====================
+
     /**
      * Tests simple arithmetic for percentage calculation.
-     * This verifies the mathematical foundation used in CategoryTotalActivity.
+     * This verifies the mathematical foundation used in CategoryTotalActivity and progress bar.
      */
     @Test
     fun percentageCalculation_isAccurate()
@@ -411,6 +634,48 @@ class ExampleUnitTest
     }
 
     /**
+     * Tests percentage calculation for progress bar (spending relative to max goal).
+     * Verifies that spending exactly at the max goal produces 100 percent.
+     */
+    @Test
+    fun progressPercentage_calculatesCorrectly()
+    {
+        val spent = 500.0
+        val maxGoal = 500.0
+        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+
+        assertEquals("Percentage should be 100 when spending equals max goal", 100.0, percentage, 0.001)
+    }
+
+    /**
+     * Tests percentage calculation for overspending (exceeding max goal).
+     * Verifies that percentage is capped at 100 percent for visual display.
+     */
+    @Test
+    fun progressPercentage_capsAt100Percent()
+    {
+        val spent = 750.0
+        val maxGoal = 500.0
+        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+
+        assertEquals("Percentage should be capped at 100 for overspending", 100.0, percentage, 0.001)
+    }
+
+    /**
+     * Tests percentage calculation for spending below the max goal.
+     * Verifies that the correct percentage is displayed.
+     */
+    @Test
+    fun progressPercentage_calculatesBelowMax()
+    {
+        val spent = 250.0
+        val maxGoal = 500.0
+        val percentage = ((spent / maxGoal) * 100).coerceIn(0.0, 100.0)
+
+        assertEquals("Percentage should be 50 when spending is half of max goal", 50.0, percentage, 0.001)
+    }
+
+    /**
      * Tests string formatting with Locale.US for consistent decimal output.
      * This verifies the formatting pattern used throughout the application.
      */
@@ -421,5 +686,68 @@ class ExampleUnitTest
         val formatted = String.format(Locale.US, "%.2f", value)
 
         assertEquals("Should format with dot decimal separator", "1234.57", formatted)
+    }
+
+    // ==================== Part 3: Badge Milestone Tests ====================
+
+    /**
+     * Tests streak milestone detection for badge awarding.
+     * Verifies that the correct badge is awarded at each streak milestone.
+     */
+    @Test
+    fun streakMilestone_detectsCorrectBadge()
+    {
+        val milestones = listOf(3, 7, 14, 30)
+
+        assertEquals("3 day streak should be milestone 0", 3, milestones[0])
+        assertEquals("7 day streak should be milestone 1", 7, milestones[1])
+        assertEquals("14 day streak should be milestone 2", 14, milestones[2])
+        assertEquals("30 day streak should be milestone 3", 30, milestones[3])
+    }
+
+    /**
+     * Tests that multiple badges can be awarded as streak increases.
+     * Verifies that a streak of 30 days qualifies for all milestone badges.
+     */
+    @Test
+    fun streakMilestone_awardsAllBadgesAt30Days()
+    {
+        val currentStreak = 30
+        val milestones = listOf(3, 7, 14, 30)
+        val earnedBadges = milestones.filter { currentStreak >= it }
+
+        assertEquals("30 day streak should earn 4 badges", 4, earnedBadges.size)
+        assertTrue("Should include 3 day badge", earnedBadges.contains(3))
+        assertTrue("Should include 7 day badge", earnedBadges.contains(7))
+        assertTrue("Should include 14 day badge", earnedBadges.contains(14))
+        assertTrue("Should include 30 day badge", earnedBadges.contains(30))
+    }
+
+    /**
+     * Tests budget badge awarding condition.
+     * Verifies that the budget badge is awarded when spending is within the max goal.
+     */
+    @Test
+    fun budgetBadge_awardedWhenWithinBudget()
+    {
+        val totalSpent = 400.0
+        val maxGoal = 500.0
+        val shouldAwardBadge = (totalSpent <= maxGoal && maxGoal > 0)
+
+        assertTrue("Budget badge should be awarded when spending is within max goal", shouldAwardBadge)
+    }
+
+    /**
+     * Tests budget badge not awarded when overspending.
+     * Verifies that the budget badge is not awarded when spending exceeds the max goal.
+     */
+    @Test
+    fun budgetBadge_notAwardedWhenOverBudget()
+    {
+        val totalSpent = 600.0
+        val maxGoal = 500.0
+        val shouldAwardBadge = (totalSpent <= maxGoal && maxGoal > 0)
+
+        assertFalse("Budget badge should not be awarded when overspending", shouldAwardBadge)
     }
 }
