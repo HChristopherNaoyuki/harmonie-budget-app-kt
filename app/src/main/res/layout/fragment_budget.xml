@@ -1,38 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!--
+    Budget fragment layout (Budget tab in bottom navigation).
+    Provides buttons for adding expenses and editing budget goals.
+    Uses a clean, minimalist design consistent with the gray theme.
+    Scrolling is enabled via NestedScrollView to prevent content squishing.
+
+    All text strings reference resources in strings.xml for proper internationalization.
+-->
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp">
+    android:fillViewport="true"
+    android:background="#FAFAFA"
+    android:scrollbars="vertical">
 
-    <TextView
-        android:id="@+id/tv_budget_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/budget_title"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="32dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="48dp">
 
-    <Button
-        android:id="@+id/btn_add_expense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/add_expense"
-        app:layout_constraintTop_toBottomOf="@id/tv_budget_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        <!-- Title with increased prominence -->
+        <TextView
+            android:id="@+id/tv_budget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/budget_title"
+            android:textColor="#1C1C1E"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="48dp" />
 
-    <Button
-        android:id="@+id/btn_edit_budget"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_budget"
-        app:layout_constraintTop_toBottomOf="@id/btn_add_expense"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        <!-- Card container for Add Expense button -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="0dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/record_new_expense"
+                    android:textColor="#8E8E93"
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btn_add_expense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_expense"
+                    android:backgroundTint="#007AFF"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:minHeight="48dp"
+                    android:elevation="0dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card container for Edit Budget button -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_monthly_spending_goals"
+                    android:textColor="#8E8E93"
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btn_edit_budget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_budget"
+                    android:backgroundTint="#2C2C2C"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:minHeight="48dp"
+                    android:elevation="0dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -94,7 +94,7 @@
     <string name="help_and_info_title">Help and Information</string>
     <string name="help_and_info_content">How to use the app: log in, add expenses, set goals, view reports.</string>
     <string name="version_title">Version</string>
-    <string name="version_content">1.0.0</string>
+    <string name="version_content">Version 2.0.0</string>
     <string name="log_out_title">Log Out</string>
     <string name="log_out_content">You have been logged out.</string>
     <string name="data_exported">Data exported</string>
@@ -216,5 +216,24 @@
     <string name="longest_streak">Longest Streak: %d days</string>
     <string name="no_badges_message">No badges yet. Add expenses and stay within your budget to earn rewards</string>
     <string name="badge_display_format">🏆 %s</string>
+
+    <!--
+        Budget tab strings for polished GUI.
+        These resolve hardcoded string warnings in fragment_budget.xml.
+    -->
+    <string name="record_new_expense">Record new expense</string>
+    <string name="set_monthly_spending_goals">Set monthly spending goals</string>
+
+    <!--
+        More tab strings for polished GUI.
+        These resolve hardcoded string warnings in fragment_more.xml.
+    -->
+    <string name="settings_and_information">Settings &amp; Information</string>
+
+    <!--
+        Landing page version indicator string.
+        This resolves hardcoded string warning in activity_main.xml.
+    -->
+    <string name="version_indicator">Version 2.0.0</string>
 
 </resources>

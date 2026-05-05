@@ -6,6 +6,9 @@
     - Progress bar showing spending relative to monthly budget
     - Current streak and longest streak displays
     - Badges container for displaying earned achievements
+
+    All text strings reference resources in strings.xml for proper internationalization.
+    Scrolling is enabled via NestedScrollView to prevent content squishing.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,13 +16,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="24dp"
+        android:paddingBottom="32dp">
 
         <!-- Greeting header with increased prominence -->
         <TextView
@@ -181,7 +186,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gamification Rewards"
+                    android:text="@string/gamification_rewards"
                     android:textSize="12sp"
                     android:textColor="#8E8E93"
                     android:textAllCaps="true"
@@ -215,7 +220,7 @@
                     android:id="@+id/tv_badges_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Earned Badges"
+                    android:text="@string/earned_badges"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1C1C1E"

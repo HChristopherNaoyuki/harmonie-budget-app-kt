@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Main activity layout (first window / landing page) with minimalistic design.
-    All original views and identifiers are preserved.
-    Uses a clean vertical layout with refined spacing and a restrained color palette.
-    The background is light gray, and buttons use a simple hierarchy
-    (filled primary, light secondary, transparent tertiary).
+    Main activity layout (first window / landing page) with polished minimalistic design.
+    Uses a clean vertical layout with refined spacing and a restrained gray color palette.
+    The background is light gray, and buttons use a simple hierarchy:
+    filled primary (blue), light secondary (light gray), transparent tertiary.
 
     Scrolling is enabled via NestedScrollView to prevent content squishing
     on smaller screens and when accessibility text size settings are increased.
+
+    All text strings reference resources in strings.xml for proper internationalization.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -25,16 +25,16 @@
         android:gravity="center_horizontal"
         android:padding="24dp"
         android:paddingTop="80dp"
-        android:paddingBottom="32dp">
+        android:paddingBottom="48dp">
 
         <!-- App icon - using the existing launcher foreground drawable -->
         <ImageView
             android:id="@+id/iv_app_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_launcher_foreground"
             android:contentDescription="@string/app_name"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="24dp" />
 
         <!-- Welcome title with increased prominence and minimal styling -->
         <TextView
@@ -46,7 +46,7 @@
             android:textSize="32sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="12dp" />
 
         <!-- Subtitle text for landing page -->
         <TextView
@@ -55,11 +55,11 @@
             android:layout_height="wrap_content"
             android:text="@string/landing_subtitle"
             android:textColor="#8E8E93"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:gravity="center"
-            android:layout_marginBottom="48dp" />
+            android:layout_marginBottom="64dp" />
 
-        <!-- Primary action: filled accent button -->
+        <!-- Primary action: filled accent button (Login) -->
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
@@ -70,9 +70,10 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:elevation="0dp" />
 
-        <!-- Secondary action: subtle light gray button -->
+        <!-- Secondary action: subtle light gray button (Register) -->
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
@@ -81,10 +82,11 @@
             android:minHeight="48dp"
             android:text="@string/register_button"
             android:textColor="#1C1C1E"
-            android:textSize="14sp"
-            android:layout_marginBottom="12dp" />
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            android:elevation="0dp" />
 
-        <!-- Tertiary action: transparent text button -->
+        <!-- Tertiary action: transparent text button (Forgot Password) -->
         <Button
             android:id="@+id/btn_forgot_password"
             android:layout_width="wrap_content"
@@ -94,8 +96,19 @@
             android:text="@string/forgot_password_button"
             android:textColor="#8E8E93"
             android:textSize="14sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:elevation="0dp" />
+
+        <!-- Version indicator at bottom of landing page -->
+        <TextView
+            android:id="@+id/tv_version_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_indicator"
+            android:textColor="#C7C7CC"
+            android:textSize="12sp"
+            android:layout_marginTop="48dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
