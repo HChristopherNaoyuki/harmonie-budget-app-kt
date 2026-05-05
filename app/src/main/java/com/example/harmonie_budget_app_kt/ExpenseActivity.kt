@@ -15,6 +15,7 @@ import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
+import com.example.harmonie_budget_app_kt.viewmodels.GamificationViewModel
 import java.util.Calendar
 import java.util.Locale
 
@@ -24,6 +25,9 @@ import java.util.Locale
  * Users may attach a photo receipt via the system gallery picker.
  * All data is validated and persisted through the ExpenseViewModel layer.
  *
+ * Part 3 enhancement: After saving an expense, the gamification streak is updated.
+ * This enables streak-based badges for consistent expense logging.
+ *
  * Layout Considerations:
  * The activity uses a NestedScrollView with LinearLayout to ensure all fields and the submit button
  * remain accessible on small screens (minimum supported API 24, 320dp width devices).
@@ -32,6 +36,7 @@ import java.util.Locale
 class ExpenseActivity : AppCompatActivity()
 {
     private val expenseViewModel = ExpenseViewModel()
+    private val gamificationViewModel = GamificationViewModel()
     private lateinit var etAmount: EditText
     private lateinit var etDate: EditText
     private lateinit var etStartTime: EditText
@@ -173,6 +178,9 @@ class ExpenseActivity : AppCompatActivity()
      * Required fields: amount, date, description.
      * The category selection is validated against the loaded category list.
      * If validation passes, the expense is saved via the ViewModel and the activity finishes.
+     *
+     * Part 3 enhancement: After saving the expense, update the gamification streak
+     * to track consecutive days of expense logging for badge awarding.
      */
     private fun saveExpense()
     {
@@ -216,6 +224,10 @@ class ExpenseActivity : AppCompatActivity()
         )
 
         expenseViewModel.saveExpense(this, username, expense)
+
+        // Part 3 gamification: Update streak after successful expense save
+        gamificationViewModel.updateStreak(this, username)
+
         Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
         finish()
     }

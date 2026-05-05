@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Home fragment layout with minimalistic design improvements.
+    Home fragment layout with minimalistic design improvements and Part 3 gamification elements.
     All original views and identifiers are preserved.
-    Changes include refined spacing, typography hierarchy, card-based grouping,
-    and a restrained color palette for visual clarity.
-    Hardcoded string "Budget Overview" replaced with @string/budget_overview.
+    New additions for Part 3:
+    - Progress bar showing spending relative to monthly budget
+    - Current streak and longest streak displays
+    - Badges container for displaying earned achievements
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,9 +28,7 @@
             android:layout_height="wrap_content"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#1C1C1E"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#1C1C1E" />
 
         <!-- Current date with reduced visual weight -->
         <TextView
@@ -38,9 +37,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="#8E8E93"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_greeting"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="4dp" />
 
         <!-- User ID section contained within a subtle card -->
         <com.google.android.material.card.MaterialCardView
@@ -94,7 +91,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Budget summary card -->
+        <!-- Budget summary card with progress bar (Part 3 enhancement) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,6 +133,24 @@
                     android:textColor="#1C1C1E"
                     android:layout_marginTop="12dp" />
 
+                <!-- Part 3: Progress bar for visual spending display -->
+                <ProgressBar
+                    android:id="@+id/progress_bar_spending"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="12dp"
+                    android:progressTint="#007AFF"
+                    android:progressBackgroundTint="#E0E0E0" />
+
+                <TextView
+                    android:id="@+id/tv_progress_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#8E8E93"
+                    android:layout_marginTop="4dp" />
+
                 <TextView
                     android:id="@+id/tv_budget_status"
                     android:layout_width="wrap_content"
@@ -143,6 +158,83 @@
                     android:textSize="14sp"
                     android:textColor="#34C759"
                     android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Part 3: Gamification section - Streak and Badges -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gamification Rewards"
+                    android:textSize="12sp"
+                    android:textColor="#8E8E93"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_current_streak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:textColor="#1C1C1E" />
+
+                    <TextView
+                        android:id="@+id/tv_longest_streak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:textColor="#1C1C1E" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_badges_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Earned Badges"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/badges_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -157,9 +249,7 @@
             android:textColor="#8E8E93"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_budget_status"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="24dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_category_breakdown"

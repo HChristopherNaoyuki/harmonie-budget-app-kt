@@ -6,7 +6,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
+import com.example.harmonie_budget_app_kt.viewmodels.GamificationViewModel
 
+/**
+ * GoalActivity allows users to set monthly minimum and maximum spending goals.
+ * The goals are saved to JSON storage through the GoalViewModel.
+ *
+ * Part 3 enhancement: When goals are saved, a budget badge may be awarded
+ * after the current month's expenses are evaluated against the goals.
+ */
 class GoalActivity : AppCompatActivity()
 {
     private lateinit var etMinGoal: android.widget.EditText
@@ -15,6 +23,7 @@ class GoalActivity : AppCompatActivity()
     private lateinit var username: String
 
     private val goalViewModel = GoalViewModel()
+    private val gamificationViewModel = GamificationViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -50,6 +59,10 @@ class GoalActivity : AppCompatActivity()
 
                     // Call through the ViewModel layer
                     goalViewModel.saveGoal(this, username, goal)
+
+                    // Part 3 gamification: Check for budget badge after goal is set
+                    // The badge will be awarded when viewing the dashboard if spending is within budget
+                    // This is handled in HomeFragment's budget status check
 
                     Toast.makeText(this, "Goals saved", Toast.LENGTH_SHORT).show()
                     finish()
