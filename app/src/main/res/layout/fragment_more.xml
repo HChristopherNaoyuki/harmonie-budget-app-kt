@@ -1,194 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!--
+    More fragment layout with full scrolling capability.
+    Wrapped in NestedScrollView to ensure all cards remain accessible on smaller screens.
+    Maintains minimalist gray theme and consistent card-based design.
+-->
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    android:background="#FAFAFA">
 
-    <!-- Export Data card -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="32dp">
+
+        <!-- Export Data card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_export_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/export_data_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_export_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_export_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/export_data_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/export_data_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E" />
 
-    <!-- Reset Progress card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layout_export_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="16dp"
+                    android:background="#F8F8F8">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/export_data_content"
+                        android:textSize="14sp"
+                        android:textColor="#8E8E93" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Reset Progress card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_reset_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/reset_progress_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_reset_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_reset_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/reset_progress_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/reset_progress_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E" />
 
-    <!-- About card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layout_reset_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="16dp"
+                    android:background="#F8F8F8">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reset_progress_content"
+                        android:textSize="14sp"
+                        android:textColor="#8E8E93" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- About card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_about_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/about_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_about_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_about_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/about_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/about_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E" />
 
-    <!-- Help and Information card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layout_about_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="16dp"
+                    android:background="#F8F8F8">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_content"
+                        android:textSize="14sp"
+                        android:textColor="#8E8E93" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Help and Information card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_help_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/help_and_info_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_help_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_help_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/help_and_info_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/help_and_info_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E" />
 
-    <!-- Version card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layout_help_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="16dp"
+                    android:background="#F8F8F8">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_and_info_content"
+                        android:textSize="14sp"
+                        android:textColor="#8E8E93" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Version card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_version_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/version_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_version_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_version_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/version_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/version_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E" />
 
-    <!-- Log Out card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layout_version_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="16dp"
+                    android:background="#F8F8F8">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/version_content"
+                        android:textSize="14sp"
+                        android:textColor="#8E8E93" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Log Out card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_log_out_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/log_out_title"
-                android:padding="16dp"
-                android:textStyle="bold" />
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="#FFFFFF">
+
             <LinearLayout
-                android:id="@+id/layout_log_out_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="16dp">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_log_out_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/log_out_content" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:text="@string/log_out_title"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF3B30" />
 
-</LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

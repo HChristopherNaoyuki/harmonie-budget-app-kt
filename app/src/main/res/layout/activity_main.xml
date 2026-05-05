@@ -1,71 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Main activity layout (first window) with minimalistic design.
+    Main activity layout (first window / landing page) with minimalistic design.
     All original views and identifiers are preserved.
     Uses a clean vertical layout with refined spacing and a restrained color palette.
     The background is light gray, and buttons use a simple hierarchy
     (filled primary, light secondary, transparent tertiary).
+
+    Scrolling is enabled via NestedScrollView to prevent content squishing
+    on smaller screens and when accessibility text size settings are increased.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:padding="24dp">
+        android:padding="24dp"
+        android:paddingTop="80dp"
+        android:paddingBottom="32dp">
+
+        <!-- App icon placeholder - simple title for minimalist design -->
+        <ImageView
+            android:id="@+id/iv_app_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="@string/app_name"
+            android:layout_marginBottom="16dp" />
 
         <!-- Welcome title with increased prominence and minimal styling -->
         <TextView
             android:id="@+id/tv_welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
             android:text="@string/welcome_message"
             android:textColor="#1C1C1E"
             android:textSize="32sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Subtitle text for landing page -->
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Track expenses, set goals, earn rewards"
+            android:textColor="#8E8E93"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="48dp" />
 
         <!-- Primary action: filled accent button -->
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
             android:backgroundTint="#007AFF"
             android:minHeight="56dp"
             android:text="@string/login_button"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
         <!-- Secondary action: subtle light gray button -->
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:backgroundTint="#E5E5EA"
             android:minHeight="48dp"
             android:text="@string/register_button"
             android:textColor="#1C1C1E"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
 
         <!-- Tertiary action: transparent text button -->
         <Button
             android:id="@+id/btn_forgot_password"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:backgroundTint="@android:color/transparent"
             android:minHeight="48dp"
             android:text="@string/forgot_password_button"
             android:textColor="#8E8E93"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
