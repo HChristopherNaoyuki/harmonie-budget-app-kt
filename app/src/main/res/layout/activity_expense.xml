@@ -12,13 +12,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="32dp">
 
         <!-- Title centered at the top of the form -->
         <TextView
@@ -70,7 +72,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:focusable="false"
-                android:clickable="true" />
+                android:clickable="true"
+                android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Start Time input field with focusable=false to trigger TimePickerDialog -->
@@ -91,7 +94,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:focusable="false"
-                android:clickable="true" />
+                android:clickable="true"
+                android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- End Time input field with focusable=false to trigger TimePickerDialog -->
@@ -112,7 +116,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:focusable="false"
-                android:clickable="true" />
+                android:clickable="true"
+                android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Description input field for expense details -->
@@ -157,7 +162,6 @@
             android:textSize="14sp" />
 
         <!-- Submit button positioned at the bottom of the scrollable content -->
-        <!-- This ensures the button remains accessible on all screen sizes -->
         <Button
             android:id="@+id/btn_save_expense"
             android:layout_width="match_parent"

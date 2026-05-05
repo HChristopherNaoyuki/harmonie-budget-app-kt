@@ -95,20 +95,11 @@ class GamificationViewModel : ViewModel()
             val currentDate = parseDate(today)
             val daysDifference = daysBetween(lastDate, currentDate)
 
-            val newStreak = if (daysDifference == 1)
+            val newStreak = when
             {
-                // Consecutive day: increment streak
-                existingStreak.currentStreak + 1
-            }
-            else if (daysDifference == 0)
-            {
-                // Same day: no change to streak
-                existingStreak.currentStreak
-            }
-            else
-            {
-                // Gap of more than one day: reset streak to 1
-                1
+                daysDifference == 1 -> existingStreak.currentStreak + 1
+                daysDifference == 0 -> existingStreak.currentStreak
+                else -> 1
             }
 
             val newLongestStreak = maxOf(newStreak, existingStreak.longestStreak)
@@ -190,7 +181,7 @@ class GamificationViewModel : ViewModel()
         {
             dateFormat.parse(dateString)
         }
-        catch (e: Exception)
+        catch (exception: Exception)
         {
             null
         }

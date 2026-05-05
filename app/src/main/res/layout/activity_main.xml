@@ -11,6 +11,7 @@
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -26,7 +27,7 @@
         android:paddingTop="80dp"
         android:paddingBottom="32dp">
 
-        <!-- App icon placeholder - simple title for minimalist design -->
+        <!-- App icon - using the existing launcher foreground drawable -->
         <ImageView
             android:id="@+id/iv_app_icon"
             android:layout_width="80dp"
@@ -52,7 +53,7 @@
             android:id="@+id/tv_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Track expenses, set goals, earn rewards"
+            android:text="@string/landing_subtitle"
             android:textColor="#8E8E93"
             android:textSize="14sp"
             android:gravity="center"

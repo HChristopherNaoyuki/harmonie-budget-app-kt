@@ -21,7 +21,6 @@ import com.example.harmonie_budget_app_kt.models.Badge
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.models.Goal
-import com.example.harmonie_budget_app_kt.models.StreakData
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.GoalViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.GamificationViewModel
@@ -94,7 +93,8 @@ class HomeFragment : Fragment()
         progressBarSpending = view.findViewById(R.id.progress_bar_spending)
         tvProgressPercentage = view.findViewById(R.id.tv_progress_percentage)
 
-        tvGreeting.text = getString(R.string.greetings, username)
+        val greetingText = getString(R.string.greetings, username)
+        tvGreeting.text = greetingText
 
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
@@ -113,7 +113,8 @@ class HomeFragment : Fragment()
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
-            tvBudgetRange.text = getString(R.string.monthly_budget, goal.minGoal, goal.maxGoal)
+            val budgetRangeText = getString(R.string.monthly_budget, goal.minGoal, goal.maxGoal)
+            tvBudgetRange.text = budgetRangeText
         }
         else
         {
@@ -121,7 +122,8 @@ class HomeFragment : Fragment()
         }
 
         val currentMonthTotal = homeViewModel.getTotalBalance(requireContext(), username)
-        tvTotalBalance.text = getString(R.string.total_balance, currentMonthTotal)
+        val totalBalanceText = getString(R.string.total_balance, currentMonthTotal)
+        tvTotalBalance.text = totalBalanceText
 
         // Part 3: Update progress bar showing spending relative to max goal
         updateProgressBar(currentMonthTotal, goal)
@@ -162,7 +164,9 @@ class HomeFragment : Fragment()
         {
             val percentage = ((spent / goal.maxGoal) * 100).coerceIn(0.0, 100.0)
             progressBarSpending.progress = percentage.toInt()
-            tvProgressPercentage.text = String.format(Locale.US, "%.0f%% of monthly budget", percentage)
+
+            val progressText = getString(R.string.progress_percentage, percentage.toInt())
+            tvProgressPercentage.text = progressText
 
             // Change progress bar color based on spending level
             val colorRes = when
@@ -176,7 +180,7 @@ class HomeFragment : Fragment()
         else
         {
             progressBarSpending.progress = 0
-            tvProgressPercentage.text = "Set a monthly budget to see progress"
+            tvProgressPercentage.text = getString(R.string.set_budget_to_see_progress)
         }
     }
 
@@ -189,13 +193,15 @@ class HomeFragment : Fragment()
         val streakData = gamificationViewModel.getStreakData(requireContext(), username)
         if (streakData != null)
         {
-            tvCurrentStreak.text = String.format(Locale.US, "Current Streak: %d days", streakData.currentStreak)
-            tvLongestStreak.text = String.format(Locale.US, "Longest Streak: %d days", streakData.longestStreak)
+            val currentStreakText = getString(R.string.current_streak, streakData.currentStreak)
+            val longestStreakText = getString(R.string.longest_streak, streakData.longestStreak)
+            tvCurrentStreak.text = currentStreakText
+            tvLongestStreak.text = longestStreakText
         }
         else
         {
-            tvCurrentStreak.text = "Current Streak: 0 days"
-            tvLongestStreak.text = "Longest Streak: 0 days"
+            tvCurrentStreak.text = getString(R.string.current_streak, 0)
+            tvLongestStreak.text = getString(R.string.longest_streak, 0)
         }
 
         // Load and display badges
@@ -216,7 +222,7 @@ class HomeFragment : Fragment()
         if (badges.isEmpty())
         {
             val emptyText = TextView(requireContext())
-            emptyText.text = "No badges yet. Add expenses and stay within your budget to earn rewards!"
+            emptyText.text = getString(R.string.no_badges_message)
             emptyText.setTextColor(Color.GRAY)
             emptyText.textSize = 14f
             emptyText.setPadding(8, 8, 8, 8)
@@ -230,7 +236,8 @@ class HomeFragment : Fragment()
         for (badge in badges)
         {
             val badgeView = TextView(requireContext())
-            badgeView.text = "🏆 ${badge.name}"
+            val badgeDisplayText = getString(R.string.badge_display_format, badge.name)
+            badgeView.text = badgeDisplayText
             badgeView.setTextColor(Color.WHITE)
             badgeView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.accent_blue))
             badgeView.setPadding(24, 12, 24, 12)

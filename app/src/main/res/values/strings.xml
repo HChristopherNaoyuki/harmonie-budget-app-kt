@@ -201,4 +201,20 @@
     <string name="goal_details">GOAL DETAILS</string>
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="credentials">CREDENTIALS</string>
+
+    <!--
+        Landing page and gamification strings for Part 3.
+        These resolve hardcoded string warnings and provide proper internationalization support.
+        Added to support the enhanced GUI and gamification features required by the POE rubric.
+    -->
+    <string name="landing_subtitle">Track expenses, set goals, earn rewards</string>
+    <string name="gamification_rewards">Gamification Rewards</string>
+    <string name="earned_badges">Earned Badges</string>
+    <string name="progress_percentage">%d%% of monthly budget</string>
+    <string name="set_budget_to_see_progress">Set a monthly budget to see progress</string>
+    <string name="current_streak">Current Streak: %d days</string>
+    <string name="longest_streak">Longest Streak: %d days</string>
+    <string name="no_badges_message">No badges yet. Add expenses and stay within your budget to earn rewards</string>
+    <string name="badge_display_format">🏆 %s</string>
+
 </resources>
