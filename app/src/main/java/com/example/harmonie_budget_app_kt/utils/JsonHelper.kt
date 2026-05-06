@@ -11,6 +11,7 @@ import com.example.harmonie_budget_app_kt.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.io.IOException
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -24,7 +25,6 @@ import javax.crypto.spec.PBEKeySpec
  * Security Enhancement:
  * Passwords are hashed using PBKDF2 with a random 128-bit salt and 10,000 iterations.
  * The hash is stored as a Base64 string in "salt:hash" format.
- * Plaintext passwords are never written to disk.
  */
 class JsonHelper
 {
@@ -37,14 +37,21 @@ class JsonHelper
      * @param context Application context for file access
      * @param fileName Name of the file to access
      * @return File object within the budget_data directory
+     * @throws IOException If the directory cannot be created
      */
     private fun getFile(context: Context, fileName: String): File
     {
         val folder = File(context.filesDir, "budget_data")
+
         if (!folder.exists())
         {
-            folder.mkdirs()
+            val created = folder.mkdirs()
+            if (!created)
+            {
+                throw IOException("Failed to create budget_data directory")
+            }
         }
+
         return File(folder, fileName)
     }
 
@@ -58,7 +65,6 @@ class JsonHelper
 
         /**
          * Hashes a plaintext password using PBKDF2 with a random salt.
-         * The output format is "saltBase64:hashBase64".
          *
          * @param password The plaintext password to hash
          * @return Base64-encoded salt and hash separated by a colon
@@ -105,7 +111,7 @@ class JsonHelper
             }
             catch (exception: Exception)
             {
-                // Exception indicates invalid Base64 format or algorithm error.
+                // The underscore prefix indicates the parameter is intentionally unused.
                 false
             }
         }
@@ -118,32 +124,47 @@ class JsonHelper
      *
      * @param context Application context
      * @param user User object containing plaintext password (will be hashed)
+     * @throws IOException If file operations fail
+     * @throws RuntimeException If hashing fails
      */
     fun saveUser(context: Context, user: User)
     {
-        val file = getFile(context, "${user.username}.json")
+        try
+        {
+            val file = getFile(context, "${user.username}.json")
 
-        val hashedPassword = hashPassword(user.password)
+            val hashedPassword = hashPassword(user.password)
 
-        val secureUser = User(
-            name = user.name,
-            surname = user.surname,
-            username = user.username,
-            password = hashedPassword,
-            userId = user.userId
-        )
+            val secureUser = User(
+                name = user.name,
+                surname = user.surname,
+                username = user.username,
+                password = hashedPassword,
+                userId = user.userId
+            )
 
-        val json = gson.toJson(secureUser)
-        file.writeText(json)
+            val json = gson.toJson(secureUser)
+            file.writeText(json)
+        }
+        catch (exception: IOException)
+        {
+            // The underscore prefix indicates the parameter is intentionally unused.
+            throw IOException("Failed to write user file", exception)
+        }
+        catch (exception: Exception)
+        {
+            // The underscore prefix indicates the parameter is intentionally unused.
+            throw RuntimeException("Failed to hash password or serialize user", exception)
+        }
     }
 
     /**
      * Loads a user from the JSON file.
-     * The returned User object contains the hashed password.
      *
      * @param context Application context
      * @param username Username of the user to load
      * @return User object with hashed password, or null if the file does not exist
+     * @throws IOException If file reading fails
      */
     fun loadUser(context: Context, username: String): User?
     {
@@ -161,11 +182,11 @@ class JsonHelper
 
     /**
      * Saves a new category for the user.
-     * Prevents duplicate category names (case-insensitive comparison).
      *
      * @param context Application context
      * @param username User identifier
      * @param category Category to save
+     * @throws IOException If file operations fail
      */
     fun saveCategory(context: Context, username: String, category: Category)
     {
@@ -180,10 +201,8 @@ class JsonHelper
             mutableListOf()
         }
 
-        // Check for duplicate category names (case-insensitive).
         val nameExists = list.any { it.name.equals(category.name, ignoreCase = true) }
 
-        // Only add the category if the name does not already exist.
         if (!nameExists)
         {
             list.add(category)
@@ -214,11 +233,10 @@ class JsonHelper
 
     /**
      * Saves a new expense for the user.
-     * Automatically assigns an incremented ID based on existing expenses.
      *
      * @param context Application context
      * @param username User identifier
-     * @param expense Expense to save (id field is ignored and overwritten)
+     * @param expense Expense to save
      */
     fun saveExpense(context: Context, username: String, expense: Expense)
     {
@@ -263,11 +281,10 @@ class JsonHelper
 
     /**
      * Saves the user's monthly spending goals.
-     * Overwrites any existing goal file.
      *
      * @param context Application context
      * @param username User identifier
-     * @param goal Goal object containing minGoal and maxGoal
+     * @param goal Goal object
      */
     fun saveGoal(context: Context, username: String, goal: Goal)
     {
@@ -298,7 +315,7 @@ class JsonHelper
     // ==================== Gamification: Badge Methods ====================
 
     /**
-     * Saves a badge for the user. Prevents duplicate badges of the same type.
+     * Saves a badge for the user.
      *
      * @param context Application context
      * @param username User identifier
@@ -350,7 +367,7 @@ class JsonHelper
      *
      * @param context Application context
      * @param username User identifier
-     * @param streakData StreakData object to save
+     * @param streakData StreakData object
      */
     fun saveStreakData(context: Context, username: String, streakData: StreakData)
     {
@@ -389,39 +406,39 @@ class JsonHelper
      */
     fun exportData(context: Context, username: String): Boolean
     {
-        val exportFolder = File(context.filesDir, "budget_data/export_$username")
-        if (!exportFolder.exists())
+        return try
         {
-            exportFolder.mkdirs()
-        }
-
-        val files = listOf(
-            "${username}.json",
-            "${username}_categories.json",
-            "${username}_expenses.json",
-            "${username}_goals.json",
-            "${username}_badges.json",
-            "${username}_streak.json"
-        )
-
-        for (fileName in files)
-        {
-            val source = getFile(context, fileName)
-            if (source.exists())
+            val exportFolder = File(context.filesDir, "budget_data/export_$username")
+            if (!exportFolder.exists())
             {
-                val dest = File(exportFolder, fileName)
-                try
+                exportFolder.mkdirs()
+            }
+
+            val files = listOf(
+                "${username}.json",
+                "${username}_categories.json",
+                "${username}_expenses.json",
+                "${username}_goals.json",
+                "${username}_badges.json",
+                "${username}_streak.json"
+            )
+
+            for (fileName in files)
+            {
+                val source = getFile(context, fileName)
+                if (source.exists())
                 {
+                    val dest = File(exportFolder, fileName)
                     source.copyTo(dest, overwrite = true)
                 }
-                catch (exception: Exception)
-                {
-                    // Return false to indicate export failure.
-                    return false
-                }
             }
+            true
         }
-        return true
+        catch (exception: Exception)
+        {
+            // The underscore prefix indicates the parameter is intentionally unused.
+            false
+        }
     }
 
     /**
@@ -433,22 +450,29 @@ class JsonHelper
      */
     fun resetProgress(context: Context, username: String): Boolean
     {
-        val files = listOf(
-            "${username}_categories.json",
-            "${username}_expenses.json",
-            "${username}_goals.json",
-            "${username}_badges.json",
-            "${username}_streak.json"
-        )
-
-        for (fileName in files)
+        try
         {
-            val file = getFile(context, fileName)
-            if (file.exists())
+            val files = listOf(
+                "${username}_categories.json",
+                "${username}_expenses.json",
+                "${username}_goals.json",
+                "${username}_badges.json",
+                "${username}_streak.json"
+            )
+
+            for (fileName in files)
             {
-                val deletedFlag = file.delete()
-                // The deletion result is not used; the method returns true regardless.
+                val file = getFile(context, fileName)
+                if (file.exists())
+                {
+                    file.delete()
+                }
             }
+        }
+        catch (exception: Exception)
+        {
+            // The underscore prefix indicates the parameter is intentionally unused.
+            return false
         }
         return true
     }
