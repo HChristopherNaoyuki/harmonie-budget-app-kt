@@ -6,16 +6,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
 /**
  * LoginActivity handles user authentication.
- * It provides fields for username and password entry,
- * validates credentials against stored user data,
- * and navigates to the Dashboard upon successful login.
  *
- * The Register button now correctly navigates to RegisterActivity
- * to allow new users to create an account.
+ * Security Enhancement:
+ * Passwords are verified using PBKDF2 hashing via JsonHelper.verifyPassword().
+ * The plaintext password entered by the user is never stored or compared directly.
  */
 class LoginActivity : AppCompatActivity()
 {
@@ -36,21 +35,33 @@ class LoginActivity : AppCompatActivity()
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 
-        // Login button validates credentials and navigates to Dashboard
+        // Login button click listener.
+        // Note: Kotlin lambda syntax requires the opening brace on the same line.
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
             if (username.isNotEmpty() && password.isNotEmpty())
             {
-                // Call through the ViewModel layer to load user data
+                // Load the user object from storage.
                 val user = userViewModel.loadUser(this, username)
-                if (user != null && user.password == password)
+
+                if (user != null)
                 {
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("username", username)
-                    startActivity(intent)
-                    finish()
+                    // Verify the entered password against the stored hash.
+                    val isPasswordValid = JsonHelper.verifyPassword(password, user.password)
+
+                    if (isPasswordValid)
+                    {
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        intent.putExtra("username", username)
+                        startActivity(intent)
+                        finish()
+                    }
+                    else
+                    {
+                        Toast.makeText(this, getString(R.string.error_invalid_credentials), Toast.LENGTH_SHORT).show()
+                    }
                 }
                 else
                 {
@@ -63,8 +74,7 @@ class LoginActivity : AppCompatActivity()
             }
         }
 
-        // Register button navigates to the registration screen
-        // This fixes the previously non-functional navigation
+        // Register button click listener.
         btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)

@@ -236,4 +236,10 @@
     -->
     <string name="version_indicator">Version 2.0.0</string>
 
+    <!--
+        Part 3 Final POE: Spending graph label.
+        Used in HomeFragment to display the selected date range for the spending graph.
+    -->
+    <string name="spending_graph_label">Spending from %1$s to %2$s</string>
+
 </resources>

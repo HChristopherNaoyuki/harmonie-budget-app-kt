@@ -34,11 +34,10 @@ import java.util.Locale
  * HomeFragment displays the user's dashboard with budget information,
  * current spending totals, category breakdown, and gamification elements.
  *
- * Part 3 enhancements:
- * - Visual display showing progress relative to monthly spending goals (progress bar)
- * - Gamification badges display showing earned achievements
- * - Current streak display for consistent expense logging
- * - Budget badge awarded when spending stays within the maximum goal
+ * Part 3 Enhancements:
+ * - Progress bar showing spending relative to monthly max goal
+ * - Gamification badges and streaks
+ * - Budget badge awarded when spending stays within budget
  */
 class HomeFragment : Fragment()
 {
@@ -52,7 +51,7 @@ class HomeFragment : Fragment()
     private lateinit var tvUserId: TextView
     private lateinit var btnCopyUserId: Button
 
-    // Part 3: Gamification UI elements
+    // Gamification UI elements.
     private lateinit var tvCurrentStreak: TextView
     private lateinit var tvLongestStreak: TextView
     private lateinit var tvBadgesLabel: TextView
@@ -60,6 +59,7 @@ class HomeFragment : Fragment()
     private lateinit var progressBarSpending: ProgressBar
     private lateinit var tvProgressPercentage: TextView
 
+    // ViewModels.
     private val homeViewModel = HomeViewModel()
     private val goalViewModel = GoalViewModel()
     private val userViewModel = UserViewModel()
@@ -76,6 +76,7 @@ class HomeFragment : Fragment()
 
         username = arguments?.getString("username") ?: "admin"
 
+        // Initialize existing UI elements.
         tvGreeting = view.findViewById(R.id.tv_greeting)
         tvCurrentDate = view.findViewById(R.id.tv_current_date)
         tvBudgetRange = view.findViewById(R.id.tv_budget_range)
@@ -85,7 +86,7 @@ class HomeFragment : Fragment()
         tvUserId = view.findViewById(R.id.tv_user_id)
         btnCopyUserId = view.findViewById(R.id.btn_copy_user_id)
 
-        // Part 3: Initialize gamification UI elements
+        // Initialize gamification UI elements.
         tvCurrentStreak = view.findViewById(R.id.tv_current_streak)
         tvLongestStreak = view.findViewById(R.id.tv_longest_streak)
         tvBadgesLabel = view.findViewById(R.id.tv_badges_label)
@@ -93,6 +94,7 @@ class HomeFragment : Fragment()
         progressBarSpending = view.findViewById(R.id.progress_bar_spending)
         tvProgressPercentage = view.findViewById(R.id.tv_progress_percentage)
 
+        // Set up greeting and date.
         val greetingText = getString(R.string.greetings, username)
         tvGreeting.text = greetingText
 
@@ -100,9 +102,11 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
+        // Set up User ID display and copy functionality.
         val user = userViewModel.loadUser(requireContext(), username)
         tvUserId.text = user?.userId ?: username
 
+        // Note: Opening brace on same line as setOnClickListener is correct Kotlin lambda syntax.
         btnCopyUserId.setOnClickListener {
             val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("User ID", tvUserId.text.toString())
@@ -110,6 +114,7 @@ class HomeFragment : Fragment()
             Toast.makeText(requireContext(), getString(R.string.user_id_copied), Toast.LENGTH_SHORT).show()
         }
 
+        // Load and display budget goals.
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
@@ -121,42 +126,43 @@ class HomeFragment : Fragment()
             tvBudgetRange.text = getString(R.string.set_monthly_goals)
         }
 
+        // Calculate and display total spending.
         val currentMonthTotal = homeViewModel.getTotalBalance(requireContext(), username)
         val totalBalanceText = getString(R.string.total_balance, currentMonthTotal)
         tvTotalBalance.text = totalBalanceText
 
-        // Part 3: Update progress bar showing spending relative to max goal
+        // Update progress bar.
         updateProgressBar(currentMonthTotal, goal)
 
+        // Determine and display budget status text.
         val status = determineBudgetStatus(currentMonthTotal, goal)
         tvBudgetStatus.text = status
 
-        // Part 3: Award budget badge if spending is within budget
+        // Award budget badge if applicable.
         if (goal != null && currentMonthTotal <= goal.maxGoal && goal.maxGoal > 0)
         {
             gamificationViewModel.checkAndAwardBudgetBadge(requireContext(), username, currentMonthTotal, goal.maxGoal)
         }
 
+        // Load expenses and build category breakdown.
         val expenses = homeViewModel.getAllExpenses(requireContext(), username)
-
-        // Load categories to enable name mapping
         val categories = categoryViewModel.getCategories(requireContext(), username)
         val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
 
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
         rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses, categoryMap))
 
-        // Part 3: Load and display gamification data
+        // Load gamification data.
         loadAndDisplayGamificationData()
 
         return view
     }
 
     /**
-     * Part 3: Updates the progress bar to visually show spending relative to the monthly max goal.
+     * Updates the progress bar to visually show spending relative to the monthly max goal.
      *
      * @param spent Amount spent in the current month
-     * @param goal User's monthly goal (min and max)
+     * @param goal User's monthly goal (min and max), may be null
      */
     private fun updateProgressBar(spent: Double, goal: Goal?)
     {
@@ -168,7 +174,7 @@ class HomeFragment : Fragment()
             val progressText = getString(R.string.progress_percentage, percentage.toInt())
             tvProgressPercentage.text = progressText
 
-            // Change progress bar color based on spending level
+            // Change progress bar color based on spending level.
             val colorRes = when
             {
                 percentage >= 100 -> android.R.color.holo_red_dark
@@ -185,11 +191,11 @@ class HomeFragment : Fragment()
     }
 
     /**
-     * Part 3: Loads streak data and badges, then updates the UI.
+     * Loads streak data and badges, then updates the UI.
      */
     private fun loadAndDisplayGamificationData()
     {
-        // Load and display streak data
+        // Load and display streak data.
         val streakData = gamificationViewModel.getStreakData(requireContext(), username)
         if (streakData != null)
         {
@@ -204,14 +210,13 @@ class HomeFragment : Fragment()
             tvLongestStreak.text = getString(R.string.longest_streak, 0)
         }
 
-        // Load and display badges
+        // Load and display badges.
         val badges = gamificationViewModel.getBadges(requireContext(), username)
         displayBadges(badges)
     }
 
     /**
-     * Part 3: Dynamically creates and adds badge views to the badges container.
-     * Each badge is displayed as a colored chip showing the badge name.
+     * Dynamically creates and adds badge views to the badges container.
      *
      * @param badges List of badges earned by the user
      */
@@ -223,7 +228,7 @@ class HomeFragment : Fragment()
         {
             val emptyText = TextView(requireContext())
             emptyText.text = getString(R.string.no_badges_message)
-            emptyText.setTextColor(Color.GRAY)
+            emptyText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
             emptyText.textSize = 14f
             emptyText.setPadding(8, 8, 8, 8)
             badgesContainer.addView(emptyText)
@@ -250,9 +255,9 @@ class HomeFragment : Fragment()
             layoutParams.setMargins(0, 0, 16, 8)
             badgeView.layoutParams = layoutParams
 
-            // Set rounded background using a drawable
             badgeView.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_button)
 
+            // Note: Opening brace on same line as setOnClickListener is correct Kotlin lambda syntax.
             badgeView.setOnClickListener {
                 Toast.makeText(requireContext(), badge.description, Toast.LENGTH_SHORT).show()
             }
@@ -261,6 +266,13 @@ class HomeFragment : Fragment()
         }
     }
 
+    /**
+     * Determines the budget status text based on current spending and goals.
+     *
+     * @param spent Amount spent in the current month
+     * @param goal User's monthly goal, may be null
+     * @return Status string resource
+     */
     private fun determineBudgetStatus(spent: Double, goal: Goal?): String
     {
         if (goal == null)
@@ -276,8 +288,11 @@ class HomeFragment : Fragment()
     }
 
     /**
-     * Calculates category breakdown strings using actual category names from the categories.json file.
-     * The categoryMap is passed in to avoid repeated loading.
+     * Calculates category breakdown strings using actual category names.
+     *
+     * @param expenses List of expenses for the user
+     * @param categoryMap Map of category ID to Category object
+     * @return List of formatted strings for display
      */
     private fun calculateCategoryBreakdown(expenses: List<Expense>, categoryMap: Map<Int, Category>): List<String>
     {
@@ -290,6 +305,12 @@ class HomeFragment : Fragment()
 
     companion object
     {
+        /**
+         * Factory method to create a new instance of HomeFragment with the specified username.
+         *
+         * @param username The logged-in user's username
+         * @return A configured HomeFragment instance
+         */
         fun newInstance(username: String): HomeFragment
         {
             val fragment = HomeFragment()
@@ -300,6 +321,9 @@ class HomeFragment : Fragment()
         }
     }
 
+    /**
+     * RecyclerView adapter for the category breakdown list.
+     */
     private class CategoryBreakdownAdapter(
         private val data: List<String>
     ) : RecyclerView.Adapter<CategoryBreakdownAdapter.ViewHolder>()

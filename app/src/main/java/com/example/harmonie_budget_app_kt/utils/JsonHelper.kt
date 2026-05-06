@@ -1,6 +1,7 @@
 package com.example.harmonie_budget_app_kt.utils
 
 import android.content.Context
+import android.util.Base64
 import com.example.harmonie_budget_app_kt.models.Badge
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
@@ -10,17 +11,33 @@ import com.example.harmonie_budget_app_kt.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.security.SecureRandom
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
 /**
  * JsonHelper handles all JSON file operations for the application.
- * It manages user data, categories, expenses, goals, and Part 3 gamification data (badges and streaks).
- * All data is stored in the budget_data folder within the app's internal storage.
- * Each user has their own set of files identified by their username.
+ *
+ * Data is stored in the budget_data folder within the app's internal storage.
+ * Each user has isolated files identified by their username.
+ *
+ * Security Enhancement:
+ * Passwords are hashed using PBKDF2 with a random 128-bit salt and 10,000 iterations.
+ * The hash is stored as a Base64 string in "salt:hash" format.
+ * Plaintext passwords are never written to disk.
  */
 class JsonHelper
 {
     private val gson: Gson by lazy { Gson() }
 
+    /**
+     * Returns a File object pointing to the budget_data directory.
+     * Creates the directory if it does not exist.
+     *
+     * @param context Application context for file access
+     * @param fileName Name of the file to access
+     * @return File object within the budget_data directory
+     */
     private fun getFile(context: Context, fileName: String): File
     {
         val folder = File(context.filesDir, "budget_data")
@@ -31,15 +48,103 @@ class JsonHelper
         return File(folder, fileName)
     }
 
+    // ==================== Security Helper Methods ====================
+
+    companion object
+    {
+        private const val ITERATION_COUNT = 10000
+        private const val KEY_LENGTH = 256
+        private const val SALT_LENGTH_BYTES = 16
+
+        /**
+         * Hashes a plaintext password using PBKDF2 with a random salt.
+         * The output format is "saltBase64:hashBase64".
+         *
+         * @param password The plaintext password to hash
+         * @return Base64-encoded salt and hash separated by a colon
+         */
+        fun hashPassword(password: String): String
+        {
+            val salt = ByteArray(SALT_LENGTH_BYTES)
+            SecureRandom().nextBytes(salt)
+
+            val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
+            val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+            val hash = factory.generateSecret(spec).encoded
+
+            val saltBase64 = Base64.encodeToString(salt, Base64.NO_WRAP)
+            val hashBase64 = Base64.encodeToString(hash, Base64.NO_WRAP)
+            return "$saltBase64:$hashBase64"
+        }
+
+        /**
+         * Verifies a plaintext password against a stored hash.
+         *
+         * @param password The plaintext password to verify
+         * @param storedHash The stored hash string in "salt:hash" format
+         * @return True if the password matches the hash, false otherwise
+         */
+        fun verifyPassword(password: String, storedHash: String): Boolean
+        {
+            return try
+            {
+                val parts = storedHash.split(":")
+                if (parts.size != 2)
+                {
+                    return false
+                }
+
+                val salt = Base64.decode(parts[0], Base64.NO_WRAP)
+                val expectedHash = Base64.decode(parts[1], Base64.NO_WRAP)
+
+                val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
+                val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+                val actualHash = factory.generateSecret(spec).encoded
+
+                actualHash.contentEquals(expectedHash)
+            }
+            catch (exception: Exception)
+            {
+                // Exception indicates invalid Base64 format or algorithm error.
+                false
+            }
+        }
+    }
+
     // ==================== User Methods ====================
 
+    /**
+     * Saves a user to the JSON file. The password is hashed before storage.
+     *
+     * @param context Application context
+     * @param user User object containing plaintext password (will be hashed)
+     */
     fun saveUser(context: Context, user: User)
     {
         val file = getFile(context, "${user.username}.json")
-        val json = gson.toJson(user)
+
+        val hashedPassword = hashPassword(user.password)
+
+        val secureUser = User(
+            name = user.name,
+            surname = user.surname,
+            username = user.username,
+            password = hashedPassword,
+            userId = user.userId
+        )
+
+        val json = gson.toJson(secureUser)
         file.writeText(json)
     }
 
+    /**
+     * Loads a user from the JSON file.
+     * The returned User object contains the hashed password.
+     *
+     * @param context Application context
+     * @param username Username of the user to load
+     * @return User object with hashed password, or null if the file does not exist
+     */
     fun loadUser(context: Context, username: String): User?
     {
         val file = getFile(context, "$username.json")
@@ -47,12 +152,21 @@ class JsonHelper
         {
             return null
         }
+
         val json = file.readText()
         return gson.fromJson(json, User::class.java)
     }
 
     // ==================== Category Methods ====================
 
+    /**
+     * Saves a new category for the user.
+     * Prevents duplicate category names (case-insensitive comparison).
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param category Category to save
+     */
     fun saveCategory(context: Context, username: String, category: Category)
     {
         val file = getFile(context, "${username}_categories.json")
@@ -65,10 +179,25 @@ class JsonHelper
         {
             mutableListOf()
         }
-        list.add(category)
-        file.writeText(gson.toJson(list))
+
+        // Check for duplicate category names (case-insensitive).
+        val nameExists = list.any { it.name.equals(category.name, ignoreCase = true) }
+
+        // Only add the category if the name does not already exist.
+        if (!nameExists)
+        {
+            list.add(category)
+            file.writeText(gson.toJson(list))
+        }
     }
 
+    /**
+     * Loads all categories for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @return List of categories, empty if none exist
+     */
     fun loadCategories(context: Context, username: String): List<Category>
     {
         val file = getFile(context, "${username}_categories.json")
@@ -76,12 +205,21 @@ class JsonHelper
         {
             return emptyList()
         }
+
         val listType = object : TypeToken<List<Category>>() {}.type
         return gson.fromJson(file.readText(), listType)
     }
 
     // ==================== Expense Methods ====================
 
+    /**
+     * Saves a new expense for the user.
+     * Automatically assigns an incremented ID based on existing expenses.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param expense Expense to save (id field is ignored and overwritten)
+     */
     fun saveExpense(context: Context, username: String, expense: Expense)
     {
         val file = getFile(context, "${username}_expenses.json")
@@ -102,6 +240,13 @@ class JsonHelper
         file.writeText(gson.toJson(list))
     }
 
+    /**
+     * Loads all expenses for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @return List of expenses, empty if none exist
+     */
     fun loadExpenses(context: Context, username: String): List<Expense>
     {
         val file = getFile(context, "${username}_expenses.json")
@@ -109,12 +254,21 @@ class JsonHelper
         {
             return emptyList()
         }
+
         val listType = object : TypeToken<List<Expense>>() {}.type
         return gson.fromJson(file.readText(), listType)
     }
 
     // ==================== Goal Methods ====================
 
+    /**
+     * Saves the user's monthly spending goals.
+     * Overwrites any existing goal file.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param goal Goal object containing minGoal and maxGoal
+     */
     fun saveGoal(context: Context, username: String, goal: Goal)
     {
         val file = getFile(context, "${username}_goals.json")
@@ -122,6 +276,13 @@ class JsonHelper
         file.writeText(json)
     }
 
+    /**
+     * Loads the user's monthly spending goals.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @return Goal object, or null if no goal exists
+     */
     fun loadGoal(context: Context, username: String): Goal?
     {
         val file = getFile(context, "${username}_goals.json")
@@ -129,15 +290,15 @@ class JsonHelper
         {
             return null
         }
+
         val json = file.readText()
         return gson.fromJson(json, Goal::class.java)
     }
 
-    // ==================== Part 3: Gamification - Badge Methods ====================
+    // ==================== Gamification: Badge Methods ====================
 
     /**
-     * Saves a badge for the user.
-     * Badges are stored in a list to support multiple achievements.
+     * Saves a badge for the user. Prevents duplicate badges of the same type.
      *
      * @param context Application context
      * @param username User identifier
@@ -156,7 +317,6 @@ class JsonHelper
             mutableListOf()
         }
 
-        // Prevent duplicate badges
         if (list.none { it.id == badge.id })
         {
             list.add(badge)
@@ -178,18 +338,19 @@ class JsonHelper
         {
             return emptyList()
         }
+
         val listType = object : TypeToken<List<Badge>>() {}.type
         return gson.fromJson(file.readText(), listType)
     }
 
-    // ==================== Part 3: Gamification - Streak Methods ====================
+    // ==================== Gamification: Streak Methods ====================
 
     /**
      * Saves streak data for the user.
      *
      * @param context Application context
      * @param username User identifier
-     * @param streakData Streak data to save
+     * @param streakData StreakData object to save
      */
     fun saveStreakData(context: Context, username: String, streakData: StreakData)
     {
@@ -212,12 +373,20 @@ class JsonHelper
         {
             return null
         }
+
         val json = file.readText()
         return gson.fromJson(json, StreakData::class.java)
     }
 
-    // ==================== Existing Export and Reset Methods ====================
+    // ==================== Export and Reset Methods ====================
 
+    /**
+     * Exports all user data files to an export folder.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @return True if export succeeded, false otherwise
+     */
     fun exportData(context: Context, username: String): Boolean
     {
         val exportFolder = File(context.filesDir, "budget_data/export_$username")
@@ -225,6 +394,7 @@ class JsonHelper
         {
             exportFolder.mkdirs()
         }
+
         val files = listOf(
             "${username}.json",
             "${username}_categories.json",
@@ -233,6 +403,7 @@ class JsonHelper
             "${username}_badges.json",
             "${username}_streak.json"
         )
+
         for (fileName in files)
         {
             val source = getFile(context, fileName)
@@ -243,8 +414,9 @@ class JsonHelper
                 {
                     source.copyTo(dest, overwrite = true)
                 }
-                catch (_: Exception)
+                catch (exception: Exception)
                 {
+                    // Return false to indicate export failure.
                     return false
                 }
             }
@@ -252,6 +424,13 @@ class JsonHelper
         return true
     }
 
+    /**
+     * Resets the user's progress by deleting all data files except the user account file.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @return True always
+     */
     fun resetProgress(context: Context, username: String): Boolean
     {
         val files = listOf(
@@ -261,12 +440,14 @@ class JsonHelper
             "${username}_badges.json",
             "${username}_streak.json"
         )
+
         for (fileName in files)
         {
             val file = getFile(context, fileName)
             if (file.exists())
             {
-                file.delete()
+                val deletedFlag = file.delete()
+                // The deletion result is not used; the method returns true regardless.
             }
         }
         return true
