@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -23,16 +24,17 @@ import java.util.TimeZone
  * Passwords are passed to UserViewModel.saveUser() which hashes them via JsonHelper.
  * The plaintext password is never stored permanently.
  *
- * Crash Fixes:
- * Added try-catch blocks around file operations to prevent crashes.
- * Added validation for all fields and password strength requirements.
- *
- * Code Style:
- * Lambda expressions have opening braces on the same line as the function call,
- * as required by Kotlin syntax. Method bodies use Allman style (braces on new lines).
+ * Error Handling:
+ * Added detailed logging to diagnose account creation failures.
+ * Specific error messages are shown to the user based on the exception type.
  */
 class RegisterActivity : AppCompatActivity()
 {
+    companion object
+    {
+        private const val TAG = "RegisterActivity"
+    }
+
     private lateinit var etName: EditText
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
@@ -59,7 +61,6 @@ class RegisterActivity : AppCompatActivity()
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
         // Navigate to Login screen if user already has an account.
-        // Note: Opening brace on same line as setOnClickListener is correct Kotlin lambda syntax.
         tvAlreadyRegistered.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -93,43 +94,49 @@ class RegisterActivity : AppCompatActivity()
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
+            Log.d(TAG, "Attempting to create account for username: $username")
+
             // Validate all fields are filled.
             if (name.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
             {
+                Log.w(TAG, "Account creation failed: Empty fields")
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
             // Validate password match.
             else if (password != confirmPassword)
             {
+                Log.w(TAG, "Account creation failed: Password mismatch")
                 Toast.makeText(this, getString(R.string.error_password_mismatch), Toast.LENGTH_SHORT).show()
             }
-            // Validate password strength (at least 8 characters with letter, number, special char).
             else
             {
+                // Validate password strength.
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
 
                 if (!passwordRegex.matches(password))
                 {
+                    Log.w(TAG, "Account creation failed: Weak password")
                     Toast.makeText(this, getString(R.string.error_password_requirements), Toast.LENGTH_SHORT).show()
                 }
-                // Check if username already exists.
                 else
                 {
+                    // Check if username already exists.
                     val existingUser = userViewModel.loadUser(this, username)
 
                     if (existingUser != null)
                     {
+                        Log.w(TAG, "Account creation failed: Username already taken: $username")
                         Toast.makeText(this, getString(R.string.error_username_taken), Toast.LENGTH_SHORT).show()
                     }
                     // Ensure User ID has been generated.
                     else if (generatedUserId.isEmpty())
                     {
+                        Log.w(TAG, "Account creation failed: User ID not generated")
                         Toast.makeText(this, "Please generate a User ID first", Toast.LENGTH_SHORT).show()
                     }
                     else
                     {
                         // Create User object with all required fields.
-                        // Note: The surname field is set to an empty string as it is not used in this version.
                         val user = User(
                             name = name,
                             surname = "",
@@ -138,18 +145,28 @@ class RegisterActivity : AppCompatActivity()
                             userId = generatedUserId
                         )
 
-                        // Save the user with try-catch to prevent crashes.
+                        Log.d(TAG, "User object created. Username: $username, UserId: $generatedUserId")
+
+                        // Save the user with detailed error handling.
                         try
                         {
                             userViewModel.saveUser(this, user)
+                            Log.i(TAG, "Account created successfully for username: $username")
                             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
                             finish()
                         }
                         catch (exception: Exception)
                         {
-                            // The underscore prefix indicates the parameter is intentionally unused.
-                            // In a production app, this exception would be logged.
-                            Toast.makeText(this, "Account creation failed. Please try again.", Toast.LENGTH_SHORT).show()
+                            // Log the full exception stack trace for debugging.
+                            Log.e(TAG, "Account creation failed for username: $username", exception)
+
+                            // Show a more specific error message to the user.
+                            val errorMessage = when (exception.message)
+                            {
+                                null -> "Account creation failed. Please try again."
+                                else -> "Account creation failed: ${exception.message}"
+                            }
+                            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -160,11 +177,6 @@ class RegisterActivity : AppCompatActivity()
     /**
      * Generates a unique User ID.
      * Format: PREFIX(4) + DATE(8) + COUNTER(4) = 16 characters total.
-     *
-     * The prefix is derived from the first 4 characters of the username,
-     * uppercased and padded with 'X' if shorter than 4 characters.
-     * The date part uses the current UTC date in yyyyMMdd format.
-     * The counter uses the last 4 digits of current time in milliseconds.
      *
      * @param username The username entered by the user
      * @return A 16-character unique User ID
