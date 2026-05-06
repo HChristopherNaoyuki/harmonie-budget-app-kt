@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.IOException
+import java.security.MessageDigest
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -24,7 +25,11 @@ import javax.crypto.spec.PBEKeySpec
  * Each user has isolated files identified by their username.
  *
  * Security Enhancement:
- * Passwords are hashed using PBKDF2 with a random 128-bit salt and 10,000 iterations.
+ * Passwords are hashed using a two-tier approach:
+ * 1. Primary: PBKDF2 with HMAC-SHA1 (compatible with all Android API 23+ devices)
+ * 2. Fallback: SHA-256 with salt if PBKDF2 is unavailable
+ *
+ * The hash is stored as a Base64 string in "salt:hash" format.
  */
 class JsonHelper
 {
@@ -37,6 +42,7 @@ class JsonHelper
 
         /**
          * Hashes a plaintext password using PBKDF2 with a random salt.
+         * Falls back to SHA-256 if PBKDF2 is not available.
          *
          * @param password The plaintext password to hash
          * @return Base64-encoded salt and hash separated by a colon
@@ -46,9 +52,25 @@ class JsonHelper
             val salt = ByteArray(SALT_LENGTH_BYTES)
             SecureRandom().nextBytes(salt)
 
-            val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
-            val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-            val hash = factory.generateSecret(spec).encoded
+            // Try PBKDF2 first (more secure).
+            val hash = try
+            {
+                // Using "PBKDF2WithHmacSHA1" for maximum Android compatibility.
+                // "PBKDF2WithHmacSHA1" is available on all Android API 23+ devices.
+                val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
+                val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                factory.generateSecret(spec).encoded
+            }
+            catch (exception: Exception)
+            {
+                Log.w(TAG, "PBKDF2 not available, falling back to SHA-256", exception)
+
+                // Fallback: Use SHA-256 with the salt.
+                // This is less secure than PBKDF2 but ensures the app works on all devices.
+                val messageDigest = MessageDigest.getInstance("SHA-256")
+                val saltedPassword = salt + password.toByteArray()
+                messageDigest.digest(saltedPassword)
+            }
 
             val saltBase64 = Base64.encodeToString(salt, Base64.NO_WRAP)
             val hashBase64 = Base64.encodeToString(hash, Base64.NO_WRAP)
@@ -57,6 +79,7 @@ class JsonHelper
 
         /**
          * Verifies a plaintext password against a stored hash.
+         * Supports both PBKDF2 and SHA-256 fallback hashes.
          *
          * @param password The plaintext password to verify
          * @param storedHash The stored hash string in "salt:hash" format
@@ -69,17 +92,32 @@ class JsonHelper
                 val parts = storedHash.split(":")
                 if (parts.size != 2)
                 {
+                    Log.e(TAG, "Invalid stored hash format: expected salt:hash")
                     return false
                 }
 
                 val salt = Base64.decode(parts[0], Base64.NO_WRAP)
                 val expectedHash = Base64.decode(parts[1], Base64.NO_WRAP)
 
-                val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
-                val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-                val actualHash = factory.generateSecret(spec).encoded
+                // Try PBKDF2 verification first.
+                var actualHash: ByteArray? = null
 
-                actualHash.contentEquals(expectedHash)
+                try
+                {
+                    val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
+                    val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                    actualHash = factory.generateSecret(spec).encoded
+                }
+                catch (exception: Exception)
+                {
+                    Log.w(TAG, "PBKDF2 verification failed, trying SHA-256 fallback", exception)
+                    // Fallback to SHA-256 verification.
+                    val messageDigest = MessageDigest.getInstance("SHA-256")
+                    val saltedPassword = salt + password.toByteArray()
+                    actualHash = messageDigest.digest(saltedPassword)
+                }
+
+                actualHash != null && actualHash.contentEquals(expectedHash)
             }
             catch (exception: Exception)
             {
@@ -143,6 +181,7 @@ class JsonHelper
             val file = getFile(context, "${user.username}.json")
 
             val hashedPassword = hashPassword(user.password)
+            Log.d(TAG, "Password hashed successfully for username: ${user.username}")
 
             val secureUser = User(
                 name = user.name,
