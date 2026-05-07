@@ -419,11 +419,8 @@ https://www.pluralsight.com/resources/blog/software-development/
 Whitman, M. E., & Mattord, H. J. (2022). Principles of Information
 Security. Cengage.
 
---
-
-END OF DOCUMENT.
-
---
 ---
 
 End of Document
+
+---
