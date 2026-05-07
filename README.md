@@ -11,6 +11,7 @@
 - [7. Testing and Quality Assurance](#7-testing-and-quality-assurance)
 - [8. Building and Running](#8-building-and-running)
 - [9. Video Demonstration](#9-video-demonstration)
+- [10. Sources](#10-sources)
 
 ## 1. Project Overview
 
@@ -28,6 +29,14 @@ JSON serialization, while RecyclerView and CardView components provide
 modern list and container layouts. This repository contains the complete
 source code, documentation, and demonstration materials for the
 Portfolio of Evidence.
+
+The development process follows a structured Research, Plan, Design,
+Build, and Evaluate cycle as prescribed by the module. Each phase
+builds upon the previous one, ensuring methodical progress while
+allowing for iterative refinements. The app is designed to run on
+physical mobile devices rather than emulators for the final submission,
+as specified in the POE requirements. This approach validates that all
+features function correctly under real-world conditions.
 
 ## 2. Team Members and Roles
 
@@ -53,7 +62,9 @@ The Software Developer builds the working Android application in
 Kotlin, implements all required features, writes clean commented code,
 initializes the GitHub repository, and manages version control. This
 role also creates the app icon, produces final image assets, and ensures
-the build system is correctly configured.
+the build system is correctly configured. The developer follows clean
+code principles as recommended by Skeen and Greenhalgh (2018) to
+maintain readability and maintainability throughout the project.
 
 The QA Tester tests all functionality on real hardware, verifies
 features against rubrics, writes automated unit tests, creates the
@@ -81,16 +92,22 @@ February 16 to March 24, 2026: Part 1 Research, Planning and Design.
 This phase includes researching existing applications, creating an
 infographic comparison, compiling feature lists, developing the planning
 and design document, producing UI mockups, creating the navigation
-diagram, and building the Gantt chart project plan.
+diagram, and building the Gantt chart project plan. The research phase
+examines three existing budgeting apps to identify strengths, weaknesses,
+and innovative features that inform the design of Harmonie Budget.
 
 March 25 to April 28, 2026: Part 2 Prototype Development and Testing.
 This phase covers building the fully working Android prototype,
 implementing user authentication, expense management, category handling,
-budget goals, local data persistence, and the visual pie chart.
+budget goals, local data persistence, and the visual pie chart. The
+prototype is tested on both emulators and physical devices to verify
+stability and performance.
 
 April 29 to May 29, 2026: Part 3 Final App Development. This final
 phase includes gamification, advanced graphs, final video production,
-comprehensive testing, and submission of all required files.
+comprehensive testing, and submission of all required files. The final
+app must run on a mobile phone and include badges for meeting budget
+goals and consistent expense logging.
 
 ## 4. Folder Structure
 
@@ -225,7 +242,8 @@ Activities and Fragments handle the user interface while ViewModels
 manage business logic. Data operations are delegated to the JsonHelper
 utility class, which manages all file input and output within the
 application private budget_data directory. This separation improves
-maintainability and testability.
+maintainability and testability, as recommended by Späth (2018) for
+modern Android development with Kotlin.
 
 The data layer consists of four core models. The User model stores
 name, surname, username, password, and a unique sixteen character User
@@ -251,16 +269,19 @@ All data is isolated per user through username-specific JSON files.
 
 The user interface employs Material Design components including
 TextInputLayouts, MaterialCardViews, BottomNavigationViews, and custom
-drawable resources. The design follows a minimalistic philosophy with
-a restrained color palette of light grays, white surfaces, and blue
-accent colors. The app icon features a minimalistic MB monogram on a
-solid circular background.
+drawable resources. The design follows a minimalistic philosophy as
+described by Malewicz (2021), with a restrained color palette of light
+grays, white surfaces, and blue accent colors. The app icon features a
+minimalistic MB monogram on a solid circular background.
 
 ## 6. Contributing Guidelines
 
 This project is developed by the Code Blooded team as part of the
 OPSC6311 Portfolio of Evidence. Contributions follow a structured
 workflow across the Research, Plan, Design, Build, and Evaluate cycle.
+Sharp, Preece, Rogers, and Preece (2019) emphasize that structured
+interaction design processes improve user satisfaction, which guided
+the team approach.
 
 The Project Manager leads Part 1 and overall coordination. This includes
 researching existing applications, creating the infographic comparison,
@@ -276,9 +297,9 @@ entries with amount, date, description, category, and photo attachment,
 monthly budget goals, category totals, local database persistence,
 graphs, progress dashboard, and gamification elements. The developer
 also adds at least two innovative features, creates the app icon and
-final image assets, writes clean commented code with logging,
-initializes the GitHub repository, commits regularly, and sets up
-automation where required.
+final image assets, writes clean commented code with logging following
+the principles outlined by Pluralsight (2022), initializes the GitHub
+repository, commits regularly, and sets up automation where required.
 
 The Quality Assurance Tester handles testing, documentation, and video
 production. This includes testing all functionality on a real mobile
@@ -310,9 +331,9 @@ To fork, log into your GitHub account and navigate to the repository
 URL. Click the Fork button at the top right corner of the page. Select
 your personal account as the destination for the fork. GitHub will
 create the forked copy and redirect you to
-https://github.com/YOUR_USERNAME/harmonie-budget-app-kt. You can now
-clone your forked copy to your local machine using the instructions
-above, replacing the URL with your forked repository URL.
+https://github.com/HChristopherNaoyuki/harmonie-budget-app-kt.git. You 
+can now clone your forked copy to your local machine using the 
+instructions above, replacing the URL with your forked repository URL.
 
 The APK file for the application can be found in the Releases section
 of this repository. Please navigate to the Releases page to download
@@ -323,11 +344,16 @@ the latest APK.
 The project includes comprehensive unit tests and instrumented tests.
 Unit tests verify password validation regular expressions, User ID
 generation logic, expense identifier incrementation, goal validation
-rules, and model construction. Instrumented tests run on an Android
-device or emulator to verify file persistence, user creation, expense
-storage, category management, goal handling, data export, and progress
-reset functionality. All tests are written in Allman style with detailed
-comments explaining the functionality and logic.
+rules, and model construction. Password storage follows secure hashing
+principles documented by Spring (n.d.), which recommends PBKDF2 for
+credential storage. Instrumented tests run on an Android device or
+emulator to verify file persistence, user creation, expense storage,
+category management, goal handling, data export, and progress reset
+functionality. All tests are written in Allman style with detailed
+comments explaining the functionality and logic. Whitman and Mattord
+(2022) highlight that information security principles must be embedded
+throughout the development lifecycle, which informed the testing
+strategy for user data protection.
 
 ## 8. Building and Running
 
@@ -363,8 +389,41 @@ demonstrating user registration, login, category management, expense
 entry, budget goal setting, the pie chart visualization, data export,
 reset functionality, and logout.
 
+## 10. Sources
+
+Kotlin Docs. (2021, March 2). Kotlin. Retrieved May 7, 2026, from
+https://kotlinlang.org/docs/home.html
+
+Malewicz, D. (2021, May 30). A guide to the Modern Minimal UI style.
+UX Collective. Retrieved May 7, 2026, from
+https://uxdesign.cc/a-guide-to-the-modern-minimal-ui-style-531ac1e9fbfe
+
+Password Storage. (n.d.). Spring. Retrieved May 7, 2026, from
+https://docs.spring.io/spring-security/reference/features/authentication/
+password-storage.html
+
+Sharp, H., Preece, J., Rogers, Y., & Preece, J. (2019). Interaction
+Design: Beyond Human-Computer Interaction. Wiley.
+
+Skeen, J., & Greenhalgh, D. (2018). Kotlin Programming: The Big Nerd
+Ranch Guide. Pearson Education.
+
+Späth, P. (2018). Pro Android with Kotlin: Developing Modern Mobile
+Apps. Apress.
+
+10 Tips for Writing Clean Code. (2022, October 20). Pluralsight.
+Retrieved May 7, 2026, from
+https://www.pluralsight.com/resources/blog/software-development/
+10-steps-to-clean-code
+
+Whitman, M. E., & Mattord, H. J. (2022). Principles of Information
+Security. Cengage.
+
+--
+
+END OF DOCUMENT.
+
+--
 ---
 
 End of Document
-
----
