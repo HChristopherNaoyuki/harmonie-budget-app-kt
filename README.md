@@ -1,6 +1,7 @@
 # Harmonie Budget Tracker
 
 ## Table of Contents
+
 - [1. Project Overview](#1-project-overview)
 - [2. Team Members and Roles](#2-team-members-and-roles)
 - [3. Project Timeline and Milestones](#3-project-timeline-and-milestones)
@@ -12,6 +13,7 @@
 - [9. Video Demonstration](#9-video-demonstration)
 
 ## 1. Project Overview
+
 Harmonie Budget Tracker is an Android mobile application developed in
 Kotlin for the OPSC6311 Introduction to Open-Source Coding module. The
 application helps users track daily expenses, manage custom categories,
@@ -24,20 +26,22 @@ API 24, which corresponds to Android 7.0 Nougat. The project uses
 Kotlin DSL for build configuration and targets API 36. Gson handles
 JSON serialization, while RecyclerView and CardView components provide
 modern list and container layouts. This repository contains the complete
-source code, documentation, and demonstration materials for the Portfolio 
-of Evidence.
+source code, documentation, and demonstration materials for the
+Portfolio of Evidence.
 
 ## 2. Team Members and Roles
+
 The team Code Blooded is structured into three distinct roles to ensure
 clear accountability across every phase of the Research, Plan, Design,
 Build, and Evaluate cycle.
 
-- Project Manager, Researcher, and Designer:
-  [Murendeni](https://github.com/MurendeniMakhavhu)
-- Software Developer:
-  [Naoyuki](https://github.com/HChristopherNaoyuki)
-- Quality Assurance Tester, Documentation and Video Lead:
-  [Makaya](https://github.com/Khayaguzu)
+Project Manager, Researcher, and Designer: Murendeni
+(https://github.com/MurendeniMakhavhu)
+
+Software Developer: Naoyuki (https://github.com/HChristopherNaoyuki)
+
+Quality Assurance Tester, Documentation and Video Lead: Makaya
+(https://github.com/Khayaguzu)
 
 The Project Manager oversees the full project lifecycle, leads Part 1
 research and design, manages deadlines, and ensures all submission
@@ -59,6 +63,7 @@ not cause crashes and that the user experience remains consistent across
 all screens.
 
 ## 3. Project Timeline and Milestones
+
 Start of project: February 16, 2026
 
 Part 1 submission: March 24, 2026
@@ -76,22 +81,19 @@ February 16 to March 24, 2026: Part 1 Research, Planning and Design.
 This phase includes researching existing applications, creating an
 infographic comparison, compiling feature lists, developing the planning
 and design document, producing UI mockups, creating the navigation
-diagram, and building the Gantt chart project plan. The output is a
-complete design document with references and a clear project scope.
+diagram, and building the Gantt chart project plan.
 
 March 25 to April 28, 2026: Part 2 Prototype Development and Testing.
 This phase covers building the fully working Android prototype,
 implementing user authentication, expense management, category handling,
-budget goals, local data persistence, and the visual pie chart. The
-output is a functional application with source code, tests, and a
-demonstration video.
+budget goals, local data persistence, and the visual pie chart.
 
 April 29 to May 29, 2026: Part 3 Final App Development. This final
 phase includes gamification, advanced graphs, final video production,
-comprehensive testing, and submission of all required files. The output
-is the complete Portfolio of Evidence with all rubric items addressed.
+comprehensive testing, and submission of all required files.
 
 ## 4. Folder Structure
+
 The project follows this exact folder structure:
 
 ```
@@ -100,11 +102,12 @@ harmonie-budget-app-kt/
 │   ├── manifests/
 │   │   └── AndroidManifest.xml
 │   ├── kotlin+java/
+│   │   │   
 │   │   ├── com.example.harmonie_budget_app_kt/
 │   │   │   ├── BudgetFragment.kt
 │   │   │   ├── BudgetsFragment.kt
-│   │   │   ├── CategoryActivity.kt
-│   │   │   ├── CategoryTotalActivity.kt
+│   │   │   ├── CategoryActivity.kt 
+│   │   │   ├── CategoryTotalActivity.kt 
 │   │   │   ├── DashboardActivity.kt
 │   │   │   ├── ExpenseActivity.kt
 │   │   │   ├── ExpenseListActivity.kt
@@ -112,43 +115,55 @@ harmonie-budget-app-kt/
 │   │   │   ├── GoalActivity.kt
 │   │   │   ├── HomeFragment.kt
 │   │   │   ├── LoginActivity.kt
-│   │   │   ├── MainActivity.kt
+│   │   │   ├── MainActivity.kt 
 │   │   │   ├── MoreFragment.kt
 │   │   │   ├── RegisterActivity.kt
 │   │   │   ├── TransactionsFragment.kt
+│   │   │   │
 │   │   │   ├── models/
+│   │   │   │   ├── Badge.kt
 │   │   │   │   ├── Category.kt
 │   │   │   │   ├── Expense.kt
 │   │   │   │   ├── Goal.kt
+│   │   │   │   ├── StreakData.kt
 │   │   │   │   └── User.kt
+│   │   │   │
 │   │   │   ├── viewmodels/
 │   │   │   │   ├── CategoryViewModel.kt
 │   │   │   │   ├── ExpenseViewModel.kt
+│   │   │   │   ├── GamificationViewModel.kt
 │   │   │   │   ├── GoalViewModel.kt
 │   │   │   │   ├── HomeViewModel.kt
 │   │   │   │   ├── MoreViewModel.kt
 │   │   │   │   └── UserViewModel.kt
+│   │   │   │
 │   │   │   └── utils/
-│   │   │       └── JsonHelper.kt
+│   │   │       └── JsonHelper.kt 
+│   │   │
 │   │   ├── com.example.harmonie_budget_app_kt (androidTest)/
 │   │   │   └── ExampleInstrumentedTest.kt
+│   │   │
 │   │   └── com.example.harmonie_budget_app_kt (test)/
 │   │       └── ExampleUnitTest.kt
+│   │
 │   └── res/
+│       │
 │       ├── menu/
-│       │   └── bottom_nav_menu.xml
+│       │   └── bottom_nav_menu.xml      
 │       ├── color/
-│       │   ├── nav_icon_color.xml
-│       │   └── nav_text_color.xml
+│       │   ├── nav_icon_color.xml 
+│       │   └── nav_text_color.xml     
+│       │
 │       ├── drawable/
 │       │   ├── ic_home.xml
 │       │   ├── ic_launcher_background.xml
 │       │   ├── ic_launcher_foreground.xml
 │       │   ├── rounded_button.xml
-│       │   └── spinner_dropdown_background.xml
+│       │   └── spinner_dropdown_background.xml 
+│       │
 │       ├── layout/
 │       │   ├── activity_category.xml
-│       │   ├── activity_category_total.xml
+│       │   ├── activity_category_total.xml 
 │       │   ├── activity_dashboard.xml
 │       │   ├── activity_expense.xml
 │       │   ├── activity_expense_list.xml
@@ -156,13 +171,15 @@ harmonie-budget-app-kt/
 │       │   ├── activity_goal.xml
 │       │   ├── activity_login.xml
 │       │   ├── activity_main.xml
-│       │   ├── activity_register.xml
-│       │   ├── fragment_budget.xml
-│       │   ├── fragment_budgets.xml
-│       │   ├── fragment_home.xml
-│       │   ├── fragment_more.xml
+│       │   ├── activity_register.xml 
+│       │   ├── fragment_budget.xml 
+│       │   ├── fragment_budgets.xml 
+│       │   ├── fragment_home.xml 
+│       │   ├── fragment_more.xml 
 │       │   └── fragment_transactions.xml
+│       │
 │       ├── mipmap/
+│       │   │
 │       │   ├── ic_launcher/
 │       │   │   ├── ic_launcher.webp (hdpi)
 │       │   │   ├── ic_launcher.webp (mdpi)
@@ -170,6 +187,7 @@ harmonie-budget-app-kt/
 │       │   │   ├── ic_launcher.webp (xxhdpi)
 │       │   │   ├── ic_launcher.webp (xxxhdpi)
 │       │   │   └── ic_launcher.xml (anydpi-v26)
+│       │   │
 │       │   └── ic_launcher_round/
 │       │       ├── ic_launcher_round.webp (hdpi)
 │       │       ├── ic_launcher_round.webp (mdpi)
@@ -177,15 +195,18 @@ harmonie-budget-app-kt/
 │       │       ├── ic_launcher_round.webp (xxhdpi)
 │       │       ├── ic_launcher_round.webp (xxxhdpi)
 │       │       └── ic_launcher_round.xml (anydpi-v26)
+│       │
 │       ├── values/
 │       │   ├── themes/
 │       │   │   ├── themes.xml
 │       │   │   └── themes.xml (night)
 │       │   ├── colors.xml
 │       │   └── strings.xml
+│       │
 │       └── xml/
 │           ├── backup_rules.xml
 │           └── data_extraction_rules.xml
+│
 └── Gradle Scripts/
     ├── build.gradle.kts (Project: harmonie-budget-app-kt)
     ├── build.gradle.kts (Module: app)
@@ -198,6 +219,7 @@ harmonie-budget-app-kt/
 ```
 
 ## 5. System Architecture and Features
+
 The application follows the Model-View-ViewModel architectural pattern.
 Activities and Fragments handle the user interface while ViewModels
 manage business logic. Data operations are delegated to the JsonHelper
@@ -209,10 +231,10 @@ The data layer consists of four core models. The User model stores
 name, surname, username, password, and a unique sixteen character User
 ID. The Expense model records amount, date, start time, end time,
 description, category identifier, and an optional photo URI. The
-Category model holds an integer identifier and a textual name. The Goal
-model stores minimum and maximum monthly budget values. These models are
-immutable Kotlin data classes that ensure type safety and clean
-serialization.
+Category model holds an integer identifier and a textual name. The
+Goal model stores minimum and maximum monthly budget values. These
+models are immutable Kotlin data classes that ensure type safety and
+clean serialization.
 
 The ViewModel layer includes CategoryViewModel, ExpenseViewModel,
 GoalViewModel, HomeViewModel, MoreViewModel, and UserViewModel. Each
@@ -235,6 +257,7 @@ accent colors. The app icon features a minimalistic MB monogram on a
 solid circular background.
 
 ## 6. Contributing Guidelines
+
 This project is developed by the Code Blooded team as part of the
 OPSC6311 Portfolio of Evidence. Contributions follow a structured
 workflow across the Research, Plan, Design, Build, and Evaluate cycle.
@@ -268,7 +291,35 @@ the README file on GitHub, documenting the innovative features,
 preparing the final APK, and ensuring all submission components are
 correctly uploaded.
 
+### How to Clone and Fork the Repository
+
+Cloning the repository creates a local copy on your computer. To clone
+using Android Studio, open Android Studio and click Get from VCS on the
+welcome screen. Paste the repository URL
+https://github.com/HChristopherNaoyuki/harmonie-budget-app-kt.git into
+the URL field and click Clone. After cloning completes, click Sync
+Project with Gradle Files to resolve dependencies.
+
+To clone using the Git command line, open a terminal and navigate to
+your desired directory. Run git clone
+https://github.com/HChristopherNaoyuki/harmonie-budget-app-kt.git. Then
+navigate into the cloned directory with cd harmonie-budget-app-kt.
+
+Forking the repository creates a copy under your own GitHub account.
+To fork, log into your GitHub account and navigate to the repository
+URL. Click the Fork button at the top right corner of the page. Select
+your personal account as the destination for the fork. GitHub will
+create the forked copy and redirect you to
+https://github.com/YOUR_USERNAME/harmonie-budget-app-kt. You can now
+clone your forked copy to your local machine using the instructions
+above, replacing the URL with your forked repository URL.
+
+The APK file for the application can be found in the Releases section
+of this repository. Please navigate to the Releases page to download
+the latest APK.
+
 ## 7. Testing and Quality Assurance
+
 The project includes comprehensive unit tests and instrumented tests.
 Unit tests verify password validation regular expressions, User ID
 generation logic, expense identifier incrementation, goal validation
@@ -279,26 +330,27 @@ reset functionality. All tests are written in Allman style with detailed
 comments explaining the functionality and logic.
 
 ## 8. Building and Running
-To clone this project directly in Android Studio:
-1. Open Android Studio.
-2. Click Get from VCS on the welcome screen.
-3. Paste this URL:
-   `https://github.com/HChristopherNaoyuki/harmonie-budget-app-kt.git`
-4. Click Clone.
-5. Once cloned, Android Studio will open the project.
-6. Click Sync Project with Gradle Files.
-7. Run the app on an emulator or physical device with API 24 or higher.
 
-To build an APK for distribution, first ensure that Gradle sync
-completes without errors. Then select Build from the top menu, click
-Build Bundle(s) / APK(s), and choose Build APK(s). Android Studio
-generates the debug APK in the app/build/outputs/apk/debug/ directory.
-For a release APK, configure signing in build.gradle.kts with a valid
-keystore, then select Build Bundle(s) / APK(s) and choose Build
-Release APK. The release build applies code shrinking and optimization
-settings defined in proguard-rules.pro.
+To clone this project directly in Android Studio, open Android Studio
+and click Get from VCS on the welcome screen. Paste the repository URL
+https://github.com/HChristopherNaoyuki/harmonie-budget-app-kt.git into
+the URL field and click Clone. Once cloned, Android Studio will open
+the project automatically. Click Sync Project with Gradle Files to
+resolve dependencies. Run the app on an emulator or physical device
+with API 24 or higher.
+
+To build an APK for distribution, ensure that Gradle sync completes
+without errors. Select Build from the top menu, click Build Bundle(s)
+/ APK(s), and choose Build APK(s). Android Studio generates the debug
+APK in the app/build/outputs/apk/debug/ directory. For a release APK,
+configure signing in build.gradle.kts with a valid keystore, then select
+Build Bundle(s) / APK(s) and choose Build Release APK.
+
+For the latest APK, please visit the Releases section of this
+repository.
 
 ## 9. Video Demonstration
+
 A professional demonstration video showing all features running on a
 mobile device is available on YouTube.
 
@@ -313,6 +365,6 @@ reset functionality, and logout.
 
 ---
 
-**End of Document**
+End of Document
 
 ---
