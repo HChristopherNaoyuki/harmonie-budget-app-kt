@@ -5,6 +5,9 @@
     Uses a clean, minimalist design consistent with the gray theme.
     Scrolling is enabled via NestedScrollView to prevent content squishing.
 
+    Updated Add Expense button to use StandardButton style with
+    black background and white text as required.
+
     All text strings reference resources in strings.xml for proper internationalization.
 -->
 <androidx.core.widget.NestedScrollView
@@ -13,7 +16,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA"
+    android:background="@color/background_light"
     android:scrollbars="vertical">
 
     <LinearLayout
@@ -31,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/budget_title"
-            android:textColor="#1C1C1E"
+            android:textColor="@color/text_primary_light"
             android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="48dp" />
@@ -43,7 +46,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="1dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/surface_light"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -56,22 +59,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/record_new_expense"
-                    android:textColor="#8E8E93"
+                    android:textColor="@color/text_secondary_light"
                     android:textSize="12sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.05"
                     android:layout_marginBottom="12dp" />
 
+                <!--
+                    Add Expense button with standardized black background and white text.
+                    Uses StandardButton style for consistency across the application.
+                -->
                 <Button
                     android:id="@+id/btn_add_expense"
+                    style="@style/StandardButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_expense"
-                    android:backgroundTint="#007AFF"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:minHeight="48dp"
-                    android:elevation="0dp" />
+                    android:text="@string/add_expense" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -82,7 +85,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="1dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/surface_light"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -95,22 +98,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/set_monthly_spending_goals"
-                    android:textColor="#8E8E93"
+                    android:textColor="@color/text_secondary_light"
                     android:textSize="12sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.05"
                     android:layout_marginBottom="12dp" />
 
+                <!-- Edit Budget button remains with its original styling -->
                 <Button
                     android:id="@+id/btn_edit_budget"
+                    style="@style/StandardButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_budget"
-                    android:backgroundTint="#2C2C2C"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:minHeight="48dp"
-                    android:elevation="0dp" />
+                    android:text="@string/edit_budget" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

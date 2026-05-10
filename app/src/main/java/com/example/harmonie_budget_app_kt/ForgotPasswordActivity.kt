@@ -14,6 +14,10 @@ import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
  *
  * Security Enhancement:
  * The new password is passed to JsonHelper.saveUser(), which hashes it using PBKDF2.
+ *
+ * Part 3 Enhancement:
+ * Added RETURN HOME button that navigates back to the Landing Page (MainActivity).
+ * Updated LOG IN and RESET PASSWORD button styling is handled in the XML layout.
  */
 class ForgotPasswordActivity : AppCompatActivity()
 {
@@ -23,6 +27,7 @@ class ForgotPasswordActivity : AppCompatActivity()
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnResetPassword: Button
     private lateinit var btnLogin: Button
+    private lateinit var btnReturnHome: Button
     private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -36,6 +41,17 @@ class ForgotPasswordActivity : AppCompatActivity()
         etConfirmPassword = findViewById(R.id.et_confirm_password)
         btnResetPassword = findViewById(R.id.btn_reset_password)
         btnLogin = findViewById(R.id.btn_login)
+        btnReturnHome = findViewById(R.id.btn_return_home)
+
+        // Part 3 Enhancement: RETURN HOME button handler.
+        // Navigates back to the Landing Page (MainActivity).
+        // Uses FLAG_ACTIVITY_CLEAR_TOP to clear the back stack and prevent duplicates.
+        btnReturnHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
 
         // Login button returns to login screen.
         btnLogin.setOnClickListener {

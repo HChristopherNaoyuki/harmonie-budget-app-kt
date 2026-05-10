@@ -5,8 +5,6 @@
         Light theme for the application.
         This is the base theme referenced by AndroidManifest.xml.
         It inherits from Theme.MaterialComponents.DayNight.NoActionBar.
-        The configuration ensures the application maintains its own color palette
-        regardless of system dark mode settings by explicitly defining all colors.
         No action bar is used as all activities manage their own navigation.
     -->
     <style name="Theme.HarmonieBudget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -29,8 +27,6 @@
         <!--
             Explicitly define these attributes to prevent system theme from
             overriding application colors when dark mode is enabled.
-            The application maintains its visual identity regardless of system
-            theme settings as required by the assignment specification.
         -->
         <item name="colorControlNormal">@color/text_secondary_light</item>
         <item name="colorControlActivated">@color/accent_blue</item>
@@ -55,12 +51,15 @@
         Standard button style for all buttons across the application.
         This style enforces black background with white text consistently.
         The style is applied to all Button components in layouts.
+        All buttons have identical height (48dp) and consistent padding.
     -->
     <style name="StandardButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/button_background_standard</item>
         <item name="android:textColor">@color/button_text_standard</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">0dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="cornerRadius">8dp</item>

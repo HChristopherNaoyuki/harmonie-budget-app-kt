@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Minimalistic app icon foreground featuring the initials "MB".
-    Uses a clean circular background with centered typography.
-    The design avoids gradients and complex shapes for a modern, minimal appearance.
+    Minimalistic app icon foreground featuring the letter H.
+    Uses a clean black background with a white letter H centered.
+    The design follows the minimalist philosophy with no gradients or complex shapes.
     All dimensions are based on the standard 108dp x 108dp adaptive icon canvas.
+
+    Updated for branding consistency: The letter H replaces the previous MB monogram.
+    The black background requirement is satisfied by the ic_launcher_background file.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -12,30 +15,27 @@
     android:viewportHeight="108">
 
     <!--
-        Circular background shape.
-        Fills the entire canvas with a solid, minimal color.
-    -->
-    <path
-        android:fillColor="#007AFF"
-        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
-
-    <!--
-        Letter "M" path.
-        Drawn with clean, straight lines using a geometric sans-serif style.
-        Positioned to the left of center to accommodate the "B".
-        Stroke width is proportional to the canvas for visual balance.
+        Letter H path.
+        Drawn with clean straight lines using a geometric sans-serif style.
+        The letter is centered within the canvas for balanced visual appearance.
+        Stroke width and positioning are proportional to the 108dp canvas.
+        White color provides high contrast against the black background.
     -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M28,72 L28,36 L36,36 L42,56 L48,36 L56,36 L56,72 L50,72 L50,46 L44,66 L40,66 L34,46 L34,72 Z" />
-
-    <!--
-        Letter "B" path.
-        Drawn with clean curves and straight lines in a geometric sans-serif style.
-        Positioned to the right of the "M" with appropriate spacing.
-    -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M60,72 L60,36 L72,36 C78,36 82,40 82,46 C82,50 80,53 76,54 C80,55 83,59 83,63 C83,69 78,72 72,72 Z M66,52 L71,52 C74,52 76,50 76,47 C76,44 74,42 71,42 L66,42 Z M66,66 L72,66 C75,66 77,64 77,61 C77,58 75,56 72,56 L66,56 Z" />
+        android:pathData="
+            M 30,25
+            L 30,83
+            L 42,83
+            L 42,59
+            L 66,59
+            L 66,83
+            L 78,83
+            L 78,25
+            L 66,25
+            L 66,49
+            L 42,49
+            L 42,25
+            Z" />
 
 </vector>

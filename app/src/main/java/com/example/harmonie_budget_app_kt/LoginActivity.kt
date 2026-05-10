@@ -15,6 +15,9 @@ import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
  * Security Enhancement:
  * Passwords are verified using PBKDF2 hashing via JsonHelper.verifyPassword().
  * The plaintext password entered by the user is never stored or compared directly.
+ *
+ * Part 3 Enhancement:
+ * Added RETURN HOME button that navigates back to the Landing Page (MainActivity).
  */
 class LoginActivity : AppCompatActivity()
 {
@@ -22,6 +25,7 @@ class LoginActivity : AppCompatActivity()
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
+    private lateinit var btnReturnHome: Button
 
     private val userViewModel = UserViewModel()
 
@@ -34,9 +38,19 @@ class LoginActivity : AppCompatActivity()
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
+        btnReturnHome = findViewById(R.id.btn_return_home)
+
+        // Part 3 Enhancement: RETURN HOME button handler.
+        // Navigates back to the Landing Page (MainActivity).
+        // Uses FLAG_ACTIVITY_CLEAR_TOP to clear the back stack and prevent duplicates.
+        btnReturnHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
 
         // Login button click listener.
-        // Note: Kotlin lambda syntax requires the opening brace on the same line.
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()

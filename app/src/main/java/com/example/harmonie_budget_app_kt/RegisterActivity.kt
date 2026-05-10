@@ -24,9 +24,9 @@ import java.util.TimeZone
  * Passwords are passed to UserViewModel.saveUser() which hashes them via JsonHelper.
  * The plaintext password is never stored permanently.
  *
- * Error Handling:
- * Added detailed logging to diagnose account creation failures.
- * Specific error messages are shown to the user based on the exception type.
+ * Part 3 Enhancement:
+ * Added RETURN HOME button that navigates back to the Landing Page (MainActivity).
+ * Updated SIGN UP button styling is handled in the XML layout.
  */
 class RegisterActivity : AppCompatActivity()
 {
@@ -41,6 +41,7 @@ class RegisterActivity : AppCompatActivity()
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnRegister: Button
     private lateinit var btnGenerateUserId: Button
+    private lateinit var btnReturnHome: Button
     private lateinit var tvGeneratedUserId: TextView
     private lateinit var tvAlreadyRegistered: TextView
     private val userViewModel = UserViewModel()
@@ -57,8 +58,19 @@ class RegisterActivity : AppCompatActivity()
         etConfirmPassword = findViewById(R.id.et_confirm_password)
         btnRegister = findViewById(R.id.btn_register)
         btnGenerateUserId = findViewById(R.id.btn_generate_user_id)
+        btnReturnHome = findViewById(R.id.btn_return_home)
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
+
+        // Part 3 Enhancement: RETURN HOME button handler.
+        // Navigates back to the Landing Page (MainActivity).
+        // Uses FLAG_ACTIVITY_CLEAR_TOP to clear the back stack and prevent duplicates.
+        btnReturnHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
 
         // Navigate to Login screen if user already has an account.
         tvAlreadyRegistered.setOnClickListener {

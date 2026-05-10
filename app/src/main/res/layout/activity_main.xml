@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Main activity layout (first window / landing page) with polished minimalistic design.
+    Main activity layout (Landing Page) with polished minimalistic design.
     Uses a clean vertical layout with refined spacing and a restrained gray color palette.
-    The background is light gray, and buttons use a simple hierarchy:
-    filled primary (blue), light secondary (light gray), transparent tertiary.
+    The background is light gray, and all buttons use the StandardButton style with
+    black background and white text as required.
 
+    All three buttons (LOG IN, REGISTER, FORGOT PASSWORD) have identical width,
+    identical height, consistent typography, and maintain equal spacing.
     Scrolling is enabled via NestedScrollView to prevent content squishing
     on smaller screens and when accessibility text size settings are increased.
 
@@ -15,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA"
+    android:background="@color/background_light"
     android:scrollbars="vertical">
 
     <LinearLayout
@@ -27,7 +29,7 @@
         android:paddingTop="80dp"
         android:paddingBottom="48dp">
 
-        <!-- App icon - using the existing launcher foreground drawable -->
+        <!-- App icon using the updated launcher foreground drawable -->
         <ImageView
             android:id="@+id/iv_app_icon"
             android:layout_width="100dp"
@@ -42,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_message"
-            android:textColor="#1C1C1E"
+            android:textColor="@color/text_primary_light"
             android:textSize="32sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -54,51 +56,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/landing_subtitle"
-            android:textColor="#8E8E93"
+            android:textColor="@color/text_secondary_light"
             android:textSize="15sp"
             android:gravity="center"
             android:layout_marginBottom="64dp" />
 
-        <!-- Primary action: filled accent button (Login) -->
+        <!--
+            Primary action: LOG IN button.
+            Uses StandardButton style with black background and white text.
+            Width is set to match_parent so all three buttons have identical width.
+            Height is controlled by minHeight in the style (48dp).
+        -->
         <Button
             android:id="@+id/btn_login"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#007AFF"
-            android:minHeight="56dp"
-            android:text="@string/login_button"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:layout_marginBottom="16dp"
-            android:elevation="0dp" />
+            android:text="@string/login_button" />
 
-        <!-- Secondary action: subtle light gray button (Register) -->
+        <!--
+            Secondary action: REGISTER button.
+            Uses StandardButton style with black background and white text.
+            Maintains identical width and height as the LOG IN button.
+        -->
         <Button
             android:id="@+id/btn_register"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E5E5EA"
-            android:minHeight="48dp"
-            android:text="@string/register_button"
-            android:textColor="#1C1C1E"
-            android:textSize="15sp"
             android:layout_marginBottom="16dp"
-            android:elevation="0dp" />
+            android:text="@string/register_button" />
 
-        <!-- Tertiary action: transparent text button (Forgot Password) -->
+        <!--
+            Tertiary action: FORGOT PASSWORD button.
+            Uses StandardButton style with black background and white text.
+            All three buttons have consistent styling as required.
+        -->
         <Button
             android:id="@+id/btn_forgot_password"
-            android:layout_width="wrap_content"
+            style="@style/StandardButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:minHeight="48dp"
-            android:text="@string/forgot_password_button"
-            android:textColor="#8E8E93"
-            android:textSize="14sp"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:elevation="0dp" />
+            android:layout_marginBottom="0dp"
+            android:text="@string/forgot_password_button" />
 
         <!-- Version indicator at bottom of landing page -->
         <TextView
@@ -106,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/version_indicator"
-            android:textColor="#C7C7CC"
+            android:textColor="@color/text_secondary_light"
             android:textSize="12sp"
             android:layout_marginTop="48dp" />
 
