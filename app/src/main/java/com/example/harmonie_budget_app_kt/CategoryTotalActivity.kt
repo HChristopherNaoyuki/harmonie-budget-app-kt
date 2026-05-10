@@ -1,12 +1,14 @@
 package com.example.harmonie_budget_app_kt
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,27 +24,17 @@ import java.util.Locale
  * The pie chart is drawn using Canvas to avoid external dependencies.
  * Paint and RectF objects are preallocated to avoid object allocations during draw operations.
  *
- * Enhancements in this version:
- * - Each category is calculated and displayed based on its exact percentage of the total.
- * - Chart segments accurately reflect the underlying expense data.
- * - Segments are visually separated by small gaps for clear distinction.
- * - A legend is drawn directly below the pie chart.
- * - The legend maps each segment to its category name using the same colors.
- * - The legend clearly labels each category and shows its percentage.
- * - Percentage labels are drawn directly on each segment for immediate readability.
+ * Part 3 Enhancement:
+ * - Added RETURN HOME button that navigates back to the Dashboard (Home screen).
+ *
  * All calculations use the verified totals from expenses grouped by categoryId.
  * Category names are loaded from the user's categories.json file for meaningful labels.
- *
- * Warnings addressed:
- * - All String.format calls now explicitly specify Locale.US to ensure consistent
- *   decimal formatting across all device locales.
- * - Color.parseColor calls replaced with androidx.core.graphics.toColorInt extension
- *   function for idiomatic Kotlin usage.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
     private lateinit var tvTotals: TextView
     private lateinit var pieContainer: FrameLayout
+    private lateinit var btnReturnHome: Button
     private lateinit var username: String
 
     private val expenseViewModel = ExpenseViewModel()
@@ -57,6 +49,19 @@ class CategoryTotalActivity : AppCompatActivity()
 
         tvTotals = findViewById(R.id.tv_totals)
         pieContainer = findViewById(R.id.pie_container)
+        btnReturnHome = findViewById(R.id.btn_return_home)
+
+        // Part 3 Enhancement: RETURN HOME button handler.
+        // Navigates directly back to the DashboardActivity (Home screen).
+        // The button uses FLAG_ACTIVITY_CLEAR_TOP to ensure the back stack
+        // is properly managed and duplicates are avoided.
+        btnReturnHome.setOnClickListener {
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.putExtra("username", username)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
 
         // Load expenses and categories through the ViewModel layer
         val expenses = expenseViewModel.getExpenses(this, username)
@@ -94,7 +99,7 @@ class CategoryTotalActivity : AppCompatActivity()
             builder.append(
                 String.format(
                     Locale.US,
-                    "%s: %.2f (%.1f%%)\n",
+                    "%s: %.2f (%.1f%%) %n",
                     categoryName,
                     total,
                     percentage
@@ -115,10 +120,6 @@ class CategoryTotalActivity : AppCompatActivity()
      * Segments include small gaps for visual separation.
      * Legend uses the exact same colors as the pie segments and shows category name plus percentage.
      * All drawing uses preallocated Paint and RectF objects.
-     *
-     * Warnings addressed:
-     * - String.format calls use Locale.US explicitly.
-     * - Color.parseColor replaced with String.toColorInt() extension.
      */
     private class PieChartView(
         context: Context,
@@ -126,14 +127,23 @@ class CategoryTotalActivity : AppCompatActivity()
     ) : View(context)
     {
         // Preallocated Paint objects to avoid allocation during draw calls
-        private val paint: Paint = Paint().apply { isAntiAlias = true }
+        // The opening brace for the lambda must be on the same line as apply
+        private val paint: Paint = Paint().apply {
+            isAntiAlias = true
+        }
+
         private val rect: RectF = RectF()
-        private val legendPaint: Paint = Paint().apply { isAntiAlias = true }
+
+        private val legendPaint: Paint = Paint().apply {
+            isAntiAlias = true
+        }
+
         private val textPaint: Paint = Paint().apply {
             isAntiAlias = true
             textSize = 28f
             color = Color.BLACK
         }
+
         private val labelPaint: Paint = Paint().apply {
             isAntiAlias = true
             textSize = 24f
@@ -150,7 +160,7 @@ class CategoryTotalActivity : AppCompatActivity()
             val total = data.sumOf { it.second }
             if (total == 0.0) return
 
-            // Pie chart area: top 65% of available height, centered horizontally
+            // Pie chart area: top 65 percent of available height, centered horizontally
             val pieHeight = (height * 0.65f).toInt()
             val pieSize = minOf(width, pieHeight)
             val left = (width - pieSize) / 2f
@@ -158,8 +168,9 @@ class CategoryTotalActivity : AppCompatActivity()
             rect.set(left, top, left + pieSize, top + pieSize)
 
             var startAngle = 0f
+
             // Expanded color palette for better distinction between categories
-            // Using String.toColorInt() extension from androidx.core.graphics for idiomatic Kotlin
+            // Using String.toColorInt() extension from androidx.core.graphics
             val colors = listOf(
                 "#E53935".toColorInt(),  // Red
                 "#1E88E5".toColorInt(),  // Blue
@@ -182,7 +193,7 @@ class CategoryTotalActivity : AppCompatActivity()
                 if (sweepAngle > 15f)
                 {
                     val midAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
-                    val radius = rect.width() / 3f  // Position at 1/3 of radius
+                    val radius = rect.width() / 3f  // Position at one third of radius
                     val labelX = rect.centerX() + (radius * kotlin.math.cos(midAngle)).toFloat()
                     val labelY = rect.centerY() + (radius * kotlin.math.sin(midAngle)).toFloat()
                     // Explicit Locale.US ensures consistent formatting of percentage text

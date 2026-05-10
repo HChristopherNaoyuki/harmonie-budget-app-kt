@@ -4,9 +4,10 @@
     <!--
         Light theme for the application.
         This is the base theme referenced by AndroidManifest.xml.
-        It inherits from Theme.MaterialComponents.DayNight.NoActionBar to ensure a clean, minimalistic look with no system action bar.
-        All activities manage their own navigation, so NoActionBar is required.
-        This file defines the style exactly once.
+        It inherits from Theme.MaterialComponents.DayNight.NoActionBar.
+        The configuration ensures the application maintains its own color palette
+        regardless of system dark mode settings by explicitly defining all colors.
+        No action bar is used as all activities manage their own navigation.
     -->
     <style name="Theme.HarmonieBudget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
@@ -19,12 +20,61 @@
         <!-- Secondary brand color used for secondary elements -->
         <item name="colorSecondary">@color/teal_200</item>
 
-        <!-- Background color for all screens (white for light mode) -->
-        <item name="android:windowBackground">@color/white</item>
+        <!-- Background color for all screens in light mode -->
+        <item name="android:windowBackground">@color/background_light</item>
 
         <!-- Default text color for light backgrounds -->
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@color/text_primary_light</item>
 
+        <!--
+            Explicitly define these attributes to prevent system theme from
+            overriding application colors when dark mode is enabled.
+            The application maintains its visual identity regardless of system
+            theme settings as required by the assignment specification.
+        -->
+        <item name="colorControlNormal">@color/text_secondary_light</item>
+        <item name="colorControlActivated">@color/accent_blue</item>
+        <item name="colorButtonNormal">@color/button_background_standard</item>
+
+        <!-- Card view styling for consistency -->
+        <item name="cardViewStyle">@style/CardViewLight</item>
+
+    </style>
+
+    <!--
+        Light theme card styling.
+        Ensures cards have white backgrounds and proper elevation in light mode.
+    -->
+    <style name="CardViewLight" parent="CardView">
+        <item name="cardBackgroundColor">@color/surface_light</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardCornerRadius">12dp</item>
+    </style>
+
+    <!--
+        Standard button style for all buttons across the application.
+        This style enforces black background with white text consistently.
+        The style is applied to all Button components in layouts.
+    -->
+    <style name="StandardButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/button_background_standard</item>
+        <item name="android:textColor">@color/button_text_standard</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!--
+        Secondary button style for text buttons or less prominent actions.
+        Uses light gray background with dark text.
+    -->
+    <style name="SecondaryButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:backgroundTint">@color/button_secondary_background</item>
+        <item name="android:textColor">@color/button_secondary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 
 </resources>

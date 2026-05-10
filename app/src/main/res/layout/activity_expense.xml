@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Add Expense screen layout.
-    Uses NestedScrollView with LinearLayout to ensure all input fields and the submit button
-    remain accessible on small screens through vertical scrolling.
+    Add Expense screen layout with responsive scrolling for small screens.
+    Uses NestedScrollView with LinearLayout to ensure all input fields and buttons
+    remain accessible on small screens including 4.7 inch devices.
     All input fields use TextInputLayout for consistent Material Design appearance.
-    The submit button is positioned at the bottom and remains visible within the scrollable area.
+    The submit button and return home button are positioned at the bottom and
+    remain visible within the scrollable area.
+
+    Modified to add RETURN HOME button as required by Part 3 specifications.
+    Button styling standardized to black background with white text.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,7 +16,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/white"
+    android:background="@color/background_light"
     android:scrollbars="vertical">
 
     <LinearLayout
@@ -30,7 +34,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
             android:text="@string/add_expense_title"
-            android:textColor="#000000"
+            android:textColor="@color/text_primary_light"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -40,8 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="#F0F0F0"
-            app:boxStrokeColor="#6A1B9A"
+            app:boxBackgroundColor="@color/surface_light"
+            app:boxStrokeColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -50,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_amount"
                 android:inputType="numberDecimal"
-                android:textColor="@android:color/black"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,8 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="#F0F0F0"
-            app:boxStrokeColor="#6A1B9A"
+            app:boxBackgroundColor="@color/surface_light"
+            app:boxStrokeColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -69,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_date"
-                android:textColor="@android:color/black"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true"
@@ -82,8 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="#F0F0F0"
-            app:boxStrokeColor="#6A1B9A"
+            app:boxBackgroundColor="@color/surface_light"
+            app:boxStrokeColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -91,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_start_time"
-                android:textColor="@android:color/black"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true"
@@ -104,8 +108,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="#F0F0F0"
-            app:boxStrokeColor="#6A1B9A"
+            app:boxBackgroundColor="@color/surface_light"
+            app:boxStrokeColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -113,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_end_time"
-                android:textColor="@android:color/black"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp"
                 android:focusable="false"
                 android:clickable="true"
@@ -126,8 +130,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="#F0F0F0"
-            app:boxStrokeColor="#6A1B9A"
+            app:boxBackgroundColor="@color/surface_light"
+            app:boxStrokeColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_description"
-                android:textColor="@android:color/black"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,29 +153,37 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp" />
 
-        <!-- Attach Photo button with purple accent color -->
+        <!-- Attach Photo button with standardized black background -->
         <Button
             android:id="@+id/btn_attach_photo"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#6A1B9A"
-            android:minHeight="48dp"
-            android:text="@string/btn_attach_photo"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:text="@string/btn_attach_photo" />
 
-        <!-- Submit button positioned at the bottom of the scrollable content -->
+        <!-- Submit button with standardized black background -->
         <Button
             android:id="@+id/btn_save_expense"
+            style="@style/StandardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/btn_save_expense" />
+
+        <!--
+            RETURN HOME button added as required by Part 3 specifications.
+            Navigates directly to the Home screen when clicked.
+            Uses the same standardized black background and white text styling.
+            Positioned below the Submit button for logical flow.
+        -->
+        <Button
+            android:id="@+id/btn_return_home"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="#2C2C2C"
-            android:minHeight="48dp"
-            android:text="@string/btn_save_expense"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:text="@string/return_home" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

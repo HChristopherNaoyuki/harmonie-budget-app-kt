@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- All colors required by both light and night themes -->
-    <!-- These definitions resolve the resource linking errors for white, black, purple_200, purple_700, teal_200, teal_700 -->
-    <!-- Additional colors added for the clean GUI style shown in the provided image -->
-
+    <!-- Core colors used by both light and dark themes -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -12,14 +9,38 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- Application-specific colors that remain identical in both themes -->
     <!-- Light background used across all screens for minimal, clean look -->
     <color name="background_light">#F5F5F0</color>
 
-    <!-- Button accents matching the blue and green buttons in the GUI image -->
+    <!-- Dark background for dark mode compatibility -->
+    <color name="background_dark">#121212</color>
+
+    <!-- Surface colors for cards and containers -->
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+
+    <!-- Button accent colors matching the required black background standard -->
     <color name="accent_blue">#007AFF</color>
     <color name="accent_green">#34C759</color>
 
-    <!-- Primary text color for excellent readability -->
-    <color name="text_primary">#1C1C1E</color>
+    <!-- Standard button colors - black background with white text -->
+    <color name="button_background_standard">#000000</color>
+    <color name="button_text_standard">#FFFFFF</color>
 
+    <!-- Secondary button colors for text buttons -->
+    <color name="button_secondary_background">#F0F0F0</color>
+    <color name="button_secondary_text">#8E8E93</color>
+
+    <!-- Primary text colors for excellent readability -->
+    <color name="text_primary_light">#1C1C1E</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+
+    <!-- Secondary text colors for hints and labels -->
+    <color name="text_secondary_light">#8E8E93</color>
+    <color name="text_secondary_dark">#A0A0A0</color>
+
+    <!-- Border and stroke colors -->
+    <color name="border_light">#E0E0E0</color>
+    <color name="border_dark">#333333</color>
 </resources>

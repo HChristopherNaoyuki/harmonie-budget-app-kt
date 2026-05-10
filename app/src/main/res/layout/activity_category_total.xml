@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Category Totals screen displaying pie chart and spending breakdown.
+    Layout uses ScrollView for small screen compatibility.
+
+    Added RETURN HOME button as required by Part 3 specifications.
+    The button allows users to return to the Home screen after viewing totals.
+-->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="32dp"
+        android:paddingBottom="48dp">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/category_totals_title"
+            android:textColor="@color/text_primary_light"
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <!-- Pie chart container for custom Canvas drawing -->
         <FrameLayout
             android:id="@+id/pie_container"
             android:layout_width="match_parent"
@@ -29,7 +40,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/text_primary_light"
             android:textSize="16sp" />
+
+        <!--
+            RETURN HOME button added as required by Part 3 specifications.
+            Navigates directly to the Home screen when clicked.
+            Uses standardized black background with white text styling.
+        -->
+        <Button
+            android:id="@+id/btn_return_home"
+            style="@style/StandardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/return_home" />
 
     </LinearLayout>
 </ScrollView>

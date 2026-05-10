@@ -2,6 +2,7 @@ package com.example.harmonie_budget_app_kt
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -28,10 +29,8 @@ import java.util.Locale
  * Part 3 enhancement: After saving an expense, the gamification streak is updated.
  * This enables streak-based badges for consistent expense logging.
  *
- * Layout Considerations:
- * The activity uses a NestedScrollView with LinearLayout to ensure all fields and the submit button
- * remain accessible on small screens (minimum supported API 24, 320dp width devices).
- * The submit button is always reachable by scrolling, regardless of screen size or keyboard state.
+ * Part 3 Enhancement (Return Home):
+ * - Added RETURN HOME button that navigates directly back to the Dashboard (Home screen).
  */
 class ExpenseActivity : AppCompatActivity()
 {
@@ -45,6 +44,7 @@ class ExpenseActivity : AppCompatActivity()
     private lateinit var spinnerCategory: Spinner
     private lateinit var btnAttachPhoto: Button
     private lateinit var btnSaveExpense: Button
+    private lateinit var btnReturnHome: Button
     private var selectedPhotoUri: Uri? = null
     private var username: String = "admin"
 
@@ -75,9 +75,22 @@ class ExpenseActivity : AppCompatActivity()
         spinnerCategory = findViewById(R.id.spinner_category)
         btnAttachPhoto = findViewById(R.id.btn_attach_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
+        btnReturnHome = findViewById(R.id.btn_return_home)
 
         // Retrieve username from intent for user-specific data isolation
         username = intent.getStringExtra("username") ?: "admin"
+
+        // Part 3 Enhancement: RETURN HOME button handler.
+        // Navigates directly back to the DashboardActivity (Home screen).
+        // The button uses FLAG_ACTIVITY_CLEAR_TOP to ensure the back stack
+        // is properly managed and duplicates are avoided.
+        btnReturnHome.setOnClickListener {
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.putExtra("username", username)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
 
         /*
             The Spinner must display only the categories the user has created.
@@ -119,7 +132,6 @@ class ExpenseActivity : AppCompatActivity()
 
         /*
             Attach Photo button launches the modern gallery picker.
-            Uses the purple accent color as specified in the layout.
         */
         btnAttachPhoto.setOnClickListener {
             getContent.launch("image/*")
@@ -127,8 +139,6 @@ class ExpenseActivity : AppCompatActivity()
 
         /*
             Submit button validates input and saves the expense.
-            The button is positioned at the bottom of the scrollable layout,
-            ensuring it remains accessible on small screens.
         */
         btnSaveExpense.setOnClickListener {
             saveExpense()

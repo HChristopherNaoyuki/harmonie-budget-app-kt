@@ -3,28 +3,89 @@
 
     <!--
         Night (dark) theme for the application.
-        This file is located in the values-night folder so the Android resource system automatically loads it when the device is in dark mode.
-        It uses the exact same style name as the light theme so the system can override only the colors that differ.
-        This prevents any duplicate style error during resource merging.
+        This file is located in the values-night folder so the Android resource
+        system loads it when the device reports dark mode. However, to maintain
+        application branding and visual identity as required by the assignment,
+        all colors are explicitly set to the same values as the light theme.
+        This prevents the system from altering application-defined colors when
+        dark mode is enabled.
+
         The parent and structure match the light theme for consistency.
     -->
     <style name="Theme.HarmonieBudget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <!-- Primary brand color used for buttons and accents in dark mode -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <!-- Primary brand color maintained from light theme -->
+        <item name="colorPrimary">@color/purple_500</item>
 
-        <!-- Status bar color in dark mode -->
+        <!-- Status bar color maintained from light theme -->
         <item name="colorPrimaryVariant">@color/purple_700</item>
 
-        <!-- Secondary brand color used for secondary elements in dark mode -->
-        <item name="colorSecondary">@color/teal_700</item>
+        <!-- Secondary brand color maintained from light theme -->
+        <item name="colorSecondary">@color/teal_200</item>
 
-        <!-- Background color for all screens in dark mode -->
-        <item name="android:windowBackground">@color/black</item>
+        <!--
+            Background color explicitly set to light background even in dark mode.
+            This ensures the application maintains its visual identity regardless
+            of system theme settings as required by the assignment specification.
+        -->
+        <item name="android:windowBackground">@color/background_light</item>
 
-        <!-- Default text color for dark backgrounds -->
-        <item name="android:textColor">@android:color/white</item>
+        <!--
+            Text color explicitly set to light mode primary text.
+            This prevents system dark mode from inverting or altering text colors.
+        -->
+        <item name="android:textColor">@color/text_primary_light</item>
 
+        <!--
+            Explicitly define these attributes to maintain light mode appearance
+            even when the device is in dark mode. This satisfies the requirement
+            that the application must not visually clash with the device dark mode
+            environment while preserving identical UI colors across all themes.
+        -->
+        <item name="colorControlNormal">@color/text_secondary_light</item>
+        <item name="colorControlActivated">@color/accent_blue</item>
+        <item name="colorButtonNormal">@color/button_background_standard</item>
+
+        <!-- Card view styling for consistency in dark mode -->
+        <item name="cardViewStyle">@style/CardViewDark</item>
+
+    </style>
+
+    <!--
+        Dark theme card styling for when the device is in dark mode.
+        Cards use slightly darker backgrounds to ensure readability while
+        maintaining the application's minimalist design language.
+    -->
+    <style name="CardViewDark" parent="CardView">
+        <item name="cardBackgroundColor">@color/surface_dark</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardCornerRadius">12dp</item>
+    </style>
+
+    <!--
+        Standard button style for all buttons in dark mode.
+        Maintains the black background with white text requirement.
+        The button appearance remains identical to light mode.
+    -->
+    <style name="StandardButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/button_background_standard</item>
+        <item name="android:textColor">@color/button_text_standard</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!--
+        Secondary button style for text buttons in dark mode.
+        Uses the same colors as light mode for consistency.
+    -->
+    <style name="SecondaryButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:backgroundTint">@color/button_secondary_background</item>
+        <item name="android:textColor">@color/button_secondary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 
 </resources>

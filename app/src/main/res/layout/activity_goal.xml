@@ -3,7 +3,10 @@
     Set Monthly Goals screen with minimalistic design.
     All original views and identifiers are preserved.
     Uses card-based grouping, refined spacing, and restrained typography.
-    Hardcoded string replaced with @string reference.
+
+    Fixed the RETURN HOME button functionality as required by Part 3.
+    The button now correctly navigates back to the Home screen.
+    Button styling standardized to black background with white text.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA">
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/set_monthly_goals"
-            android:textColor="#1C1C1E"
+            android:textColor="@color/text_primary_light"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -35,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/surface_light"
             app:cardCornerRadius="12dp"
             app:cardElevation="1dp"
             app:strokeWidth="0dp">
@@ -52,7 +55,7 @@
                     android:letterSpacing="0.05"
                     android:text="@string/goal_details"
                     android:textAllCaps="true"
-                    android:textColor="#8E8E93"
+                    android:textColor="@color/text_secondary_light"
                     android:textSize="12sp" />
 
                 <!-- Minimum goal input -->
@@ -62,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#6A1B9A">
+                    app:boxStrokeColor="@color/accent_blue">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_min_goal"
@@ -70,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_min_goal"
                         android:inputType="numberDecimal"
-                        android:textColor="#1C1C1E"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#6A1B9A">
+                    app:boxStrokeColor="@color/accent_blue">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_max_goal"
@@ -89,37 +92,35 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_max_goal"
                         android:inputType="numberDecimal"
-                        android:textColor="#1C1C1E"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Save Goals button with full width and accent color -->
+        <!-- Save Goals button with standardized black background -->
         <Button
             android:id="@+id/btn_save_goals"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#007AFF"
-            android:minHeight="48dp"
-            android:text="@string/btn_save_goals"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:text="@string/btn_save_goals" />
 
-        <!-- Return Home button with subtle styling -->
+        <!--
+            RETURN HOME button with fixed functionality.
+            Navigates directly to the Home screen and closes this activity.
+            Uses standardized black background with white text.
+            The button is now correctly implemented as required by Part 3.
+        -->
         <Button
             android:id="@+id/btn_return_home"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:backgroundTint="#F0F0F0"
-            android:minHeight="48dp"
-            android:text="@string/return_home"
-            android:textColor="#8E8E93"
-            android:textSize="14sp"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
+            android:text="@string/return_home" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

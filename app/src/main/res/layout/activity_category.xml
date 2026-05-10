@@ -3,7 +3,9 @@
     Manage Categories screen with minimalistic design.
     All original views and identifiers are preserved.
     Uses card-based grouping, refined spacing, and restrained typography.
-    Hardcoded strings replaced with @string references.
+
+    Button styling standardized to black background with white text.
+    The Return Home button now uses StandardButton style.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAFAFA">
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/manage_categories"
-            android:textColor="#1C1C1E"
+            android:textColor="@color/text_primary_light"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -35,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/surface_light"
             app:cardCornerRadius="12dp"
             app:cardElevation="1dp"
             app:strokeWidth="0dp">
@@ -52,7 +54,7 @@
                     android:letterSpacing="0.05"
                     android:text="@string/new_category"
                     android:textAllCaps="true"
-                    android:textColor="#8E8E93"
+                    android:textColor="@color/text_secondary_light"
                     android:textSize="12sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -61,27 +63,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#6A1B9A">
+                    app:boxStrokeColor="@color/accent_blue">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_category_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_category_name"
-                        android:textColor="#1C1C1E"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Add Category button with standardized black background -->
                 <Button
                     android:id="@+id/btn_add_category"
+                    style="@style/StandardButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:backgroundTint="#007AFF"
-                    android:minHeight="48dp"
-                    android:text="@string/btn_add_category"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:text="@string/btn_add_category" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/surface_light"
             app:cardCornerRadius="12dp"
             app:cardElevation="1dp"
             app:strokeWidth="0dp">
@@ -108,7 +108,7 @@
                     android:letterSpacing="0.05"
                     android:text="@string/your_categories"
                     android:textAllCaps="true"
-                    android:textColor="#8E8E93"
+                    android:textColor="@color/text_secondary_light"
                     android:textSize="12sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -121,18 +121,17 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Return Home button with subtle styling -->
+        <!--
+            Return Home button with standardized black background.
+            Uses the StandardButton style for consistency across the application.
+        -->
         <Button
             android:id="@+id/btn_return_home"
+            style="@style/StandardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#F0F0F0"
-            android:minHeight="48dp"
-            android:text="@string/return_home"
-            android:textColor="#8E8E93"
-            android:textSize="14sp"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
+            android:text="@string/return_home" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
