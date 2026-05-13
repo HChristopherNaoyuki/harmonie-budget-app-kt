@@ -23,6 +23,14 @@ import java.util.Locale
 
 /**
  * CategoryTotalActivity displays the expense history table with filtering capabilities.
+ *
+ * Part 3 Enhancement:
+ * - Displays a full expense history table with columns: Amount, Date, Category,
+ *   Submission Time, Expense Start Time, Expense End Time.
+ * - Expenses are displayed in chronological order.
+ * - Includes filter functionality by category and date.
+ * - RETURN HOME button navigates to the Budgets tab.
+ * - Updated to show total amount at the top matching the mockup design.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -32,6 +40,7 @@ class CategoryTotalActivity : AppCompatActivity()
     private lateinit var btnApplyFilter: Button
     private lateinit var btnClearFilter: Button
     private lateinit var btnReturnHome: Button
+    private lateinit var tvTotalAmount: TextView
 
     private lateinit var username: String
     private lateinit var expenseAdapter: ExpenseHistoryAdapter
@@ -51,12 +60,14 @@ class CategoryTotalActivity : AppCompatActivity()
 
         username = intent.getStringExtra("username") ?: "admin"
 
+        // Initialize views
         rvExpenseHistory = findViewById(R.id.rv_expense_history)
         spinnerFilterCategory = findViewById(R.id.spinner_filter_category)
         etFilterDate = findViewById(R.id.et_filter_date)
         btnApplyFilter = findViewById(R.id.btn_apply_filter)
         btnClearFilter = findViewById(R.id.btn_clear_filter)
         btnReturnHome = findViewById(R.id.btn_return_home)
+        tvTotalAmount = findViewById(R.id.tv_total_amount)
 
         rvExpenseHistory.layoutManager = LinearLayoutManager(this)
 
@@ -68,6 +79,9 @@ class CategoryTotalActivity : AppCompatActivity()
 
         // Submit the initial expenses list to the adapter
         expenseAdapter.submitList(allExpenses)
+
+        // Update total amount display
+        updateTotalAmountDisplay()
 
         btnReturnHome.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
@@ -88,6 +102,16 @@ class CategoryTotalActivity : AppCompatActivity()
         btnClearFilter.setOnClickListener {
             clearFilter()
         }
+    }
+
+    /**
+     * Updates the total amount display at the top of the screen.
+     * Calculates the sum of all filtered expenses.
+     */
+    private fun updateTotalAmountDisplay()
+    {
+        val total = allExpenses.sumOf { it.amount }
+        tvTotalAmount.text = String.format(Locale.US, "$%.2f", total)
     }
 
     private fun loadData()

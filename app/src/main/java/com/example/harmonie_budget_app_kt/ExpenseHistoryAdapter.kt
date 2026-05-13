@@ -1,5 +1,7 @@
 package com.example.harmonie_budget_app_kt
 
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -14,6 +16,11 @@ import java.util.Locale
 /**
  * ExpenseHistoryAdapter is a RecyclerView adapter for displaying expense records.
  * Uses ListAdapter with DiffUtil for efficient updates.
+ *
+ * Part 3 Enhancement:
+ * - Updated the visual format of each expense entry to match the mockup design.
+ * - Each entry now shows: category, description, amount, and relative date.
+ * - Format example: "Groceries - Whole Foods    -$87.42" with "Today" or date below.
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -43,40 +50,81 @@ class ExpenseHistoryAdapter(
         }
     }
 
-    class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+    /**
+     * ViewHolder class that holds the views for a single expense entry.
+     * Each entry displays:
+     * - Primary text: Category and description (e.g., "Groceries - Whole Foods")
+     * - Secondary text: Relative date (Today, Yesterday, or formatted date)
+     * - Amount: Negative amount in red (e.g., "-$87.42")
+     */
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    {
+        val tvCategoryDescription: TextView = itemView.findViewById(R.id.tv_category_description)
+        val tvDate: TextView = itemView.findViewById(R.id.tv_date)
+        val tvAmount: TextView = itemView.findViewById(R.id.tv_amount)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
     {
-        val textView = TextView(parent.context)
-        textView.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        textView.setPadding(16, 16, 16, 16)
-        textView.setTextColor(parent.context.getColor(R.color.text_primary_light))
-        textView.textSize = 14f
-        return ViewHolder(textView)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_expense_history, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int)
     {
         val expense = getItem(position)
 
+        // Find the category name for this expense
         val categoryName = categories.find { it.id == expense.categoryId }?.name ?: "Unknown"
 
-        val submissionTime = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-            .format(Calendar.getInstance().time)
+        // Build the category and description text
+        val categoryDescriptionText = "$categoryName - ${expense.description}"
+        holder.tvCategoryDescription.text = categoryDescriptionText
 
-        val displayText = holder.textView.context.getString(
-            R.string.expense_history_row_format,
-            String.format(Locale.US, "%.2f", expense.amount),
-            expense.date,
-            categoryName,
-            submissionTime,
-            expense.startTime,
-            expense.endTime
-        )
+        // Format the date as a relative string (Today, Yesterday, or formatted date)
+        val relativeDate = getRelativeDateString(expense.date)
+        holder.tvDate.text = relativeDate
 
-        holder.textView.text = displayText
+        // Format the amount as a negative value with dollar sign
+        val formattedAmount = String.format(Locale.US, "-$%.2f", expense.amount)
+        holder.tvAmount.text = formattedAmount
+
+        // Set amount text color to red for visual emphasis of expenses
+        holder.tvAmount.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
+    }
+
+    /**
+     * Converts a date string to a relative display format.
+     *
+     * @param dateString The expense date in yyyy-MM-dd format
+     * @return "Today" if the date is today, "Yesterday" if yesterday,
+     *         otherwise the formatted date as "MMM dd"
+     */
+    private fun getRelativeDateString(dateString: String): String
+    {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val expenseDate = dateFormat.parse(dateString)
+
+        val calendar = Calendar.getInstance()
+        val todayDate = dateFormat.format(calendar.time)
+
+        // Check if the expense date is today
+        if (dateString == todayDate)
+        {
+            return "Today"
+        }
+
+        // Check if the expense date is yesterday
+        calendar.add(Calendar.DAY_OF_YEAR, -1)
+        val yesterdayDate = dateFormat.format(calendar.time)
+        if (dateString == yesterdayDate)
+        {
+            return "Yesterday"
+        }
+
+        // Otherwise return formatted date (e.g., "May 12")
+        val displayFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+        return displayFormat.format(expenseDate ?: return dateString)
     }
 }
