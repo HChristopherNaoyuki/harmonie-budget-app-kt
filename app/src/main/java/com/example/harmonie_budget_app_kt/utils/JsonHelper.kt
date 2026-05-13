@@ -30,6 +30,9 @@ import javax.crypto.spec.PBEKeySpec
  * 2. Fallback: SHA-256 with salt if PBKDF2 is unavailable
  *
  * The hash is stored as a Base64 string in "salt:hash" format.
+ *
+ * Part 3 Enhancement:
+ * Added full name validation in saveUser method requiring at least two names.
  */
 class JsonHelper
 {
@@ -56,7 +59,6 @@ class JsonHelper
             val hash = try
             {
                 // Using "PBKDF2WithHmacSHA1" for maximum Android compatibility.
-                // "PBKDF2WithHmacSHA1" is available on all Android API 23+ devices.
                 val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
                 val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
                 factory.generateSecret(spec).encoded
@@ -66,7 +68,6 @@ class JsonHelper
                 Log.w(TAG, "PBKDF2 not available, falling back to SHA-256", exception)
 
                 // Fallback: Use SHA-256 with the salt.
-                // This is less secure than PBKDF2 but ensures the app works on all devices.
                 val messageDigest = MessageDigest.getInstance("SHA-256")
                 val saltedPassword = salt + password.toByteArray()
                 messageDigest.digest(saltedPassword)
@@ -99,7 +100,6 @@ class JsonHelper
                 val salt = Base64.decode(parts[0], Base64.NO_WRAP)
                 val expectedHash = Base64.decode(parts[1], Base64.NO_WRAP)
 
-                // Try PBKDF2 verification first.
                 var actualHash: ByteArray? = null
 
                 try
@@ -111,7 +111,6 @@ class JsonHelper
                 catch (exception: Exception)
                 {
                     Log.w(TAG, "PBKDF2 verification failed, trying SHA-256 fallback", exception)
-                    // Fallback to SHA-256 verification.
                     val messageDigest = MessageDigest.getInstance("SHA-256")
                     val saltedPassword = salt + password.toByteArray()
                     actualHash = messageDigest.digest(saltedPassword)
@@ -165,16 +164,55 @@ class JsonHelper
     // ==================== User Methods ====================
 
     /**
+     * Validates that the full name contains at least two names (first name and surname).
+     * This method is used internally by saveUser for backend validation.
+     *
+     * @param fullName The full name string to validate
+     * @return True if the name contains at least two non-empty parts after trimming
+     */
+    private fun isValidFullName(fullName: String): Boolean
+    {
+        // Trim the input and collapse multiple spaces into single spaces
+        val trimmed = fullName.trim().replace(Regex("\\s+"), " ")
+
+        // Check if the trimmed string is empty
+        if (trimmed.isEmpty())
+        {
+            return false
+        }
+
+        // Split by space and filter out empty parts
+        val nameParts = trimmed.split(" ").filter { it.isNotEmpty() }
+
+        // Require at least two name parts (first name and surname)
+        return nameParts.size >= 2
+    }
+
+    /**
      * Saves a user to the JSON file. The password is hashed before storage.
+     * Performs backend validation on the full name before saving.
      *
      * @param context Application context
      * @param user User object containing plaintext password (will be hashed)
+     * @throws IllegalArgumentException If the full name is invalid
      * @throws IOException If file operations fail
      * @throws RuntimeException If hashing fails
      */
+    @Throws(IllegalArgumentException::class, IOException::class, RuntimeException::class)
     fun saveUser(context: Context, user: User)
     {
         Log.d(TAG, "saveUser called for username: ${user.username}")
+
+        // Part 3 Enhancement: Backend validation for full name.
+        // This ensures that even if frontend validation is bypassed, the name is validated here.
+        if (!isValidFullName(user.name))
+        {
+            Log.e(TAG, "saveUser failed: Invalid full name for username: ${user.username}")
+            throw IllegalArgumentException("Please enter your full name (first name and surname)")
+        }
+
+        // Trim and clean the name for storage
+        val cleanedName = user.name.trim().replace(Regex("\\s+"), " ")
 
         try
         {
@@ -184,7 +222,7 @@ class JsonHelper
             Log.d(TAG, "Password hashed successfully for username: ${user.username}")
 
             val secureUser = User(
-                name = user.name,
+                name = cleanedName,
                 surname = user.surname,
                 username = user.username,
                 password = hashedPassword,

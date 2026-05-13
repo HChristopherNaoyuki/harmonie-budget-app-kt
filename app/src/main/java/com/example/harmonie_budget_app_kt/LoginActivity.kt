@@ -18,6 +18,7 @@ import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
  *
  * Part 3 Enhancement:
  * Added RETURN HOME button that navigates back to the Landing Page (MainActivity).
+ * All user-facing text uses string resources.
  */
 class LoginActivity : AppCompatActivity()
 {
@@ -40,9 +41,8 @@ class LoginActivity : AppCompatActivity()
         btnRegister = findViewById(R.id.btn_register)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Part 3 Enhancement: RETURN HOME button handler.
+        // RETURN HOME button handler.
         // Navigates back to the Landing Page (MainActivity).
-        // Uses FLAG_ACTIVITY_CLEAR_TOP to clear the back stack and prevent duplicates.
         btnReturnHome.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -74,11 +74,13 @@ class LoginActivity : AppCompatActivity()
                     }
                     else
                     {
+                        // Using string resource for error message.
                         Toast.makeText(this, getString(R.string.error_invalid_credentials), Toast.LENGTH_SHORT).show()
                     }
                 }
                 else
                 {
+                    // Using string resource for error message.
                     Toast.makeText(this, getString(R.string.error_invalid_credentials), Toast.LENGTH_SHORT).show()
                 }
             }

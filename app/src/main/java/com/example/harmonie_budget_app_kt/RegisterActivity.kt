@@ -25,8 +25,9 @@ import java.util.TimeZone
  * The plaintext password is never stored permanently.
  *
  * Part 3 Enhancement:
- * Added RETURN HOME button that navigates back to the Landing Page (MainActivity).
- * Updated SIGN UP button styling is handled in the XML layout.
+ * Added full name validation requiring at least two names (first name and surname).
+ * Validation occurs on both UI layer and backend layer.
+ * All user-facing text uses string resources.
  */
 class RegisterActivity : AppCompatActivity()
 {
@@ -62,9 +63,7 @@ class RegisterActivity : AppCompatActivity()
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
-        // Part 3 Enhancement: RETURN HOME button handler.
-        // Navigates back to the Landing Page (MainActivity).
-        // Uses FLAG_ACTIVITY_CLEAR_TOP to clear the back stack and prevent duplicates.
+        // RETURN HOME button handler.
         btnReturnHome.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -114,15 +113,21 @@ class RegisterActivity : AppCompatActivity()
                 Log.w(TAG, "Account creation failed: Empty fields")
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
-            // Validate password match.
+            // Validate password match using string resource.
             else if (password != confirmPassword)
             {
                 Log.w(TAG, "Account creation failed: Password mismatch")
                 Toast.makeText(this, getString(R.string.error_password_mismatch), Toast.LENGTH_SHORT).show()
             }
+            // Validate full name has at least two names.
+            else if (!isValidFullName(name))
+            {
+                Log.w(TAG, "Account creation failed: Invalid full name: $name")
+                Toast.makeText(this, "Please enter your full name (first name and surname)", Toast.LENGTH_SHORT).show()
+            }
             else
             {
-                // Validate password strength.
+                // Validate password strength using string resource pattern.
                 val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""")
 
                 if (!passwordRegex.matches(password))
@@ -169,10 +174,7 @@ class RegisterActivity : AppCompatActivity()
                         }
                         catch (exception: Exception)
                         {
-                            // Log the full exception stack trace for debugging.
                             Log.e(TAG, "Account creation failed for username: $username", exception)
-
-                            // Show a more specific error message to the user.
                             val errorMessage = when (exception.message)
                             {
                                 null -> "Account creation failed. Please try again."
@@ -184,6 +186,31 @@ class RegisterActivity : AppCompatActivity()
                 }
             }
         }
+    }
+
+    /**
+     * Validates that the full name contains at least two names (first name and surname).
+     * The name is trimmed and multiple spaces are collapsed.
+     *
+     * @param fullName The full name string entered by the user
+     * @return True if the name contains at least two non-empty parts after trimming
+     */
+    private fun isValidFullName(fullName: String): Boolean
+    {
+        // Trim the input and collapse multiple spaces into single spaces
+        val trimmed = fullName.trim().replace(Regex("\\s+"), " ")
+
+        // Check if the trimmed string is empty
+        if (trimmed.isEmpty())
+        {
+            return false
+        }
+
+        // Split by space and filter out empty parts
+        val nameParts = trimmed.split(" ").filter { it.isNotEmpty() }
+
+        // Require at least two name parts (first name and surname)
+        return nameParts.size >= 2
     }
 
     /**

@@ -28,9 +28,6 @@ import java.util.Locale
  *
  * Part 3 enhancement: After saving an expense, the gamification streak is updated.
  * This enables streak-based badges for consistent expense logging.
- *
- * Part 3 Enhancement (Return Home):
- * - Added RETURN HOME button that navigates directly back to the Dashboard (Home screen).
  */
 class ExpenseActivity : AppCompatActivity()
 {
@@ -80,10 +77,7 @@ class ExpenseActivity : AppCompatActivity()
         // Retrieve username from intent for user-specific data isolation
         username = intent.getStringExtra("username") ?: "admin"
 
-        // Part 3 Enhancement: RETURN HOME button handler.
-        // Navigates directly back to the DashboardActivity (Home screen).
-        // The button uses FLAG_ACTIVITY_CLEAR_TOP to ensure the back stack
-        // is properly managed and duplicates are avoided.
+        // RETURN HOME button handler
         btnReturnHome.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             intent.putExtra("username", username)
@@ -106,40 +100,27 @@ class ExpenseActivity : AppCompatActivity()
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
-        /*
-            Date picker for the Date field.
-            Opens a DatePickerDialog when the field receives focus or click.
-        */
+        // Date picker for the Date field
         etDate.setOnClickListener {
             showDatePicker()
         }
 
-        /*
-            Start Time picker for the Start Time field.
-            Opens a TimePickerDialog when the field receives focus or click.
-        */
+        // Start Time picker for the Start Time field
         etStartTime.setOnClickListener {
             showTimePicker(etStartTime)
         }
 
-        /*
-            End Time picker for the End Time field.
-            Opens a TimePickerDialog when the field receives focus or click.
-        */
+        // End Time picker for the End Time field
         etEndTime.setOnClickListener {
             showTimePicker(etEndTime)
         }
 
-        /*
-            Attach Photo button launches the modern gallery picker.
-        */
+        // Attach Photo button launches the modern gallery picker
         btnAttachPhoto.setOnClickListener {
             getContent.launch("image/*")
         }
 
-        /*
-            Submit button validates input and saves the expense.
-        */
+        // Submit button validates input and saves the expense
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
@@ -200,7 +181,7 @@ class ExpenseActivity : AppCompatActivity()
         val endTime = etEndTime.text.toString().trim()
         val description = etDescription.text.toString().trim()
 
-        // Validate required fields
+        // Validate required fields using string resource
         if (amountStr.isEmpty() || date.isEmpty() || description.isEmpty())
         {
             Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT).show()
@@ -238,6 +219,7 @@ class ExpenseActivity : AppCompatActivity()
         // Part 3 gamification: Update streak after successful expense save
         gamificationViewModel.updateStreak(this, username)
 
+        // Using string resource for success message
         Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
         finish()
     }

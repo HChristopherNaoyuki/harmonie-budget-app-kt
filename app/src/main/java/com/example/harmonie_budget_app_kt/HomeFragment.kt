@@ -38,6 +38,7 @@ import java.util.Locale
  * - Progress bar showing spending relative to monthly max goal
  * - Gamification badges and streaks
  * - Budget badge awarded when spending stays within budget
+ * All user-facing text uses string resources.
  */
 class HomeFragment : Fragment()
 {
@@ -94,7 +95,7 @@ class HomeFragment : Fragment()
         progressBarSpending = view.findViewById(R.id.progress_bar_spending)
         tvProgressPercentage = view.findViewById(R.id.tv_progress_percentage)
 
-        // Set up greeting and date.
+        // Set up greeting and date using string resource.
         val greetingText = getString(R.string.greetings, username)
         tvGreeting.text = greetingText
 
@@ -106,11 +107,11 @@ class HomeFragment : Fragment()
         val user = userViewModel.loadUser(requireContext(), username)
         tvUserId.text = user?.userId ?: username
 
-        // Note: Opening brace on same line as setOnClickListener is correct Kotlin lambda syntax.
         btnCopyUserId.setOnClickListener {
             val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("User ID", tvUserId.text.toString())
             clipboard.setPrimaryClip(clip)
+            // Using string resource for copy confirmation.
             Toast.makeText(requireContext(), getString(R.string.user_id_copied), Toast.LENGTH_SHORT).show()
         }
 
@@ -118,6 +119,7 @@ class HomeFragment : Fragment()
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
+            // Using string resource with placeholders for budget range.
             val budgetRangeText = getString(R.string.monthly_budget, goal.minGoal, goal.maxGoal)
             tvBudgetRange.text = budgetRangeText
         }
@@ -141,7 +143,12 @@ class HomeFragment : Fragment()
         // Award budget badge if applicable.
         if (goal != null && currentMonthTotal <= goal.maxGoal && goal.maxGoal > 0)
         {
-            gamificationViewModel.checkAndAwardBudgetBadge(requireContext(), username, currentMonthTotal, goal.maxGoal)
+            gamificationViewModel.checkAndAwardBudgetBadge(
+                requireContext(),
+                username,
+                currentMonthTotal,
+                goal.maxGoal
+            )
         }
 
         // Load expenses and build category breakdown.
@@ -150,7 +157,9 @@ class HomeFragment : Fragment()
         val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
 
         rvCategoryBreakdown.layoutManager = LinearLayoutManager(requireContext())
-        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(calculateCategoryBreakdown(expenses, categoryMap))
+        rvCategoryBreakdown.adapter = CategoryBreakdownAdapter(
+            calculateCategoryBreakdown(expenses, categoryMap)
+        )
 
         // Load gamification data.
         loadAndDisplayGamificationData()
@@ -171,6 +180,7 @@ class HomeFragment : Fragment()
             val percentage = ((spent / goal.maxGoal) * 100).coerceIn(0.0, 100.0)
             progressBarSpending.progress = percentage.toInt()
 
+            // Using string resource for progress percentage.
             val progressText = getString(R.string.progress_percentage, percentage.toInt())
             tvProgressPercentage.text = progressText
 
@@ -195,7 +205,7 @@ class HomeFragment : Fragment()
      */
     private fun loadAndDisplayGamificationData()
     {
-        // Load and display streak data.
+        // Load and display streak data using string resources.
         val streakData = gamificationViewModel.getStreakData(requireContext(), username)
         if (streakData != null)
         {
@@ -241,6 +251,7 @@ class HomeFragment : Fragment()
         for (badge in badges)
         {
             val badgeView = TextView(requireContext())
+            // Using string resource with placeholder for badge name.
             val badgeDisplayText = getString(R.string.badge_display_format, badge.name)
             badgeView.text = badgeDisplayText
             badgeView.setTextColor(Color.WHITE)
@@ -257,7 +268,6 @@ class HomeFragment : Fragment()
 
             badgeView.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_button)
 
-            // Note: Opening brace on same line as setOnClickListener is correct Kotlin lambda syntax.
             badgeView.setOnClickListener {
                 Toast.makeText(requireContext(), badge.description, Toast.LENGTH_SHORT).show()
             }
@@ -294,11 +304,15 @@ class HomeFragment : Fragment()
      * @param categoryMap Map of category ID to Category object
      * @return List of formatted strings for display
      */
-    private fun calculateCategoryBreakdown(expenses: List<Expense>, categoryMap: Map<Int, Category>): List<String>
+    private fun calculateCategoryBreakdown(
+        expenses: List<Expense>,
+        categoryMap: Map<Int, Category>
+    ): List<String>
     {
         return expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
                 val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
+                // Using string resource with placeholders for category total.
                 getString(R.string.category_total, categoryName, list.sumOf { it.amount })
             }
     }

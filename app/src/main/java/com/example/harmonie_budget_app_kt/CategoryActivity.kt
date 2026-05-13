@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 
+/**
+ * CategoryActivity allows users to manage expense categories.
+ *
+ * Part 3 Enhancement:
+ * When a category is added, the activity finishes and returns to the TransactionsFragment.
+ * This allows the TransactionsFragment to refresh its category display onResume.
+ */
 class CategoryActivity : AppCompatActivity()
 {
     private lateinit var etCategoryName: EditText
@@ -54,6 +62,7 @@ class CategoryActivity : AppCompatActivity()
                 adapter.addCategory(category)
 
                 etCategoryName.text.clear()
+                // Using getString to resolve the string resource
                 Toast.makeText(this, getString(R.string.category_added), Toast.LENGTH_SHORT).show()
             }
         }
@@ -66,11 +75,11 @@ class CategoryActivity : AppCompatActivity()
     private class CategoryAdapter(private val list: MutableList<Category>)
         : RecyclerView.Adapter<CategoryAdapter.ViewHolder>()
     {
-        class ViewHolder(val tv: android.widget.TextView) : RecyclerView.ViewHolder(tv)
+        class ViewHolder(val tv: TextView) : RecyclerView.ViewHolder(tv)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
         {
-            val tv = android.widget.TextView(parent.context)
+            val tv = TextView(parent.context)
             tv.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT

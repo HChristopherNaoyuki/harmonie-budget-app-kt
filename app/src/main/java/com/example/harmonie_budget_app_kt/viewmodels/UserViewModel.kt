@@ -12,8 +12,8 @@ import java.io.IOException
  * It calls JsonHelper methods to load and save user data.
  * This follows the MVVM pattern by separating UI logic from data access.
  *
- * Error Handling:
- * Added detailed logging and specific exception types for better error diagnosis.
+ * Part 3 Enhancement:
+ * Added backend validation for full name requiring at least two names.
  */
 class UserViewModel : ViewModel()
 {
@@ -25,17 +25,50 @@ class UserViewModel : ViewModel()
     private val jsonHelper = JsonHelper()
 
     /**
+     * Validates that the full name contains at least two names (first name and surname).
+     *
+     * @param fullName The full name string to validate
+     * @return True if the name contains at least two non-empty parts after trimming
+     */
+    fun isValidFullName(fullName: String): Boolean
+    {
+        // Trim the input and collapse multiple spaces into single spaces
+        val trimmed = fullName.trim().replace(Regex("\\s+"), " ")
+
+        // Check if the trimmed string is empty
+        if (trimmed.isEmpty())
+        {
+            return false
+        }
+
+        // Split by space and filter out empty parts
+        val nameParts = trimmed.split(" ").filter { it.isNotEmpty() }
+
+        // Require at least two name parts (first name and surname)
+        return nameParts.size >= 2
+    }
+
+    /**
      * Saves a new user. The password is hashed by JsonHelper.
+     * Performs backend validation on the full name before saving.
      *
      * @param context Application context for file access
      * @param user User object to save (plaintext password will be hashed)
+     * @throws IllegalArgumentException If the full name is invalid
      * @throws IOException If file operations fail
      * @throws RuntimeException If hashing or serialization fails
      */
-    @Throws(IOException::class, RuntimeException::class)
+    @Throws(IllegalArgumentException::class, IOException::class, RuntimeException::class)
     fun saveUser(context: Context, user: User)
     {
         Log.d(TAG, "saveUser called for username: ${user.username}")
+
+        // Part 3 Enhancement: Backend validation for full name.
+        if (!isValidFullName(user.name))
+        {
+            Log.e(TAG, "saveUser failed: Invalid full name for username: ${user.username}")
+            throw IllegalArgumentException("Please enter your full name (first name and surname)")
+        }
 
         try
         {

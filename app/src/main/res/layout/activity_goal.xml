@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Set Monthly Goals screen with minimalistic design.
-    All original views and identifiers are preserved.
-    Uses card-based grouping, refined spacing, and restrained typography.
-
-    Fixed the RETURN HOME button functionality as required by Part 3.
-    The button now correctly navigates back to the Home screen.
-    Button styling standardized to black background with white text.
--->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,7 +13,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Title with increased prominence -->
         <TextView
             android:id="@+id/tv_goal_title"
             android:layout_width="wrap_content"
@@ -33,7 +23,6 @@
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <!-- Input card containing both goal fields -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,7 +47,6 @@
                     android:textColor="@color/text_secondary_light"
                     android:textSize="12sp" />
 
-                <!-- Minimum goal input -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_min_goal"
                     android:layout_width="match_parent"
@@ -77,7 +65,6 @@
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Maximum goal input -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_max_goal"
                     android:layout_width="match_parent"
@@ -99,7 +86,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Save Goals button with standardized black background -->
         <Button
             android:id="@+id/btn_save_goals"
             style="@style/StandardButton"
@@ -108,12 +94,6 @@
             android:layout_marginTop="24dp"
             android:text="@string/btn_save_goals" />
 
-        <!--
-            RETURN HOME button with fixed functionality.
-            Navigates directly to the Home screen and closes this activity.
-            Uses standardized black background with white text.
-            The button is now correctly implemented as required by Part 3.
-        -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"
