@@ -23,15 +23,7 @@ import java.util.Locale
 
 /**
  * CategoryTotalActivity displays the expense history table with filtering capabilities.
- *
- * Part 3 Enhancement:
- * - Displays a full expense history table with columns: Amount, Date, Category,
- *   Submission Time, Expense Start Time, Expense End Time.
- * - Expenses are displayed in chronological order.
- * - Includes filter functionality by category and date.
- * - RETURN HOME button navigates to the Budgets tab.
- * - Updated to show total amount at the top matching the mockup design.
- * - Currency updated to ZAR (South African Rand).
+ * Users can filter expenses by category and date, and view a scrollable list of results.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -49,9 +41,13 @@ class CategoryTotalActivity : AppCompatActivity()
     private val expenseViewModel = ExpenseViewModel()
     private val categoryViewModel = CategoryViewModel()
 
+    // Data holders
     private var allExpenses: List<Expense> = emptyList()
+    private var filteredExpenses: List<Expense> = emptyList()
     private var categories: List<Category> = emptyList()
-    private var selectedCategoryId: Int = -1
+
+    // Filter state
+    private var selectedCategoryId: Int = -1 // -1 means all categories
     private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -72,66 +68,42 @@ class CategoryTotalActivity : AppCompatActivity()
 
         rvExpenseHistory.layoutManager = LinearLayoutManager(this)
 
+        // Load initial data
         loadData()
 
-        // Create adapter with categories only (Expenses will be set via submitList)
-        expenseAdapter = ExpenseHistoryAdapter(categories)
-        rvExpenseHistory.adapter = expenseAdapter
-
-        // Submit the initial expenses list to the adapter
-        expenseAdapter.submitList(allExpenses)
-
-        // Update total amount display with ZAR currency using string resource
-        updateTotalAmountDisplay()
-
-        btnReturnHome.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
-            intent.putExtra("username", username)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
-        }
-
-        etFilterDate.setOnClickListener {
-            showDatePicker()
-        }
-
-        btnApplyFilter.setOnClickListener {
-            applyFilter()
-        }
-
-        btnClearFilter.setOnClickListener {
-            clearFilter()
-        }
+        // Setup UI listeners
+        setupCategorySpinner()
+        setupDatePicker()
+        setupButtonListeners()
     }
 
     /**
-     * Updates the total amount display at the top of the screen.
-     * Calculates the sum of all filtered expenses.
-     * Format uses ZAR (South African Rand) currency with thousands separator.
-     * Example output: "R 2,847.35"
+     * Loads expenses and categories from the ViewModel.
+     * Sorts expenses chronologically and initializes the adapter.
      */
-    private fun updateTotalAmountDisplay()
-    {
-        val total = allExpenses.sumOf { it.amount }
-        // Format with ZAR currency symbol, thousands separator, and two decimal places
-        val formattedTotal = String.format(Locale.US, "R %,.2f", total)
-        tvTotalAmount.text = formattedTotal
-    }
-
     private fun loadData()
     {
         allExpenses = expenseViewModel.getExpenses(this, username)
         categories = categoryViewModel.getCategories(this, username)
 
+        // Sort expenses in chronological order (oldest first)
         allExpenses = allExpenses.sortedWith(
             compareBy<Expense> { it.date }
                 .thenBy { it.startTime }
         )
 
-        setupCategorySpinner()
+        // Initialize filtered expenses to all expenses
+        filteredExpenses = allExpenses.toList()
+
+        // Initialize adapter and set data
+        expenseAdapter = ExpenseHistoryAdapter(categories)
+        rvExpenseHistory.adapter = expenseAdapter
+        updateAdapterAndTotal()
     }
 
+    /**
+     * Sets up the category filter spinner with "All Categories" option.
+     */
     private fun setupCategorySpinner()
     {
         val categoryNames = mutableListOf(getString(R.string.all_categories))
@@ -146,6 +118,8 @@ class CategoryTotalActivity : AppCompatActivity()
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long)
             {
                 selectedCategoryId = if (position == 0) -1 else categories[position - 1].id
+                // Do not auto-apply filter on selection change to improve performance.
+                // User must click "Apply Filter".
             }
 
             override fun onNothingSelected(parent: AdapterView<*>)
@@ -155,38 +129,81 @@ class CategoryTotalActivity : AppCompatActivity()
         }
     }
 
-    private fun showDatePicker()
+    /**
+     * Sets up the date picker dialog for the filter date field.
+     */
+    private fun setupDatePicker()
     {
-        val calendar = Calendar.getInstance()
-        DatePickerDialog(
-            this,
-            { _, year, month, day ->
-                selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day)
-                etFilterDate.setText(selectedDate)
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        etFilterDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                this,
+                { _, year, month, day ->
+                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day)
+                    etFilterDate.setText(selectedDate)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
     }
 
+    /**
+     * Sets up click listeners for the Apply Filter, Clear Filter, and Return Home buttons.
+     */
+    private fun setupButtonListeners()
+    {
+        btnApplyFilter.setOnClickListener {
+            applyFilter()
+        }
+
+        btnClearFilter.setOnClickListener {
+            clearFilter()
+        }
+
+        btnReturnHome.setOnClickListener {
+            // Navigate back to the DashboardActivity and explicitly select the "Budgets" tab.
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.putExtra("username", username)
+            // Pass an extra to tell the Dashboard which tab to select.
+            intent.putExtra("selected_tab", R.id.nav_budgets)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    /**
+     * Filters the expenses based on the current selectedCategoryId and selectedDate.
+     * Updates the RecyclerView and the total amount display.
+     */
     private fun applyFilter()
     {
-        var filteredExpenses = allExpenses
+        // Perform filtering logic
+        val filtered = allExpenses.filter { expense ->
+            var matches = true
 
-        if (selectedCategoryId != -1)
-        {
-            filteredExpenses = filteredExpenses.filter { it.categoryId == selectedCategoryId }
-        }
-
-        selectedDate?.let { date ->
-            if (date.isNotEmpty())
+            // Check category filter
+            if (selectedCategoryId != -1)
             {
-                filteredExpenses = filteredExpenses.filter { it.date == date }
+                matches = matches && (expense.categoryId == selectedCategoryId)
             }
+
+            // Check date filter
+            selectedDate?.let { date ->
+                if (date.isNotEmpty())
+                {
+                    matches = matches && (expense.date == date)
+                }
+            }
+
+            matches
         }
 
-        expenseAdapter.submitList(filteredExpenses)
+        // Update the displayed list and total
+        filteredExpenses = filtered
+        updateAdapterAndTotal()
 
         if (filteredExpenses.isEmpty())
         {
@@ -194,13 +211,40 @@ class CategoryTotalActivity : AppCompatActivity()
         }
     }
 
+    /**
+     * Clears all active filters, resetting the display to show all expenses.
+     */
     private fun clearFilter()
     {
+        // Reset filter state
         selectedCategoryId = -1
         selectedDate = null
         etFilterDate.text.clear()
         spinnerFilterCategory.setSelection(0)
 
-        expenseAdapter.submitList(allExpenses)
+        // Reset displayed data to the full list
+        filteredExpenses = allExpenses
+        updateAdapterAndTotal()
+    }
+
+    /**
+     * Updates the RecyclerView adapter with the current filtered expenses list
+     * and refreshes the total amount display.
+     */
+    private fun updateAdapterAndTotal()
+    {
+        expenseAdapter.submitList(filteredExpenses)
+        updateTotalAmountDisplay()
+    }
+
+    /**
+     * Calculates the sum of the currently displayed (filtered) expenses
+     * and updates the total amount TextView with ZAR formatting.
+     */
+    private fun updateTotalAmountDisplay()
+    {
+        val total = filteredExpenses.sumOf { it.amount }
+        val formattedTotal = String.format(Locale.US, "R %,.2f", total)
+        tvTotalAmount.text = formattedTotal
     }
 }

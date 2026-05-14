@@ -16,17 +16,29 @@ class DashboardActivity : AppCompatActivity()
         setContentView(R.layout.activity_dashboard)
 
         // Username is received from LoginActivity or RegisterActivity
-        // This value is required for all user-specific data isolation
-        username = intent.getStringExtra("username") ?: throw IllegalStateException("Username must be passed to DashboardActivity")
+        username = intent.getStringExtra("username")
+            ?: throw IllegalStateException("Username must be passed to DashboardActivity")
 
         bottomNav = findViewById(R.id.bottom_nav)
 
+        // Determine which tab to load initially.
+        // Default to Home if no specific tab is requested.
+        val selectedTabId = intent.getIntExtra("selected_tab", R.id.nav_home)
+
         // Only load the initial fragment on first creation
-        // This prevents duplicate fragments on configuration change (rotation)
-        // (fixes L-06)
         if (savedInstanceState == null)
         {
-            loadFragment(HomeFragment.newInstance(username))
+            when (selectedTabId)
+            {
+                R.id.nav_home -> loadFragment(HomeFragment.newInstance(username))
+                R.id.nav_budget -> loadFragment(BudgetFragment.newInstance(username))
+                R.id.nav_transactions -> loadFragment(TransactionsFragment.newInstance(username))
+                R.id.nav_budgets -> loadFragment(BudgetsFragment.newInstance(username))
+                R.id.nav_more -> loadFragment(MoreFragment.newInstance(username))
+                else -> loadFragment(HomeFragment.newInstance(username))
+            }
+            // Set the selected item in the bottom navigation view
+            bottomNav.selectedItemId = selectedTabId
         }
 
         bottomNav.setOnItemSelectedListener { item ->
