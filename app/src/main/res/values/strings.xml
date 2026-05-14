@@ -127,6 +127,8 @@
     <string name="apply_filter_button">Apply Filter</string>
     <string name="expense_history_label">Expense History</string>
     <string name="expense_history_row_format">Amount: %s | Date: %s | Category: %s | Submitted: %s | Start: %s | End: %s</string>
+    <string name="default_zar_amount">R 0.00</string>
+    <string name="this_month_label">this month</string>
 
     <!-- Common navigation buttons -->
     <string name="return_home">Return Home</string>

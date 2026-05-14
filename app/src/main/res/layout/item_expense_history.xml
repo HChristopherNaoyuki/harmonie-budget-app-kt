@@ -3,7 +3,7 @@
     Layout for a single expense history item in the RecyclerView.
     This layout matches the mockup design showing:
     - Category and description on the left (e.g., "Groceries - Whole Foods")
-    - Amount on the right (e.g., "-$87.42")
+    - Amount on the right with ZAR currency (e.g., "-R 87.42")
     - Relative date below the category description (e.g., "Today")
 
     The layout uses a vertical LinearLayout for the left side content
@@ -14,7 +14,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     android:background="?android:attr/selectableItemBackground">
 
     <!-- Left side: Category and description with relative date below -->
@@ -44,7 +47,7 @@
 
     </LinearLayout>
 
-    <!-- Right side: Amount (negative value in red) -->
+    <!-- Right side: Amount with ZAR currency (negative value in red) -->
     <TextView
         android:id="@+id/tv_amount"
         android:layout_width="wrap_content"
@@ -52,6 +55,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:paddingStart="16dp"
+        android:paddingEnd="0dp"
         android:gravity="end" />
 
 </LinearLayout>

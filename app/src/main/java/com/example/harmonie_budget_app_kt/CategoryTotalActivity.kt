@@ -31,6 +31,7 @@ import java.util.Locale
  * - Includes filter functionality by category and date.
  * - RETURN HOME button navigates to the Budgets tab.
  * - Updated to show total amount at the top matching the mockup design.
+ * - Currency updated to ZAR (South African Rand).
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -80,7 +81,7 @@ class CategoryTotalActivity : AppCompatActivity()
         // Submit the initial expenses list to the adapter
         expenseAdapter.submitList(allExpenses)
 
-        // Update total amount display
+        // Update total amount display with ZAR currency using string resource
         updateTotalAmountDisplay()
 
         btnReturnHome.setOnClickListener {
@@ -107,11 +108,15 @@ class CategoryTotalActivity : AppCompatActivity()
     /**
      * Updates the total amount display at the top of the screen.
      * Calculates the sum of all filtered expenses.
+     * Format uses ZAR (South African Rand) currency with thousands separator.
+     * Example output: "R 2,847.35"
      */
     private fun updateTotalAmountDisplay()
     {
         val total = allExpenses.sumOf { it.amount }
-        tvTotalAmount.text = String.format(Locale.US, "$%.2f", total)
+        // Format with ZAR currency symbol, thousands separator, and two decimal places
+        val formattedTotal = String.format(Locale.US, "R %,.2f", total)
+        tvTotalAmount.text = formattedTotal
     }
 
     private fun loadData()
@@ -140,14 +145,7 @@ class CategoryTotalActivity : AppCompatActivity()
         {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long)
             {
-                if (position == 0)
-                {
-                    selectedCategoryId = -1
-                }
-                else
-                {
-                    selectedCategoryId = categories[position - 1].id
-                }
+                selectedCategoryId = if (position == 0) -1 else categories[position - 1].id
             }
 
             override fun onNothingSelected(parent: AdapterView<*>)

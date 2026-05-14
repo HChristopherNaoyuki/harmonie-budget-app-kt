@@ -1,4 +1,3 @@
-// app/kotlin+java/com/example/harmonie_budget_app_kt/viewmodels/GamificationViewModel.kt
 package com.example.harmonie_budget_app_kt.viewmodels
 
 import android.content.Context
@@ -95,10 +94,11 @@ class GamificationViewModel : ViewModel()
             val currentDate = parseDate(today)
             val daysDifference = daysBetween(lastDate, currentDate)
 
-            val newStreak = when
+            // Use when expression with daysDifference as the subject
+            val newStreak = when (daysDifference)
             {
-                daysDifference == 1 -> existingStreak.currentStreak + 1
-                daysDifference == 0 -> existingStreak.currentStreak
+                1 -> existingStreak.currentStreak + 1
+                0 -> existingStreak.currentStreak
                 else -> 1
             }
 

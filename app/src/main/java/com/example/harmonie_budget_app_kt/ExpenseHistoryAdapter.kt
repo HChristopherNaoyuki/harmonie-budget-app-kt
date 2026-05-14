@@ -1,7 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -20,7 +19,8 @@ import java.util.Locale
  * Part 3 Enhancement:
  * - Updated the visual format of each expense entry to match the mockup design.
  * - Each entry now shows: category, description, amount, and relative date.
- * - Format example: "Groceries - Whole Foods    -$87.42" with "Today" or date below.
+ * - Format example: "Groceries - Whole Foods    -R 87.42" with "Today" or date below.
+ * - Currency updated to ZAR (South African Rand).
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -55,9 +55,9 @@ class ExpenseHistoryAdapter(
      * Each entry displays:
      * - Primary text: Category and description (e.g., "Groceries - Whole Foods")
      * - Secondary text: Relative date (Today, Yesterday, or formatted date)
-     * - Amount: Negative amount in red (e.g., "-$87.42")
+     * - Amount: Negative amount in red with ZAR currency (e.g., "-R 87.42")
      */
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView)
     {
         val tvCategoryDescription: TextView = itemView.findViewById(R.id.tv_category_description)
         val tvDate: TextView = itemView.findViewById(R.id.tv_date)
@@ -86,8 +86,9 @@ class ExpenseHistoryAdapter(
         val relativeDate = getRelativeDateString(expense.date)
         holder.tvDate.text = relativeDate
 
-        // Format the amount as a negative value with dollar sign
-        val formattedAmount = String.format(Locale.US, "-$%.2f", expense.amount)
+        // Format the amount as a negative value with ZAR currency symbol and thousands separator
+        // Example output: "-R 87.42" or "-R 1,234.56"
+        val formattedAmount = String.format(Locale.US, "-R %,.2f", expense.amount)
         holder.tvAmount.text = formattedAmount
 
         // Set amount text color to red for visual emphasis of expenses
