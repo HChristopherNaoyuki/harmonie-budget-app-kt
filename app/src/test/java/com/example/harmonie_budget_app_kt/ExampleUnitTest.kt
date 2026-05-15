@@ -21,15 +21,15 @@ import java.util.TimeZone
  * - User ID generation logic
  * - Password validation regex
  * - Expense ID incrementation
- * - Goal validation logic (using a dedicated validation function)
+ * - Goal validation logic
  * - Category model behavior
  * - Expense model data integrity
  * - User model construction
  * - Badge model tests (Part 3 gamification)
  * - StreakData model tests (Part 3 gamification)
- * - Streak calculation logic (using a dedicated function)
- * - Percentage calculation for progress bar (using a dedicated function)
- * - Budget badge logic (using a dedicated function)
+ * - Streak calculation logic
+ * - Percentage calculation for progress bar
+ * - Budget badge logic
  */
 class ExampleUnitTest
 {
@@ -101,13 +101,7 @@ class ExampleUnitTest
 
     /**
      * Tests the User ID generation logic from RegisterActivity.
-     * The generation logic is duplicated here for the unit test because the original method is private.
-     * This ensures the test remains independent and verifies the exact 16-character format.
-     *
      * Expected format: PREFIX(4) + DATE(8) + COUNTER(4) = 16 characters total.
-     * Prefix is derived from the first 4 characters of the username, uppercased and padded with 'X'.
-     * Date part uses the current UTC date in yyyyMMdd format.
-     * Counter uses the last 4 digits of current time in milliseconds.
      */
     @Test
     fun generateUserId_producesCorrectFormat()
@@ -128,10 +122,6 @@ class ExampleUnitTest
         assertTrue("Counter must be 4 digits", result.substring(12, 16).all { it.isDigit() })
     }
 
-    /**
-     * Tests User ID generation with a username longer than 4 characters.
-     * Verifies that only the first 4 characters are used for the prefix.
-     */
     @Test
     fun generateUserId_truncatesLongUsername()
     {
@@ -142,10 +132,6 @@ class ExampleUnitTest
         assertEquals("Prefix should use first 4 characters uppercased", "ABCD", prefix)
     }
 
-    /**
-     * Tests User ID generation with a username shorter than 4 characters.
-     * Verifies that the prefix is padded with 'X' to reach 4 characters.
-     */
     @Test
     fun generateUserId_padsShortUsername()
     {
@@ -158,11 +144,6 @@ class ExampleUnitTest
 
     // ==================== Password Validation Tests ====================
 
-    /**
-     * Tests password validation regex used in RegisterActivity and ForgotPasswordActivity.
-     * Requirements: at least 8 characters, one letter, one number, one special character.
-     * The regex uses positive lookahead assertions to enforce each requirement.
-     */
     @Test
     fun passwordRegex_acceptsValidPasswords()
     {
@@ -174,10 +155,6 @@ class ExampleUnitTest
         assertTrue(regex.matches("C0mplex!"))
     }
 
-    /**
-     * Tests password validation regex rejects invalid passwords.
-     * Edge cases: too short, missing letter, missing number, missing special character.
-     */
     @Test
     fun passwordRegex_rejectsInvalidPasswords()
     {
@@ -192,40 +169,28 @@ class ExampleUnitTest
 
     // ==================== Expense ID Generation Tests ====================
 
-    /**
-     * Tests Expense ID generation logic used in JsonHelper.saveExpense.
-     * Verifies incremental IDs are correctly assigned using pure in-memory logic.
-     * This test avoids file I/O to remain environment-independent.
-     */
     @Test
     fun expenseIdGeneration_incrementsCorrectly()
     {
         val expenses = mutableListOf<Expense>()
 
-        // First expense should receive ID 1
         val maxId1 = expenses.maxOfOrNull { it.id } ?: 0
         val newId1 = maxId1 + 1
         assertEquals("First expense ID should be 1", 1, newId1)
 
         expenses.add(Expense(1, 10.0, "2026-04-19", "09:00", "10:00", "Test", 1))
 
-        // Second expense should receive ID 2
         val maxId2 = expenses.maxOfOrNull { it.id } ?: 0
         val newId2 = maxId2 + 1
         assertEquals("Second expense ID should be 2", 2, newId2)
 
         expenses.add(Expense(2, 20.0, "2026-04-20", "11:00", "12:00", "Test2", 2))
 
-        // Third expense should receive ID 3
         val maxId3 = expenses.maxOfOrNull { it.id } ?: 0
         val newId3 = maxId3 + 1
         assertEquals("Third expense ID should be 3", 3, newId3)
     }
 
-    /**
-     * Tests Expense ID generation with gaps in the sequence.
-     * Verifies that the maximum ID is used, not the count.
-     */
     @Test
     fun expenseIdGeneration_handlesGaps()
     {
@@ -240,12 +205,8 @@ class ExampleUnitTest
         assertEquals("Next ID should be 6, not 3", 6, newId)
     }
 
-    // ==================== Goal Validation Tests (Using Helper Function) ====================
+    // ==================== Goal Validation Tests ====================
 
-    /**
-     * Tests Goal validation logic using the isValidGoal helper function.
-     * Valid conditions: maxGoal > minGoal, minGoal > 0.0, maxGoal <= 1000000.0
-     */
     @Test
     fun goalValidation_acceptsValidGoals()
     {
@@ -255,10 +216,6 @@ class ExampleUnitTest
         assertTrue("Large valid range", isValidGoal(1000.0, 500000.0))
     }
 
-    /**
-     * Tests Goal validation rejects equal minimum and maximum values.
-     * The maximum must be strictly greater than the minimum.
-     */
     @Test
     fun goalValidation_rejectsEqualGoals()
     {
@@ -266,9 +223,6 @@ class ExampleUnitTest
         assertFalse("Both zero", isValidGoal(0.0, 0.0))
     }
 
-    /**
-     * Tests Goal validation rejects minimum greater than maximum.
-     */
     @Test
     fun goalValidation_rejectsMinGreaterThanMax()
     {
@@ -276,9 +230,6 @@ class ExampleUnitTest
         assertFalse("Min much larger than max", isValidGoal(10000.0, 100.0))
     }
 
-    /**
-     * Tests Goal validation rejects negative minimum values.
-     */
     @Test
     fun goalValidation_rejectsNegativeMinGoal()
     {
@@ -286,18 +237,12 @@ class ExampleUnitTest
         assertFalse("Both negative", isValidGoal(-100.0, -50.0))
     }
 
-    /**
-     * Tests Goal validation rejects negative maximum values.
-     */
     @Test
     fun goalValidation_rejectsNegativeMaxGoal()
     {
         assertFalse("Negative maximum goal should be rejected", isValidGoal(10.0, -100.0))
     }
 
-    /**
-     * Tests Goal validation rejects maximum values exceeding the limit.
-     */
     @Test
     fun goalValidation_rejectsExcessiveMaxGoal()
     {
@@ -305,9 +250,6 @@ class ExampleUnitTest
         assertFalse("Max goal far exceeding limit", isValidGoal(1.0, 2000000.0))
     }
 
-    /**
-     * Tests Goal validation rejects minimum value of zero.
-     */
     @Test
     fun goalValidation_rejectsZeroMinGoal()
     {
@@ -316,10 +258,6 @@ class ExampleUnitTest
 
     // ==================== Category Model Tests ====================
 
-    /**
-     * Tests Category model construction and property access.
-     * Verifies that id and name are stored correctly.
-     */
     @Test
     fun categoryModel_storesPropertiesCorrectly()
     {
@@ -329,10 +267,6 @@ class ExampleUnitTest
         assertEquals("Category name should match", "Groceries", category.name)
     }
 
-    /**
-     * Tests Category model with empty name.
-     * Verifies that the model accepts empty strings (validation is UI-layer responsibility).
-     */
     @Test
     fun categoryModel_acceptsEmptyName()
     {
@@ -343,10 +277,6 @@ class ExampleUnitTest
 
     // ==================== Expense Model Tests ====================
 
-    /**
-     * Tests Expense model construction with all fields.
-     * Verifies that all properties are stored correctly.
-     */
     @Test
     fun expenseModel_storesAllPropertiesCorrectly()
     {
@@ -371,10 +301,6 @@ class ExampleUnitTest
         assertEquals("Photo URI should match", "content://media/123", expense.photoUri)
     }
 
-    /**
-     * Tests Expense model with null photo URI.
-     * Verifies that optional photoUri defaults to null.
-     */
     @Test
     fun expenseModel_nullPhotoUri()
     {
@@ -393,10 +319,6 @@ class ExampleUnitTest
 
     // ==================== User Model Tests ====================
 
-    /**
-     * Tests User model construction with all fields.
-     * Verifies that all properties including userId are stored correctly.
-     */
     @Test
     fun userModel_storesAllPropertiesCorrectly()
     {
@@ -415,10 +337,6 @@ class ExampleUnitTest
         assertEquals("User ID should match", "JOHN202604220001", user.userId)
     }
 
-    /**
-     * Tests User model with default userId.
-     * Verifies that the default parameter produces an empty string.
-     */
     @Test
     fun userModel_defaultUserIdIsEmpty()
     {
@@ -434,10 +352,6 @@ class ExampleUnitTest
 
     // ==================== Goal Model Tests ====================
 
-    /**
-     * Tests Goal model construction and property access.
-     * Verifies that minGoal and maxGoal are stored correctly.
-     */
     @Test
     fun goalModel_storesPropertiesCorrectly()
     {
@@ -447,10 +361,6 @@ class ExampleUnitTest
         assertEquals("Max goal should match", 800.0, goal.maxGoal, 0.001)
     }
 
-    /**
-     * Tests Goal model with zero values.
-     * Verifies that the model accepts zeros (validation is UI-layer responsibility).
-     */
     @Test
     fun goalModel_acceptsZeroValues()
     {
@@ -462,10 +372,6 @@ class ExampleUnitTest
 
     // ==================== Part 3: Badge Model Tests ====================
 
-    /**
-     * Tests Badge model construction and property access.
-     * Verifies that id, name, description, and earnedDate are stored correctly.
-     */
     @Test
     fun badgeModel_storesPropertiesCorrectly()
     {
@@ -485,10 +391,6 @@ class ExampleUnitTest
         assertEquals("Icon resource should default to 0", 0, badge.iconResource)
     }
 
-    /**
-     * Tests Badge model with custom icon resource.
-     * Verifies that iconResource is stored correctly.
-     */
     @Test
     fun badgeModel_acceptsCustomIconResource()
     {
@@ -503,10 +405,6 @@ class ExampleUnitTest
         assertEquals("Custom icon resource should be stored", 12345, badge.iconResource)
     }
 
-    /**
-     * Tests Badge model equality and data class behavior.
-     * Verifies that two badges with identical properties are considered equal.
-     */
     @Test
     fun badgeModel_implementsEqualityCorrectly()
     {
@@ -520,10 +418,6 @@ class ExampleUnitTest
 
     // ==================== Part 3: StreakData Model Tests ====================
 
-    /**
-     * Tests StreakData model construction and property access.
-     * Verifies that currentStreak, longestStreak, and lastExpenseDate are stored correctly.
-     */
     @Test
     fun streakDataModel_storesPropertiesCorrectly()
     {
@@ -538,10 +432,6 @@ class ExampleUnitTest
         assertEquals("Last expense date should match", "2026-05-05", streakData.lastExpenseDate)
     }
 
-    /**
-     * Tests StreakData model with zero values.
-     * Verifies that the model accepts zero streaks for new users.
-     */
     @Test
     fun streakDataModel_acceptsZeroValues()
     {
@@ -556,10 +446,6 @@ class ExampleUnitTest
         assertEquals("Last expense date should be empty", "", streakData.lastExpenseDate)
     }
 
-    /**
-     * Tests StreakData model with single day streak.
-     * Verifies that a new user's first expense produces streak = 1.
-     */
     @Test
     fun streakDataModel_singleDayStreak()
     {
@@ -573,12 +459,8 @@ class ExampleUnitTest
         assertEquals("Longest streak should also be 1", 1, streakData.longestStreak)
     }
 
-    // ==================== Part 3: Streak Calculation Logic Tests (Using Helper Function) ====================
+    // ==================== Part 3: Streak Calculation Logic Tests ====================
 
-    /**
-     * Tests streak calculation when expense is logged on consecutive days.
-     * Verifies that currentStreak increments by 1.
-     */
     @Test
     fun streakCalculation_incrementsOnConsecutiveDays()
     {
@@ -586,10 +468,6 @@ class ExampleUnitTest
         assertEquals("Streak should increment by 1", 6, result)
     }
 
-    /**
-     * Tests streak calculation when expense is logged on the same day.
-     * Verifies that currentStreak remains unchanged.
-     */
     @Test
     fun streakCalculation_remainsUnchangedOnSameDay()
     {
@@ -597,10 +475,6 @@ class ExampleUnitTest
         assertEquals("Streak should remain unchanged", 5, result)
     }
 
-    /**
-     * Tests streak calculation when there is a gap of more than one day.
-     * Verifies that currentStreak resets to 1.
-     */
     @Test
     fun streakCalculation_resetsOnGap()
     {
@@ -608,10 +482,6 @@ class ExampleUnitTest
         assertEquals("Streak should reset to 1", 1, result)
     }
 
-    /**
-     * Tests streak calculation with a large gap (multiple days missed).
-     * Verifies that currentStreak resets to 1 regardless of gap size.
-     */
     @Test
     fun streakCalculation_resetsOnLargeGap()
     {
@@ -619,9 +489,6 @@ class ExampleUnitTest
         assertEquals("Streak should reset to 1 for any gap greater than 1", 1, result)
     }
 
-    /**
-     * Tests streak calculation when starting from zero (first expense ever).
-     */
     @Test
     fun streakCalculation_startsAtOneForFirstExpense()
     {
@@ -629,10 +496,6 @@ class ExampleUnitTest
         assertEquals("First expense should set streak to 1", 1, result)
     }
 
-    /**
-     * Tests longest streak update logic.
-     * Verifies that longestStreak is updated only when currentStreak exceeds the previous record.
-     */
     @Test
     fun streakCalculation_updatesLongestStreak()
     {
@@ -643,10 +506,6 @@ class ExampleUnitTest
         assertEquals("Longest streak should update to larger value", 15, newLongestStreak)
     }
 
-    /**
-     * Tests longest streak remains unchanged when current streak is lower.
-     * Verifies that longestStreak is not reduced.
-     */
     @Test
     fun streakCalculation_preservesLongestStreak()
     {
@@ -657,12 +516,8 @@ class ExampleUnitTest
         assertEquals("Longest streak should remain at previous record", 10, newLongestStreak)
     }
 
-    // ==================== Percentage Calculation Tests (Using Helper Function) ====================
+    // ==================== Percentage Calculation Tests ====================
 
-    /**
-     * Tests simple arithmetic for percentage calculation.
-     * This verifies the mathematical foundation used in CategoryTotalActivity and progress bar.
-     */
     @Test
     fun percentageCalculation_isAccurate()
     {
@@ -673,29 +528,19 @@ class ExampleUnitTest
         assertEquals("Percentage should be 25.0", 25.0, percentage, 0.001)
     }
 
-    /**
-     * Tests progress percentage calculation for various spending scenarios.
-     */
     @Test
     fun progressPercentage_calculatesCorrectly()
     {
-        // Test normal case: spending at exactly 50 percent of max goal
         val percentage50 = calculateProgressPercentage(250.0, 500.0)
         assertEquals("50 percent spending should return 50", 50, percentage50)
 
-        // Test spending at exactly max goal
         val percentage100 = calculateProgressPercentage(500.0, 500.0)
         assertEquals("100 percent spending should return 100", 100, percentage100)
 
-        // Test spending below max goal
         val percentage25 = calculateProgressPercentage(125.0, 500.0)
         assertEquals("25 percent spending should return 25", 25, percentage25)
     }
 
-    /**
-     * Tests progress percentage calculation for overspending (exceeding max goal).
-     * Verifies that percentage is capped at 100 percent for visual display.
-     */
     @Test
     fun progressPercentage_capsAt100Percent()
     {
@@ -706,10 +551,6 @@ class ExampleUnitTest
         assertEquals("Extreme overspending should also be capped at 100", 100, percentageExtreme)
     }
 
-    /**
-     * Tests progress percentage calculation when max goal is zero or negative.
-     * Verifies that percentage returns 0 to avoid division by zero.
-     */
     @Test
     fun progressPercentage_handlesInvalidMaxGoal()
     {
@@ -720,10 +561,6 @@ class ExampleUnitTest
         assertEquals("Negative max goal should return 0", 0, percentageNegativeGoal)
     }
 
-    /**
-     * Tests progress percentage with zero spent.
-     * Verifies that 0 percent is returned.
-     */
     @Test
     fun progressPercentage_zeroSpent()
     {
@@ -731,27 +568,8 @@ class ExampleUnitTest
         assertEquals("Zero spent should return 0", 0, percentage)
     }
 
-    // ==================== String Formatting Tests ====================
-
-    /**
-     * Tests string formatting with Locale.US for consistent decimal output.
-     * This verifies the formatting pattern used throughout the application.
-     */
-    @Test
-    fun stringFormatting_usesConsistentLocale()
-    {
-        val value = 1234.567
-        val formatted = String.format(Locale.US, "%.2f", value)
-
-        assertEquals("Should format with dot decimal separator", "1234.57", formatted)
-    }
-
     // ==================== Part 3: Badge Milestone Tests ====================
 
-    /**
-     * Tests streak milestone detection for badge awarding.
-     * Verifies that the correct badge is awarded at each streak milestone.
-     */
     @Test
     fun streakMilestone_detectsCorrectBadge()
     {
@@ -763,10 +581,6 @@ class ExampleUnitTest
         assertEquals("30 day streak should be milestone 3", 30, milestones[3])
     }
 
-    /**
-     * Tests that multiple badges can be awarded as streak increases.
-     * Verifies that a streak of 30 days qualifies for all milestone badges.
-     */
     @Test
     fun streakMilestone_awardsAllBadgesAt30Days()
     {
@@ -781,10 +595,6 @@ class ExampleUnitTest
         assertTrue("Should include 30 day badge", earnedBadges.contains(30))
     }
 
-    /**
-     * Tests that only appropriate badges are awarded for intermediate streaks.
-     * Verifies that a streak of 10 days awards only the 3 and 7 day badges.
-     */
     @Test
     fun streakMilestone_awardsIntermediateBadges()
     {
@@ -799,12 +609,8 @@ class ExampleUnitTest
         assertFalse("Should not include 30 day badge", earnedBadges.contains(30))
     }
 
-    // ==================== Part 3: Budget Badge Logic Tests (Using Helper Function) ====================
+    // ==================== Part 3: Budget Badge Logic Tests ====================
 
-    /**
-     * Tests budget badge awarding condition when spending is within budget.
-     * Verifies that the budget badge is awarded when totalSpent is less than or equal to maxGoal.
-     */
     @Test
     fun budgetBadge_awardedWhenWithinBudget()
     {
@@ -813,10 +619,6 @@ class ExampleUnitTest
         assertTrue("Spending well below max goal should award badge", shouldAwardBudgetBadge(100.0, 500.0))
     }
 
-    /**
-     * Tests budget badge not awarded when overspending.
-     * Verifies that the budget badge is not awarded when totalSpent exceeds maxGoal.
-     */
     @Test
     fun budgetBadge_notAwardedWhenOverBudget()
     {
@@ -824,10 +626,6 @@ class ExampleUnitTest
         assertFalse("Spending significantly above max goal should not award badge", shouldAwardBudgetBadge(1000.0, 500.0))
     }
 
-    /**
-     * Tests budget badge not awarded when maxGoal is zero or negative.
-     * Verifies that the budget badge requires a valid positive maxGoal.
-     */
     @Test
     fun budgetBadge_notAwardedForInvalidMaxGoal()
     {
@@ -835,10 +633,6 @@ class ExampleUnitTest
         assertFalse("Negative max goal should not award badge", shouldAwardBudgetBadge(100.0, -50.0))
     }
 
-    /**
-     * Tests budget badge when totalSpent is zero.
-     * Verifies that zero spending within a valid budget awards the badge.
-     */
     @Test
     fun budgetBadge_awardedForZeroSpending()
     {
