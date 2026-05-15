@@ -127,6 +127,7 @@ harmonie-budget-app-kt/
 │   │   │   ├── CategoryTotalActivity.kt 
 │   │   │   ├── DashboardActivity.kt
 │   │   │   ├── ExpenseActivity.kt
+│   │   │   ├── ExpenseHistoryAdapter.kt
 │   │   │   ├── ExpenseListActivity.kt
 │   │   │   ├── ForgotPasswordActivity.kt
 │   │   │   ├── GoalActivity.kt
@@ -193,7 +194,8 @@ harmonie-budget-app-kt/
 │       │   ├── fragment_budgets.xml 
 │       │   ├── fragment_home.xml 
 │       │   ├── fragment_more.xml 
-│       │   └── fragment_transactions.xml
+│       │   ├── fragment_transactions.xml 
+│       │   └── item_expense_history.xml
 │       │
 │       ├── mipmap/
 │       │   │
