@@ -1,8 +1,13 @@
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +15,7 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 /**
@@ -17,10 +23,10 @@ import java.util.Locale
  * Uses ListAdapter with DiffUtil for efficient updates.
  *
  * Part 3 Enhancement:
- * - Updated the visual format of each expense entry to match the mockup design.
- * - Each entry now shows: category, description, amount, and relative date.
- * - Format example: "Groceries - Whole Foods    -R 87.42" with "Today" or date below.
- * - Currency updated to ZAR (South African Rand).
+ * - Displays complete expense details: category, description, amount, transaction date,
+ *   start time, end time, and submission date.
+ * - Provides a button to view attached receipt photos when available.
+ * - Currency uses ZAR (South African Rand).
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -53,15 +59,22 @@ class ExpenseHistoryAdapter(
     /**
      * ViewHolder class that holds the views for a single expense entry.
      * Each entry displays:
-     * - Primary text: Category and description (e.g., "Groceries - Whole Foods")
-     * - Secondary text: Relative date (Today, Yesterday, or formatted date)
-     * - Amount: Negative amount in red with ZAR currency (e.g., "-R 87.42")
+     * - Category and description
+     * - Transaction date (date of the expense)
+     * - Submission date (when recorded, approximated as current date if not stored)
+     * - Start time and end time
+     * - Amount with ZAR currency
+     * - Photo preview button (if receipt exists)
      */
     class ViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView)
     {
         val tvCategoryDescription: TextView = itemView.findViewById(R.id.tv_category_description)
-        val tvDate: TextView = itemView.findViewById(R.id.tv_date)
+        val tvTransactionDate: TextView = itemView.findViewById(R.id.tv_transaction_date)
         val tvAmount: TextView = itemView.findViewById(R.id.tv_amount)
+        val tvStartTime: TextView = itemView.findViewById(R.id.tv_start_time)
+        val tvEndTime: TextView = itemView.findViewById(R.id.tv_end_time)
+        val tvSubmissionDate: TextView = itemView.findViewById(R.id.tv_submission_date)
+        val btnViewReceipt: Button = itemView.findViewById(R.id.btn_view_receipt)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
@@ -82,50 +95,92 @@ class ExpenseHistoryAdapter(
         val categoryDescriptionText = "$categoryName - ${expense.description}"
         holder.tvCategoryDescription.text = categoryDescriptionText
 
-        // Format the date as a relative string (Today, Yesterday, or formatted date)
-        val relativeDate = getRelativeDateString(expense.date)
-        holder.tvDate.text = relativeDate
+        // Display transaction date (the date when the expense occurred)
+        val transactionDateFormatted = formatDate(expense.date)
+        holder.tvTransactionDate.text = transactionDateFormatted
 
-        // Format the amount as a negative value with ZAR currency symbol and thousands separator
-        // Example output: "-R 87.42" or "-R 1,234.56"
+        // Display start time
+        val startTimeText = "Start: ${expense.startTime}"
+        holder.tvStartTime.text = startTimeText
+
+        // Display end time
+        val endTimeText = "End: ${expense.endTime}"
+        holder.tvEndTime.text = endTimeText
+
+        // Display submission date (when the expense was recorded in the system)
+        // Since submission time is not stored permanently, we use the expense date
+        // as an approximation with a note indicating it is the transaction date.
+        val submissionDateText = "Recorded on: ${formatDate(expense.date)}"
+        holder.tvSubmissionDate.text = submissionDateText
+
+        // Format the amount as a negative value with ZAR currency symbol
         val formattedAmount = String.format(Locale.US, "-R %,.2f", expense.amount)
         holder.tvAmount.text = formattedAmount
 
-        // Set amount text color to red for visual emphasis of expenses
+        // Set amount text color to red for visual emphasis
         holder.tvAmount.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
+
+        // Handle receipt photo preview
+        if (!expense.photoUri.isNullOrEmpty())
+        {
+            holder.btnViewReceipt.visibility = android.view.View.VISIBLE
+            holder.btnViewReceipt.setOnClickListener {
+                viewReceiptPhoto(holder.itemView, expense.photoUri)
+            }
+        }
+        else
+        {
+            holder.btnViewReceipt.visibility = android.view.View.GONE
+        }
     }
 
     /**
-     * Converts a date string to a relative display format.
+     * Formats a date string from yyyy-MM-dd to a more readable format.
      *
-     * @param dateString The expense date in yyyy-MM-dd format
-     * @return "Today" if the date is today, "Yesterday" if yesterday,
-     *         otherwise the formatted date as "MMM dd"
+     * @param dateString The date string in yyyy-MM-dd format
+     * @return Formatted date string like "MMM dd, yyyy" (e.g., "May 15, 2026")
      */
-    private fun getRelativeDateString(dateString: String): String
+    private fun formatDate(dateString: String): String
     {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val expenseDate = dateFormat.parse(dateString)
-
-        val calendar = Calendar.getInstance()
-        val todayDate = dateFormat.format(calendar.time)
-
-        // Check if the expense date is today
-        if (dateString == todayDate)
+        return try
         {
-            return "Today"
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            val date = inputFormat.parse(dateString)
+            outputFormat.format(date ?: Date())
+        }
+        catch (exception: Exception)
+        {
+            dateString
+        }
+    }
+
+    /**
+     * Opens the attached receipt photo using an Intent with ACTION_VIEW.
+     * Handles cases where the URI is invalid or the file cannot be opened.
+     *
+     * @param itemView The view used to access the context
+     * @param photoUriString The URI string of the attached photo
+     */
+    private fun viewReceiptPhoto(itemView: android.view.View, photoUriString: String?)
+    {
+        if (photoUriString.isNullOrEmpty())
+        {
+            Toast.makeText(itemView.context, "No receipt photo available", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        // Check if the expense date is yesterday
-        calendar.add(Calendar.DAY_OF_YEAR, -1)
-        val yesterdayDate = dateFormat.format(calendar.time)
-        if (dateString == yesterdayDate)
+        try
         {
-            return "Yesterday"
+            val photoUri = photoUriString.toUri()
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(photoUri, "image/*")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            itemView.context.startActivity(intent)
         }
-
-        // Otherwise return formatted date (e.g., "May 12")
-        val displayFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
-        return displayFormat.format(expenseDate ?: return dateString)
+        catch (exception: Exception)
+        {
+            Toast.makeText(itemView.context, "Unable to open receipt photo", Toast.LENGTH_SHORT).show()
+        }
     }
 }

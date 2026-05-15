@@ -24,6 +24,11 @@ import java.util.Locale
 /**
  * CategoryTotalActivity displays the expense history table with filtering capabilities.
  * Users can filter expenses by category and date, and view a scrollable list of results.
+ * Each expense entry shows complete details including transaction date, amount, time details,
+ * and provides a button to view attached receipt photos.
+ *
+ * The window supports vertical scrolling on smaller displays and the RETURN HOME button
+ * remains visible at the bottom of the Expense History section.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -79,17 +84,17 @@ class CategoryTotalActivity : AppCompatActivity()
 
     /**
      * Loads expenses and categories from the ViewModel.
-     * Sorts expenses chronologically and initializes the adapter.
+     * Sorts expenses in reverse chronological order (newest first) for better UX.
      */
     private fun loadData()
     {
         allExpenses = expenseViewModel.getExpenses(this, username)
         categories = categoryViewModel.getCategories(this, username)
 
-        // Sort expenses in chronological order (oldest first)
+        // Sort expenses in reverse chronological order (newest first based on date and start time)
         allExpenses = allExpenses.sortedWith(
-            compareBy<Expense> { it.date }
-                .thenBy { it.startTime }
+            compareByDescending<Expense> { it.date }
+                .thenByDescending { it.startTime }
         )
 
         // Initialize filtered expenses to all expenses
@@ -118,8 +123,7 @@ class CategoryTotalActivity : AppCompatActivity()
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long)
             {
                 selectedCategoryId = if (position == 0) -1 else categories[position - 1].id
-                // Do not auto-apply filter on selection change to improve performance.
-                // User must click "Apply Filter".
+                // Filter is applied only when user clicks "Apply Filter" button
             }
 
             override fun onNothingSelected(parent: AdapterView<*>)
@@ -163,10 +167,9 @@ class CategoryTotalActivity : AppCompatActivity()
         }
 
         btnReturnHome.setOnClickListener {
-            // Navigate back to the DashboardActivity and explicitly select the "Budgets" tab.
+            // Navigate back to the DashboardActivity and explicitly select the "Budgets" tab
             val intent = Intent(this, DashboardActivity::class.java)
             intent.putExtra("username", username)
-            // Pass an extra to tell the Dashboard which tab to select.
             intent.putExtra("selected_tab", R.id.nav_budgets)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
@@ -177,10 +180,11 @@ class CategoryTotalActivity : AppCompatActivity()
     /**
      * Filters the expenses based on the current selectedCategoryId and selectedDate.
      * Updates the RecyclerView and the total amount display.
+     * Filters are applied consistently across the entire expense history view.
      */
     private fun applyFilter()
     {
-        // Perform filtering logic
+        // Perform filtering logic on allExpenses
         val filtered = allExpenses.filter { expense ->
             var matches = true
 
@@ -190,7 +194,7 @@ class CategoryTotalActivity : AppCompatActivity()
                 matches = matches && (expense.categoryId == selectedCategoryId)
             }
 
-            // Check date filter
+            // Check date filter (filters by transaction date)
             selectedDate?.let { date ->
                 if (date.isNotEmpty())
                 {
