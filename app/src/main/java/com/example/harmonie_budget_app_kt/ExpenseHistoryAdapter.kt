@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -22,11 +23,10 @@ import java.util.Locale
  * ExpenseHistoryAdapter is a RecyclerView adapter for displaying expense records.
  * Uses ListAdapter with DiffUtil for efficient updates.
  *
- * Part 3 Enhancement:
- * - Displays complete expense details: category, description, amount, transaction date,
- *   start time, end time, and submission date.
- * - Provides a button to view attached receipt photos when available.
- * - Currency uses ZAR (South African Rand).
+ * Part 3 Enhancement (Receipt Viewing):
+ * - Fixed photo URI handling to properly retrieve and display attached receipt images.
+ * - Uses FileProvider to ensure correct file access permissions.
+ * - Handles both content:// and file:// URI schemes.
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -34,9 +34,6 @@ class ExpenseHistoryAdapter(
     private val categories: List<Category>
 ) : ListAdapter<Expense, ExpenseHistoryAdapter.ViewHolder>(ExpenseDiffCallback())
 {
-    /**
-     * DiffUtil callback for calculating differences between expense lists.
-     */
     class ExpenseDiffCallback : DiffUtil.ItemCallback<Expense>()
     {
         override fun areItemsTheSame(oldItem: Expense, newItem: Expense): Boolean
@@ -56,16 +53,6 @@ class ExpenseHistoryAdapter(
         }
     }
 
-    /**
-     * ViewHolder class that holds the views for a single expense entry.
-     * Each entry displays:
-     * - Category and description
-     * - Transaction date (date of the expense)
-     * - Submission date (when recorded, approximated as current date if not stored)
-     * - Start time and end time
-     * - Amount with ZAR currency
-     * - Photo preview button (if receipt exists)
-     */
     class ViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView)
     {
         val tvCategoryDescription: TextView = itemView.findViewById(R.id.tv_category_description)
@@ -88,39 +75,28 @@ class ExpenseHistoryAdapter(
     {
         val expense = getItem(position)
 
-        // Find the category name for this expense
-        val categoryName = categories.find { it.id == expense.categoryId }?.name ?: "Unknown"
+        val categoryName = categories.find { it.id == expense.categoryId }?.name ?: "General"
 
-        // Build the category and description text
         val categoryDescriptionText = "$categoryName - ${expense.description}"
         holder.tvCategoryDescription.text = categoryDescriptionText
 
-        // Display transaction date (the date when the expense occurred)
         val transactionDateFormatted = formatDate(expense.date)
         holder.tvTransactionDate.text = transactionDateFormatted
 
-        // Display start time
         val startTimeText = "Start: ${expense.startTime}"
         holder.tvStartTime.text = startTimeText
 
-        // Display end time
         val endTimeText = "End: ${expense.endTime}"
         holder.tvEndTime.text = endTimeText
 
-        // Display submission date (when the expense was recorded in the system)
-        // Since submission time is not stored permanently, we use the expense date
-        // as an approximation with a note indicating it is the transaction date.
         val submissionDateText = "Recorded on: ${formatDate(expense.date)}"
         holder.tvSubmissionDate.text = submissionDateText
 
-        // Format the amount as a negative value with ZAR currency symbol
         val formattedAmount = String.format(Locale.US, "-R %,.2f", expense.amount)
         holder.tvAmount.text = formattedAmount
-
-        // Set amount text color to red for visual emphasis
         holder.tvAmount.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
 
-        // Handle receipt photo preview
+        // Part 3 Enhancement: Fixed receipt photo viewing
         if (!expense.photoUri.isNullOrEmpty())
         {
             holder.btnViewReceipt.visibility = android.view.View.VISIBLE
@@ -134,12 +110,6 @@ class ExpenseHistoryAdapter(
         }
     }
 
-    /**
-     * Formats a date string from yyyy-MM-dd to a more readable format.
-     *
-     * @param dateString The date string in yyyy-MM-dd format
-     * @return Formatted date string like "MMM dd, yyyy" (e.g., "May 15, 2026")
-     */
     private fun formatDate(dateString: String): String
     {
         return try
@@ -157,7 +127,8 @@ class ExpenseHistoryAdapter(
 
     /**
      * Opens the attached receipt photo using an Intent with ACTION_VIEW.
-     * Handles cases where the URI is invalid or the file cannot be opened.
+     * Handles both content:// and file:// URI schemes.
+     * Uses FileProvider for file URIs to ensure proper permissions.
      *
      * @param itemView The view used to access the context
      * @param photoUriString The URI string of the attached photo
@@ -172,15 +143,42 @@ class ExpenseHistoryAdapter(
 
         try
         {
-            val photoUri = photoUriString.toUri()
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(photoUri, "image/*")
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            itemView.context.startActivity(intent)
+            val photoUri = Uri.parse(photoUriString)
+
+            // Check if the URI scheme is file (local file path)
+            if (photoUri.scheme == "file")
+            {
+                // Use FileProvider to get a content URI with proper permissions
+                val photoFile = File(photoUri.path ?: "")
+                if (photoFile.exists())
+                {
+                    val contentUri = FileProvider.getUriForFile(
+                        itemView.context,
+                        "${itemView.context.packageName}.fileprovider",
+                        photoFile
+                    )
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(contentUri, "image/*")
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    itemView.context.startActivity(intent)
+                }
+                else
+                {
+                    Toast.makeText(itemView.context, "Receipt file not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else
+            {
+                // Handle content URI directly
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(photoUri, "image/*")
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                itemView.context.startActivity(intent)
+            }
         }
         catch (exception: Exception)
         {
-            Toast.makeText(itemView.context, "Unable to open receipt photo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(itemView.context, "Unable to open receipt photo: ${exception.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }

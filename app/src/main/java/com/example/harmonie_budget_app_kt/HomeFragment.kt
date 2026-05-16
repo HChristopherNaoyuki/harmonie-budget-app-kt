@@ -38,6 +38,7 @@ import java.util.Locale
  * - Progress bar showing spending relative to monthly max goal
  * - Gamification badges and streaks
  * - Budget badge awarded when spending stays within budget
+ * - Default "General" category handling for orphaned expense category IDs
  * All user-facing text uses string resources.
  */
 class HomeFragment : Fragment()
@@ -52,7 +53,7 @@ class HomeFragment : Fragment()
     private lateinit var tvUserId: TextView
     private lateinit var btnCopyUserId: Button
 
-    // Gamification UI elements.
+    // Gamification UI elements
     private lateinit var tvCurrentStreak: TextView
     private lateinit var tvLongestStreak: TextView
     private lateinit var tvBadgesLabel: TextView
@@ -60,7 +61,7 @@ class HomeFragment : Fragment()
     private lateinit var progressBarSpending: ProgressBar
     private lateinit var tvProgressPercentage: TextView
 
-    // ViewModels.
+    // ViewModels
     private val homeViewModel = HomeViewModel()
     private val goalViewModel = GoalViewModel()
     private val userViewModel = UserViewModel()
@@ -77,7 +78,7 @@ class HomeFragment : Fragment()
 
         username = arguments?.getString("username") ?: "admin"
 
-        // Initialize existing UI elements.
+        // Initialize existing UI elements
         tvGreeting = view.findViewById(R.id.tv_greeting)
         tvCurrentDate = view.findViewById(R.id.tv_current_date)
         tvBudgetRange = view.findViewById(R.id.tv_budget_range)
@@ -87,7 +88,7 @@ class HomeFragment : Fragment()
         tvUserId = view.findViewById(R.id.tv_user_id)
         btnCopyUserId = view.findViewById(R.id.btn_copy_user_id)
 
-        // Initialize gamification UI elements.
+        // Initialize gamification UI elements
         tvCurrentStreak = view.findViewById(R.id.tv_current_streak)
         tvLongestStreak = view.findViewById(R.id.tv_longest_streak)
         tvBadgesLabel = view.findViewById(R.id.tv_badges_label)
@@ -95,7 +96,7 @@ class HomeFragment : Fragment()
         progressBarSpending = view.findViewById(R.id.progress_bar_spending)
         tvProgressPercentage = view.findViewById(R.id.tv_progress_percentage)
 
-        // Set up greeting and date using string resource.
+        // Set up greeting and date using string resource
         val greetingText = getString(R.string.greetings, username)
         tvGreeting.text = greetingText
 
@@ -103,7 +104,7 @@ class HomeFragment : Fragment()
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         tvCurrentDate.text = dateFormat.format(calendar.time)
 
-        // Set up User ID display and copy functionality.
+        // Set up User ID display and copy functionality
         val user = userViewModel.loadUser(requireContext(), username)
         tvUserId.text = user?.userId ?: username
 
@@ -111,15 +112,13 @@ class HomeFragment : Fragment()
             val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("User ID", tvUserId.text.toString())
             clipboard.setPrimaryClip(clip)
-            // Using string resource for copy confirmation.
             Toast.makeText(requireContext(), getString(R.string.user_id_copied), Toast.LENGTH_SHORT).show()
         }
 
-        // Load and display budget goals.
+        // Load and display budget goals
         val goal = goalViewModel.getGoal(requireContext(), username)
         if (goal != null)
         {
-            // Using string resource with placeholders for budget range.
             val budgetRangeText = getString(R.string.monthly_budget, goal.minGoal, goal.maxGoal)
             tvBudgetRange.text = budgetRangeText
         }
@@ -128,19 +127,19 @@ class HomeFragment : Fragment()
             tvBudgetRange.text = getString(R.string.set_monthly_goals)
         }
 
-        // Calculate and display total spending.
+        // Calculate and display total spending
         val currentMonthTotal = homeViewModel.getTotalBalance(requireContext(), username)
         val totalBalanceText = getString(R.string.total_balance, currentMonthTotal)
         tvTotalBalance.text = totalBalanceText
 
-        // Update progress bar.
+        // Update progress bar
         updateProgressBar(currentMonthTotal, goal)
 
-        // Determine and display budget status text.
+        // Determine and display budget status text
         val status = determineBudgetStatus(currentMonthTotal, goal)
         tvBudgetStatus.text = status
 
-        // Award budget badge if applicable.
+        // Award budget badge if applicable
         if (goal != null && currentMonthTotal <= goal.maxGoal && goal.maxGoal > 0)
         {
             gamificationViewModel.checkAndAwardBudgetBadge(
@@ -151,7 +150,7 @@ class HomeFragment : Fragment()
             )
         }
 
-        // Load expenses and build category breakdown.
+        // Load expenses and build category breakdown
         val expenses = homeViewModel.getAllExpenses(requireContext(), username)
         val categories = categoryViewModel.getCategories(requireContext(), username)
         val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
@@ -161,7 +160,7 @@ class HomeFragment : Fragment()
             calculateCategoryBreakdown(expenses, categoryMap)
         )
 
-        // Load gamification data.
+        // Load gamification data
         loadAndDisplayGamificationData()
 
         return view
@@ -180,11 +179,10 @@ class HomeFragment : Fragment()
             val percentage = ((spent / goal.maxGoal) * 100).coerceIn(0.0, 100.0)
             progressBarSpending.progress = percentage.toInt()
 
-            // Using string resource for progress percentage.
             val progressText = getString(R.string.progress_percentage, percentage.toInt())
             tvProgressPercentage.text = progressText
 
-            // Change progress bar color based on spending level.
+            // Change progress bar color based on spending level
             val colorRes = when
             {
                 percentage >= 100 -> android.R.color.holo_red_dark
@@ -205,7 +203,7 @@ class HomeFragment : Fragment()
      */
     private fun loadAndDisplayGamificationData()
     {
-        // Load and display streak data using string resources.
+        // Load and display streak data using string resources
         val streakData = gamificationViewModel.getStreakData(requireContext(), username)
         if (streakData != null)
         {
@@ -220,7 +218,7 @@ class HomeFragment : Fragment()
             tvLongestStreak.text = getString(R.string.longest_streak, 0)
         }
 
-        // Load and display badges.
+        // Load and display badges
         val badges = gamificationViewModel.getBadges(requireContext(), username)
         displayBadges(badges)
     }
@@ -251,7 +249,6 @@ class HomeFragment : Fragment()
         for (badge in badges)
         {
             val badgeView = TextView(requireContext())
-            // Using string resource with placeholder for badge name.
             val badgeDisplayText = getString(R.string.badge_display_format, badge.name)
             badgeView.text = badgeDisplayText
             badgeView.setTextColor(Color.WHITE)
@@ -299,6 +296,9 @@ class HomeFragment : Fragment()
 
     /**
      * Calculates category breakdown strings using actual category names.
+     * If an expense references a category that no longer exists (orphaned categoryId),
+     * the expense is classified under the default "General" category. This ensures
+     * that all expenses are displayed even if the original category was deleted.
      *
      * @param expenses List of expenses for the user
      * @param categoryMap Map of category ID to Category object
@@ -311,8 +311,8 @@ class HomeFragment : Fragment()
     {
         return expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
-                val categoryName = categoryMap[categoryId]?.name ?: "Category $categoryId"
-                // Using string resource with placeholders for category total.
+                // If categoryId is not found in the map, default to "General"
+                val categoryName = categoryMap[categoryId]?.name ?: "General"
                 getString(R.string.category_total, categoryName, list.sumOf { it.amount })
             }
     }

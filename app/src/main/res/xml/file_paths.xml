@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File paths configuration for FileProvider.
+    This allows the app to share receipt images with other apps
+    (e.g., image viewers) using content URIs instead of file URIs.
+
+    The paths reference the app's internal storage and cache directories
+    where receipt photos may be stored.
+-->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        Reference the app's internal storage directory.
+        This is where receipt photos are typically stored.
+    -->
+    <files-path
+        name="receipts"
+        path="/" />
+
+    <!--
+        Reference the app's cache directory.
+        Fallback location for temporary receipt files.
+    -->
+    <cache-path
+        name="cache_receipts"
+        path="/" />
+
+    <!--
+        Reference external storage for compatibility with older Android versions.
+    -->
+    <external-files-path
+        name="external_receipts"
+        path="/" />
+
+    <!--
+        Reference external cache directory.
+    -->
+    <external-cache-path
+        name="external_cache_receipts"
+        path="/" />
+</paths>

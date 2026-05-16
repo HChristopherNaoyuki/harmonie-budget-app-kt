@@ -10,37 +10,44 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Application-specific colors that remain identical in both themes -->
-    <!-- Light background used across all screens for minimal, clean look -->
     <color name="background_light">#F5F5F0</color>
-
-    <!-- Dark background for dark mode compatibility -->
     <color name="background_dark">#121212</color>
 
-    <!-- Surface colors for cards and containers -->
     <color name="surface_light">#FFFFFF</color>
     <color name="surface_dark">#1E1E1E</color>
 
-    <!-- Button accent colors matching the required black background standard -->
     <color name="accent_blue">#007AFF</color>
     <color name="accent_green">#34C759</color>
 
-    <!-- Standard button colors - black background with white text -->
+    <!-- Standard button colors -->
     <color name="button_background_standard">#000000</color>
     <color name="button_text_standard">#FFFFFF</color>
 
-    <!-- Secondary button colors for text buttons -->
     <color name="button_secondary_background">#F0F0F0</color>
     <color name="button_secondary_text">#8E8E93</color>
 
-    <!-- Primary text colors for excellent readability -->
+    <!--
+        Primary text colors - designed for high contrast in both themes.
+        These values are explicitly set to ensure visibility in dark mode.
+    -->
     <color name="text_primary_light">#1C1C1E</color>
     <color name="text_primary_dark">#FFFFFF</color>
 
-    <!-- Secondary text colors for hints and labels -->
+    <!--
+        Secondary text colors for hints and labels.
+        Light gray for light mode, lighter gray for dark mode.
+    -->
     <color name="text_secondary_light">#8E8E93</color>
-    <color name="text_secondary_dark">#A0A0A0</color>
+    <color name="text_secondary_dark">#B0B0B0</color>
+
+    <!--
+        Hint text colors for EditText placeholders.
+        Slightly lighter than secondary text for placeholder distinction.
+    -->
+    <color name="text_hint_light">#C7C7CC</color>
+    <color name="text_hint_dark">#808080</color>
 
     <!-- Border and stroke colors -->
     <color name="border_light">#E0E0E0</color>
-    <color name="border_dark">#333333</color>
+    <color name="border_dark">#444444</color>
 </resources>

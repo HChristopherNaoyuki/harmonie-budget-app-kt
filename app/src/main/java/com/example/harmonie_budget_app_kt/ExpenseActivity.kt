@@ -22,12 +22,10 @@ import java.util.Locale
 
 /**
  * ExpenseActivity handles the creation and submission of new expense records.
- * It provides input fields for amount, date, time range, description, and category selection.
- * Users may attach a photo receipt via the system gallery picker.
- * All data is validated and persisted through the ExpenseViewModel layer.
  *
- * Part 3 enhancement: After saving an expense, the gamification streak is updated.
- * This enables streak-based badges for consistent expense logging.
+ * Part 3 Enhancement (Time Validation):
+ * - Validates that end time is not before start time.
+ * - End time may be equal to start time, but never earlier.
  */
 class ExpenseActivity : AppCompatActivity()
 {
@@ -45,11 +43,6 @@ class ExpenseActivity : AppCompatActivity()
     private var selectedPhotoUri: Uri? = null
     private var username: String = "admin"
 
-    /**
-     * Activity result launcher for the photo picker.
-     * Uses the modern GetContent contract to open the system gallery.
-     * Stores the selected URI for attachment to the expense record.
-     */
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent())
     { uri: Uri? ->
         uri?.let { selectedUri: Uri ->
@@ -63,7 +56,6 @@ class ExpenseActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense)
 
-        // Initialize view references from the layout
         etAmount = findViewById(R.id.et_amount)
         etDate = findViewById(R.id.et_date)
         etStartTime = findViewById(R.id.et_start_time)
@@ -74,10 +66,8 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
 
-        // Retrieve username from intent for user-specific data isolation
         username = intent.getStringExtra("username") ?: "admin"
 
-        // RETURN HOME button handler
         btnReturnHome.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             intent.putExtra("username", username)
@@ -86,50 +76,45 @@ class ExpenseActivity : AppCompatActivity()
             finish()
         }
 
-        /*
-            The Spinner must display only the categories the user has created.
-            Categories are loaded directly from the JSON data file using JsonHelper.
-            This is the same data saved by CategoryActivity and is not hard-coded.
-            The list is built from the stored Category objects, ensuring the selection
-            is restricted to user-created categories only.
-        */
         val jsonHelper = JsonHelper()
         val categoryList = jsonHelper.loadCategories(this, username)
         val categories = categoryList.map { category: Category -> category.name }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+
+        // Add a default "General" category if no categories exist
+        val spinnerCategories = if (categories.isEmpty())
+        {
+            listOf("General")
+        }
+        else
+        {
+            categories
+        }
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerCategories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
-        // Date picker for the Date field
         etDate.setOnClickListener {
             showDatePicker()
         }
 
-        // Start Time picker for the Start Time field
         etStartTime.setOnClickListener {
             showTimePicker(etStartTime)
         }
 
-        // End Time picker for the End Time field
         etEndTime.setOnClickListener {
             showTimePicker(etEndTime)
         }
 
-        // Attach Photo button launches the modern gallery picker
         btnAttachPhoto.setOnClickListener {
             getContent.launch("image/*")
         }
 
-        // Submit button validates input and saves the expense
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
     }
 
-    /**
-     * Displays a DatePickerDialog configured with the current system date.
-     * The selected date is formatted as yyyy-MM-dd and inserted into the target EditText.
-     */
     private fun showDatePicker()
     {
         val calendar = Calendar.getInstance()
@@ -144,12 +129,6 @@ class ExpenseActivity : AppCompatActivity()
         ).show()
     }
 
-    /**
-     * Displays a TimePickerDialog configured with the current system time.
-     * The selected time is formatted as HH:mm and inserted into the target EditText.
-     *
-     * @param editText The EditText field to populate with the selected time
-     */
     private fun showTimePicker(editText: EditText)
     {
         val calendar = Calendar.getInstance()
@@ -165,14 +144,40 @@ class ExpenseActivity : AppCompatActivity()
     }
 
     /**
-     * Validates all required input fields and persists the expense record.
-     * Required fields: amount, date, description.
-     * The category selection is validated against the loaded category list.
-     * If validation passes, the expense is saved via the ViewModel and the activity finishes.
+     * Validates that the end time is not earlier than the start time.
+     * End time may be equal to start time.
      *
-     * Part 3 enhancement: After saving the expense, update the gamification streak
-     * to track consecutive days of expense logging for badge awarding.
+     * @param startTime The start time string in HH:mm format
+     * @param endTime The end time string in HH:mm format
+     * @return True if end time is not before start time, false otherwise
      */
+    private fun isTimeValid(startTime: String, endTime: String): Boolean
+    {
+        if (startTime.isEmpty() || endTime.isEmpty())
+        {
+            return true  // Empty times are handled by required field validation
+        }
+
+        val startParts = startTime.split(":")
+        val endParts = endTime.split(":")
+
+        if (startParts.size != 2 || endParts.size != 2)
+        {
+            return false
+        }
+
+        val startHour = startParts[0].toIntOrNull() ?: return false
+        val startMinute = startParts[1].toIntOrNull() ?: return false
+        val endHour = endParts[0].toIntOrNull() ?: return false
+        val endMinute = endParts[1].toIntOrNull() ?: return false
+
+        val startTotalMinutes = startHour * 60 + startMinute
+        val endTotalMinutes = endHour * 60 + endMinute
+
+        // End time must not be earlier than start time (can be equal)
+        return endTotalMinutes >= startTotalMinutes
+    }
+
     private fun saveExpense()
     {
         val amountStr = etAmount.text.toString().trim()
@@ -181,26 +186,41 @@ class ExpenseActivity : AppCompatActivity()
         val endTime = etEndTime.text.toString().trim()
         val description = etDescription.text.toString().trim()
 
-        // Validate required fields using string resource
         if (amountStr.isEmpty() || date.isEmpty() || description.isEmpty())
         {
             Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT).show()
             return
         }
 
+        // Part 3 Enhancement: Validate that end time is not before start time
+        if (!isTimeValid(startTime, endTime))
+        {
+            Toast.makeText(this, "End time cannot be earlier than start time", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val amount = amountStr.toDoubleOrNull() ?: 0.0
 
-        // Determine selected category ID from spinner position
         val jsonHelper = JsonHelper()
         val categoryList = jsonHelper.loadCategories(this, username)
+
+        // Determine selected category ID
         val selectedCategoryPosition = spinnerCategory.selectedItemPosition
         val categoryId = if (selectedCategoryPosition >= 0 && selectedCategoryPosition < categoryList.size)
         {
             categoryList[selectedCategoryPosition].id
         }
+        else if (categoryList.isNotEmpty())
+        {
+            // If a category exists but selection is invalid, use the first one
+            categoryList[0].id
+        }
         else
         {
-            0
+            // If no categories exist, create a default "General" category with ID 1
+            val generalCategory = Category(1, "General")
+            jsonHelper.saveCategory(this, username, generalCategory)
+            1
         }
 
         val expense = Expense(
@@ -216,10 +236,8 @@ class ExpenseActivity : AppCompatActivity()
 
         expenseViewModel.saveExpense(this, username, expense)
 
-        // Part 3 gamification: Update streak after successful expense save
         gamificationViewModel.updateStreak(this, username)
 
-        // Using string resource for success message
         Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()
         finish()
     }

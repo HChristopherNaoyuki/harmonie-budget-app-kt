@@ -24,11 +24,12 @@ import java.util.Locale
 /**
  * CategoryTotalActivity displays the expense history table with filtering capabilities.
  * Users can filter expenses by category and date, and view a scrollable list of results.
- * Each expense entry shows complete details including transaction date, amount, time details,
- * and provides a button to view attached receipt photos.
  *
- * The window supports vertical scrolling on smaller displays and the RETURN HOME button
- * remains visible at the bottom of the Expense History section.
+ * Part 3 Enhancements:
+ * - Displays a full expense history table with complete expense details
+ * - Includes filter functionality by category and date
+ * - RETURN HOME button navigates to the Budgets tab
+ * - Default "General" category handling for expenses with unknown category IDs
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
@@ -52,7 +53,7 @@ class CategoryTotalActivity : AppCompatActivity()
     private var categories: List<Category> = emptyList()
 
     // Filter state
-    private var selectedCategoryId: Int = -1 // -1 means all categories
+    private var selectedCategoryId: Int = -1  // -1 means all categories
     private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -91,7 +92,7 @@ class CategoryTotalActivity : AppCompatActivity()
         allExpenses = expenseViewModel.getExpenses(this, username)
         categories = categoryViewModel.getCategories(this, username)
 
-        // Sort expenses in reverse chronological order (newest first based on date and start time)
+        // Sort expenses in reverse chronological order (newest first)
         allExpenses = allExpenses.sortedWith(
             compareByDescending<Expense> { it.date }
                 .thenByDescending { it.startTime }
