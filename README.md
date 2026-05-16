@@ -108,7 +108,6 @@ harmonie-budget-app-kt/
 │   ├── manifests/
 │   │   └── AndroidManifest.xml
 │   ├── kotlin+java/
-│   │   │   
 │   │   ├── com.example.harmonie_budget_app_kt/
 │   │   │   ├── BudgetFragment.kt
 │   │   │   ├── BudgetsFragment.kt
@@ -126,7 +125,6 @@ harmonie-budget-app-kt/
 │   │   │   ├── MoreFragment.kt
 │   │   │   ├── RegisterActivity.kt
 │   │   │   ├── TransactionsFragment.kt
-│   │   │   │
 │   │   │   ├── models/
 │   │   │   │   ├── Badge.kt
 │   │   │   │   ├── Category.kt
@@ -134,7 +132,6 @@ harmonie-budget-app-kt/
 │   │   │   │   ├── Goal.kt
 │   │   │   │   ├── StreakData.kt
 │   │   │   │   └── User.kt
-│   │   │   │
 │   │   │   ├── viewmodels/
 │   │   │   │   ├── CategoryViewModel.kt
 │   │   │   │   ├── ExpenseViewModel.kt
@@ -143,31 +140,24 @@ harmonie-budget-app-kt/
 │   │   │   │   ├── HomeViewModel.kt
 │   │   │   │   ├── MoreViewModel.kt
 │   │   │   │   └── UserViewModel.kt
-│   │   │   │
 │   │   │   └── utils/
 │   │   │       └── JsonHelper.kt 
-│   │   │
 │   │   ├── com.example.harmonie_budget_app_kt (androidTest)/
 │   │   │   └── ExampleInstrumentedTest.kt
-│   │   │
 │   │   └── com.example.harmonie_budget_app_kt (test)/
 │   │       └── ExampleUnitTest.kt
-│   │
 │   └── res/
-│       │
 │       ├── menu/
 │       │   └── bottom_nav_menu.xml      
 │       ├── color/
 │       │   ├── nav_icon_color.xml 
 │       │   └── nav_text_color.xml     
-│       │
 │       ├── drawable/
 │       │   ├── ic_home.xml
 │       │   ├── ic_launcher_background.xml
 │       │   ├── ic_launcher_foreground.xml
 │       │   ├── rounded_button.xml
 │       │   └── spinner_dropdown_background.xml 
-│       │
 │       ├── layout/
 │       │   ├── activity_category.xml
 │       │   ├── activity_category_total.xml 
@@ -185,7 +175,6 @@ harmonie-budget-app-kt/
 │       │   ├── fragment_more.xml 
 │       │   ├── fragment_transactions.xml 
 │       │   └── item_expense_history.xml
-│       │
 │       ├── mipmap/
 │       │   │
 │       │   ├── ic_launcher/
@@ -195,7 +184,6 @@ harmonie-budget-app-kt/
 │       │   │   ├── ic_launcher.webp (xxhdpi)
 │       │   │   ├── ic_launcher.webp (xxxhdpi)
 │       │   │   └── ic_launcher.xml (anydpi-v26)
-│       │   │
 │       │   └── ic_launcher_round/
 │       │       ├── ic_launcher_round.webp (hdpi)
 │       │       ├── ic_launcher_round.webp (mdpi)
@@ -203,18 +191,16 @@ harmonie-budget-app-kt/
 │       │       ├── ic_launcher_round.webp (xxhdpi)
 │       │       ├── ic_launcher_round.webp (xxxhdpi)
 │       │       └── ic_launcher_round.xml (anydpi-v26)
-│       │
 │       ├── values/
 │       │   ├── themes/
 │       │   │   ├── themes.xml
 │       │   │   └── themes.xml (night)
 │       │   ├── colors.xml
 │       │   └── strings.xml
-│       │
 │       └── xml/
 │           ├── backup_rules.xml
-│           └── data_extraction_rules.xml
-│
+│           ├── data_extraction_rules.xml
+│           └── file_paths.xml
 └── Gradle Scripts/
     ├── build.gradle.kts (Project: harmonie-budget-app-kt)
     ├── build.gradle.kts (Module: app)
