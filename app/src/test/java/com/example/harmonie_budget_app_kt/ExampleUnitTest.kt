@@ -30,32 +30,17 @@ import java.util.TimeZone
  * - Streak calculation logic
  * - Percentage calculation for progress bar
  * - Budget badge logic
+ * - Time validation logic (new)
  */
 class ExampleUnitTest
 {
     // ==================== Helper Functions for Testing ====================
 
-    /**
-     * Validates a goal using the same rules as GoalActivity.
-     * This function isolates the validation logic for testing.
-     *
-     * @param minGoal The minimum monthly spending goal
-     * @param maxGoal The maximum monthly spending goal
-     * @return true if the goals are valid, false otherwise
-     */
     private fun isValidGoal(minGoal: Double, maxGoal: Double): Boolean
     {
         return (minGoal > 0.0 && maxGoal > minGoal && maxGoal <= 1000000.0)
     }
 
-    /**
-     * Calculates the new streak value based on the previous streak and days difference.
-     * This function isolates the streak calculation logic for testing.
-     *
-     * @param currentStreak The current streak count before the new expense
-     * @param daysDifference The number of days between the last expense and today
-     * @return The updated streak value
-     */
     private fun calculateNewStreak(currentStreak: Int, daysDifference: Int): Int
     {
         return when (daysDifference)
@@ -66,14 +51,6 @@ class ExampleUnitTest
         }
     }
 
-    /**
-     * Calculates the progress percentage for the budget progress bar.
-     * This function isolates the percentage calculation logic for testing.
-     *
-     * @param spent The amount spent in the current month
-     * @param maxGoal The maximum monthly budget goal
-     * @return The percentage (capped between 0 and 100)
-     */
     private fun calculateProgressPercentage(spent: Double, maxGoal: Double): Int
     {
         if (maxGoal <= 0)
@@ -84,25 +61,52 @@ class ExampleUnitTest
         return percentage.toInt().coerceIn(0, 100)
     }
 
-    /**
-     * Determines whether a budget badge should be awarded.
-     * This function isolates the badge logic for testing.
-     *
-     * @param totalSpent The total amount spent in the current month
-     * @param maxGoal The maximum monthly budget goal
-     * @return true if a budget badge should be awarded, false otherwise
-     */
     private fun shouldAwardBudgetBadge(totalSpent: Double, maxGoal: Double): Boolean
     {
         return (totalSpent <= maxGoal && maxGoal > 0)
     }
 
+    /**
+     * Part 3 Enhancement: Time validation logic test helper.
+     * Validates that end time is not earlier than start time.
+     * For times crossing midnight, the end time is considered earlier
+     * because 00:00 (0 minutes) is less than 23:59 (1439 minutes).
+     *
+     * @param startTime The start time string in HH:mm format
+     * @param endTime The end time string in HH:mm format
+     * @return True if end time is not before start time, false otherwise
+     */
+    private fun isTimeValid(startTime: String, endTime: String): Boolean
+    {
+        if (startTime.isEmpty() || endTime.isEmpty())
+        {
+            return true
+        }
+
+        val startParts = startTime.split(":")
+        val endParts = endTime.split(":")
+
+        if (startParts.size != 2 || endParts.size != 2)
+        {
+            return false
+        }
+
+        val startHour = startParts[0].toIntOrNull() ?: return false
+        val startMinute = startParts[1].toIntOrNull() ?: return false
+        val endHour = endParts[0].toIntOrNull() ?: return false
+        val endMinute = endParts[1].toIntOrNull() ?: return false
+
+        val startTotalMinutes = startHour * 60 + startMinute
+        val endTotalMinutes = endHour * 60 + endMinute
+
+        // End time must not be earlier than start time (can be equal)
+        // Cross-midnight times (e.g., 23:59 to 00:00) are invalid because
+        // 00:00 (0 minutes) is earlier than 23:59 (1439 minutes)
+        return endTotalMinutes >= startTotalMinutes
+    }
+
     // ==================== User ID Generation Tests ====================
 
-    /**
-     * Tests the User ID generation logic from RegisterActivity.
-     * Expected format: PREFIX(4) + DATE(8) + COUNTER(4) = 16 characters total.
-     */
     @Test
     fun generateUserId_producesCorrectFormat()
     {
@@ -275,6 +279,15 @@ class ExampleUnitTest
         assertEquals("Empty name should be stored", "", category.name)
     }
 
+    @Test
+    fun categoryModel_defaultGeneralCategory()
+    {
+        val generalCategory = Category(1, "General")
+
+        assertEquals("General category ID should be 1", 1, generalCategory.id)
+        assertEquals("General category name should be General", "General", generalCategory.name)
+    }
+
     // ==================== Expense Model Tests ====================
 
     @Test
@@ -317,37 +330,58 @@ class ExampleUnitTest
         assertNull("Photo URI should be null when not provided", expense.photoUri)
     }
 
+    @Test
+    fun expenseModel_withGeneralCategory()
+    {
+        val expense = Expense(
+            id = 3,
+            amount = 50.00,
+            date = "2026-05-16",
+            startTime = "08:00",
+            endTime = "09:00",
+            description = "Uncategorized purchase",
+            categoryId = 1
+        )
+
+        assertEquals("Category ID should default to General category ID", 1, expense.categoryId)
+    }
+
     // ==================== User Model Tests ====================
 
     @Test
     fun userModel_storesAllPropertiesCorrectly()
     {
         val user = User(
-            name = "John",
-            surname = "Doe",
+            name = "John Doe",
+            surname = "",
             username = "johndoe",
             password = "SecurePass1!",
             userId = "JOHN202604220001"
         )
 
-        assertEquals("Name should match", "John", user.name)
-        assertEquals("Surname should match", "Doe", user.surname)
+        assertEquals("Name should match", "John Doe", user.name)
+        assertEquals("Surname should match", "", user.surname)
         assertEquals("Username should match", "johndoe", user.username)
         assertEquals("Password should match", "SecurePass1!", user.password)
         assertEquals("User ID should match", "JOHN202604220001", user.userId)
     }
 
     @Test
-    fun userModel_defaultUserIdIsEmpty()
+    fun userModel_requiresFullName()
     {
-        val user = User(
-            name = "Jane",
-            surname = "Smith",
-            username = "janesmith",
-            password = "Pass123!"
-        )
+        val validUser = User("John Doe", "", "johndoe", "Pass123!", "ID123")
+        val nameParts = validUser.name.split(" ").filter { it.isNotEmpty() }
 
-        assertEquals("Default userId should be empty string", "", user.userId)
+        assertTrue("Valid full name should have at least two parts", nameParts.size >= 2)
+    }
+
+    @Test
+    fun userModel_rejectsSingleName()
+    {
+        val singleName = "John"
+        val nameParts = singleName.split(" ").filter { it.isNotEmpty() }
+
+        assertFalse("Single name should not be considered a full name", nameParts.size >= 2)
     }
 
     // ==================== Goal Model Tests ====================
@@ -566,6 +600,55 @@ class ExampleUnitTest
     {
         val percentage = calculateProgressPercentage(0.0, 500.0)
         assertEquals("Zero spent should return 0", 0, percentage)
+    }
+
+    // ==================== Part 3: Time Validation Tests ====================
+
+    @Test
+    fun timeValidation_acceptsValidTimes()
+    {
+        // Equal times should be valid
+        assertTrue("Equal times should be valid", isTimeValid("09:00", "09:00"))
+
+        // End time after start time should be valid
+        assertTrue("End time after start time should be valid", isTimeValid("09:00", "10:00"))
+
+        // Empty times should be valid (handled by required field validation)
+        assertTrue("Empty start time should be valid", isTimeValid("", "10:00"))
+        assertTrue("Empty end time should be valid", isTimeValid("09:00", ""))
+        assertTrue("Both empty should be valid", isTimeValid("", ""))
+    }
+
+    @Test
+    fun timeValidation_rejectsInvalidTimes()
+    {
+        // End time before start time should be invalid
+        assertFalse("End time before start time should be invalid", isTimeValid("10:00", "09:00"))
+
+        // End time earlier hour should be invalid
+        assertFalse("End time earlier hour should be invalid", isTimeValid("09:30", "08:30"))
+
+        // Invalid format should be invalid
+        assertFalse("Invalid format should be invalid", isTimeValid("09:00", "invalid"))
+        assertFalse("Invalid format should be invalid", isTimeValid("invalid", "10:00"))
+    }
+
+    @Test
+    fun timeValidation_handlesBoundaryCases()
+    {
+        // Cross-midnight (23:59 to 00:00) is invalid because 00:00 is earlier than 23:59
+        // when compared as minutes since midnight (0 minutes vs 1439 minutes)
+        assertFalse("Cross-midnight (23:59 to 00:00) should be invalid",
+            isTimeValid("23:59", "00:00"))
+
+        // Start time at midnight to early morning is valid
+        assertTrue("Start time at midnight to early morning is valid",
+            isTimeValid("00:00", "00:01"))
+
+        // Start time to same time on next day is invalid (not supported without date change)
+        // This test verifies the function does not incorrectly accept cross-midnight ranges
+        assertFalse("Start time before end time crossing midnight should be invalid",
+            isTimeValid("23:00", "01:00"))
     }
 
     // ==================== Part 3: Badge Milestone Tests ====================

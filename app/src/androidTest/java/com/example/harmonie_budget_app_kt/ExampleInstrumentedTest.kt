@@ -20,18 +20,13 @@ import java.io.File
  * Tests cover core data persistence, user creation, expense storage, category management,
  * goal handling, export operations, reset functionality, and Part 3 gamification features
  * (badges and streak data persistence).
- * All tests are written in Allman style with detailed professional comments.
  *
- * Note: All user test data uses full names (first name and surname) to satisfy the
+ * All tests use valid full names (first name and surname) to satisfy the
  * full name validation requirement in JsonHelper.saveUser().
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest
 {
-    /**
-     * Verifies the app context is correctly loaded.
-     * This is the default instrumented test provided by the template.
-     */
     @Test
     fun useAppContext()
     {
@@ -47,7 +42,6 @@ class ExampleInstrumentedTest
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val jsonHelper = JsonHelper()
 
-        // Using full name (first name and surname) to pass validation
         val testUser = User(
             name = "Test User",
             surname = "",
@@ -63,6 +57,31 @@ class ExampleInstrumentedTest
         assertEquals("User ID should match", "TEST202604190001", loadedUser?.userId)
         assertEquals("Username should match", "testuser123", loadedUser?.username)
         assertEquals("Name should match", "Test User", loadedUser?.name)
+    }
+
+    @Test
+    fun userCreation_rejectsSingleName()
+    {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val jsonHelper = JsonHelper()
+
+        val invalidUser = User(
+            name = "Single",
+            surname = "",
+            username = "singleuser",
+            password = "Test123!",
+            userId = "SINGLE202604190001"
+        )
+
+        try
+        {
+            jsonHelper.saveUser(context, invalidUser)
+            fail("Expected IllegalArgumentException for single name was not thrown")
+        }
+        catch (exception: IllegalArgumentException)
+        {
+            assertEquals("Please enter your full name (first name and surname)", exception.message)
+        }
     }
 
     @Test
@@ -83,11 +102,9 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "updatetestuser"
 
-        // Using full name (first name and surname) to pass validation
         val originalUser = User("Original Name", "", username, "OldPass1!", "ORIG202604220001")
         jsonHelper.saveUser(context, originalUser)
 
-        // Using full name (first name and surname) to pass validation
         val updatedUser = User("Updated Name", "", username, "NewPass1!", "UPDT202604220001")
         jsonHelper.saveUser(context, updatedUser)
 
@@ -107,7 +124,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "testuser123"
 
-        // Ensure user exists with valid full name before testing expenses
         val testUser = User("Test User", "", username, "Test123!", "TEST202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -134,7 +150,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "testuser456"
 
-        // Ensure user exists with valid full name before testing expenses
         val testUser = User("Test User", "", username, "Test123!", "TEST202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -166,6 +181,33 @@ class ExampleInstrumentedTest
         assertEquals("Photo URI should match", "content://media/456", loaded.photoUri)
     }
 
+    @Test
+    fun expenseStorage_withGeneralCategory()
+    {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val jsonHelper = JsonHelper()
+        val username = "generalcatuser"
+
+        val testUser = User("Test User", "", username, "Test123!", "GEN202604190001")
+        jsonHelper.saveUser(context, testUser)
+
+        val expense = Expense(
+            id = 0,
+            amount = 50.00,
+            date = "2026-05-16",
+            startTime = "08:00",
+            endTime = "09:00",
+            description = "Uncategorized purchase",
+            categoryId = 1
+        )
+
+        jsonHelper.saveExpense(context, username, expense)
+        val loadedExpenses = jsonHelper.loadExpenses(context, username)
+
+        assertEquals("Should have 1 expense", 1, loadedExpenses.size)
+        assertEquals("Category ID should be 1 (General)", 1, loadedExpenses[0].categoryId)
+    }
+
     // ==================== Goal Tests ====================
 
     @Test
@@ -175,7 +217,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "testuser123"
 
-        // Ensure user exists with valid full name before testing goals
         val testUser = User("Test User", "", username, "Test123!", "TEST202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -210,7 +251,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "testuser123"
 
-        // Ensure user exists with valid full name before testing categories
         val testUser = User("Test User", "", username, "Test123!", "TEST202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -242,6 +282,25 @@ class ExampleInstrumentedTest
         assertTrue("Should return empty list", loadedCategories.isEmpty())
     }
 
+    @Test
+    fun categoryStorage_defaultGeneralCategory()
+    {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val jsonHelper = JsonHelper()
+        val username = "generaluser"
+
+        val testUser = User("Test User", "", username, "Test123!", "GEN202604190001")
+        jsonHelper.saveUser(context, testUser)
+
+        val generalCategory = Category(1, "General")
+        jsonHelper.saveCategory(context, username, generalCategory)
+
+        val loadedCategories = jsonHelper.loadCategories(context, username)
+
+        assertEquals("Should have 1 category", 1, loadedCategories.size)
+        assertEquals("Category name should be General", "General", loadedCategories[0].name)
+    }
+
     // ==================== Part 3: Badge Tests ====================
 
     @Test
@@ -251,7 +310,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "badgetestuser"
 
-        // Ensure user exists with valid full name before testing badges
         val testUser = User("Test User", "", username, "Test123!", "BADGE202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -284,7 +342,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "badgeduplicatetest"
 
-        // Ensure user exists with valid full name before testing badges
         val testUser = User("Test User", "", username, "Test123!", "DUPE202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -322,7 +379,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "streaktestuser"
 
-        // Ensure user exists with valid full name before testing streak data
         val testUser = User("Test User", "", username, "Test123!", "STREAK202604190001")
         jsonHelper.saveUser(context, testUser)
 
@@ -365,7 +421,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "exporttestuser"
 
-        // Using full name (first name and surname) to pass validation
         val user = User("Export User", "", username, "Pass123!", "EXPO202604220001")
         jsonHelper.saveUser(context, user)
         jsonHelper.saveExpense(context, username, Expense(0, 50.0, "2026-04-22", "10:00", "11:00", "Test", 1))
@@ -397,7 +452,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "resettestuser"
 
-        // Using full name (first name and surname) to pass validation
         val user = User("Reset User", "", username, "Pass123!", "RESET202604220001")
         jsonHelper.saveUser(context, user)
         jsonHelper.saveExpense(context, username, Expense(0, 50.0, "2026-04-22", "10:00", "11:00", "Test", 1))
@@ -427,8 +481,6 @@ class ExampleInstrumentedTest
         val jsonHelper = JsonHelper()
         val username = "accountpreservetest"
 
-        // CORRECTED: Using full name (first name and surname) to pass validation
-        // Previously failed because "Account" is a single name
         val user = User("Account User", "", username, "KeepPass1!", "ACCT202604220001")
         jsonHelper.saveUser(context, user)
         jsonHelper.saveExpense(context, username, Expense(0, 50.0, "2026-04-22", "10:00", "11:00", "Test", 1))
