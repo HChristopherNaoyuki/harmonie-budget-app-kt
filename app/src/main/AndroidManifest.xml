@@ -2,7 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.harmonie_budget_app_kt">
 
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!--
+        READ_MEDIA_IMAGES permission is used for the optional receipt photo picker
+        in ExpenseActivity. This is a valid core use case for a personal budget tracker
+        that allows users to attach photos of receipts.
+
+        For Android 14 (API 34) and higher, the system automatically handles
+        Selected Photos Access when using the standard gallery picker
+        (ActivityResultContracts.GetContent). No additional permission handling
+        is required as the user selects specific photos at the time of attachment.
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+        android:maxSdkVersion="33" />
+
+    <!-- For Android 13 and below, use the legacy permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +25,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HarmonieBudget">
+        android:theme="@style/Theme.HarmonieBudget"
+        android:requestLegacyExternalStorage="true">
 
         <!-- FileProvider for sharing receipt images securely -->
         <provider

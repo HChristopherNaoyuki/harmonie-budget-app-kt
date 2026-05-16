@@ -20,13 +20,6 @@ import com.example.harmonie_budget_app_kt.viewmodels.GamificationViewModel
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * ExpenseActivity handles the creation and submission of new expense records.
- *
- * Part 3 Enhancement (Time Validation):
- * - Validates that end time is not before start time.
- * - End time may be equal to start time, but never earlier.
- */
 class ExpenseActivity : AppCompatActivity()
 {
     private val expenseViewModel = ExpenseViewModel()
@@ -79,18 +72,9 @@ class ExpenseActivity : AppCompatActivity()
         val jsonHelper = JsonHelper()
         val categoryList = jsonHelper.loadCategories(this, username)
         val categories = categoryList.map { category: Category -> category.name }
+            .ifEmpty { listOf("General") }
 
-        // Add a default "General" category if no categories exist
-        val spinnerCategories = if (categories.isEmpty())
-        {
-            listOf("General")
-        }
-        else
-        {
-            categories
-        }
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerCategories)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
@@ -143,19 +127,11 @@ class ExpenseActivity : AppCompatActivity()
         ).show()
     }
 
-    /**
-     * Validates that the end time is not earlier than the start time.
-     * End time may be equal to start time.
-     *
-     * @param startTime The start time string in HH:mm format
-     * @param endTime The end time string in HH:mm format
-     * @return True if end time is not before start time, false otherwise
-     */
     private fun isTimeValid(startTime: String, endTime: String): Boolean
     {
         if (startTime.isEmpty() || endTime.isEmpty())
         {
-            return true  // Empty times are handled by required field validation
+            return true
         }
 
         val startParts = startTime.split(":")
@@ -174,7 +150,6 @@ class ExpenseActivity : AppCompatActivity()
         val startTotalMinutes = startHour * 60 + startMinute
         val endTotalMinutes = endHour * 60 + endMinute
 
-        // End time must not be earlier than start time (can be equal)
         return endTotalMinutes >= startTotalMinutes
     }
 
@@ -192,7 +167,6 @@ class ExpenseActivity : AppCompatActivity()
             return
         }
 
-        // Part 3 Enhancement: Validate that end time is not before start time
         if (!isTimeValid(startTime, endTime))
         {
             Toast.makeText(this, "End time cannot be earlier than start time", Toast.LENGTH_SHORT).show()
@@ -204,7 +178,6 @@ class ExpenseActivity : AppCompatActivity()
         val jsonHelper = JsonHelper()
         val categoryList = jsonHelper.loadCategories(this, username)
 
-        // Determine selected category ID
         val selectedCategoryPosition = spinnerCategory.selectedItemPosition
         val categoryId = if (selectedCategoryPosition >= 0 && selectedCategoryPosition < categoryList.size)
         {
@@ -212,12 +185,10 @@ class ExpenseActivity : AppCompatActivity()
         }
         else if (categoryList.isNotEmpty())
         {
-            // If a category exists but selection is invalid, use the first one
             categoryList[0].id
         }
         else
         {
-            // If no categories exist, create a default "General" category with ID 1
             val generalCategory = Category(1, "General")
             jsonHelper.saveCategory(this, username, generalCategory)
             1
@@ -235,7 +206,6 @@ class ExpenseActivity : AppCompatActivity()
         )
 
         expenseViewModel.saveExpense(this, username, expense)
-
         gamificationViewModel.updateStreak(this, username)
 
         Toast.makeText(this, getString(R.string.expense_submitted), Toast.LENGTH_SHORT).show()

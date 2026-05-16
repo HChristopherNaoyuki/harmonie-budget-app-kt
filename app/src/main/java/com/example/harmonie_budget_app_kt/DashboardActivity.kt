@@ -15,29 +15,24 @@ class DashboardActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // Username is received from LoginActivity or RegisterActivity
         username = intent.getStringExtra("username")
             ?: throw IllegalStateException("Username must be passed to DashboardActivity")
 
         bottomNav = findViewById(R.id.bottom_nav)
 
-        // Determine which tab to load initially.
-        // Default to Home if no specific tab is requested.
         val selectedTabId = intent.getIntExtra("selected_tab", R.id.nav_home)
 
-        // Only load the initial fragment on first creation
         if (savedInstanceState == null)
         {
             when (selectedTabId)
             {
-                R.id.nav_home -> loadFragment(HomeFragment.newInstance(username))
-                R.id.nav_budget -> loadFragment(BudgetFragment.newInstance(username))
-                R.id.nav_transactions -> loadFragment(TransactionsFragment.newInstance(username))
-                R.id.nav_budgets -> loadFragment(BudgetsFragment.newInstance(username))
-                R.id.nav_more -> loadFragment(MoreFragment.newInstance(username))
-                else -> loadFragment(HomeFragment.newInstance(username))
+                R.id.nav_home -> loadFragment(createHomeFragment())
+                R.id.nav_budget -> loadFragment(createBudgetFragment())
+                R.id.nav_transactions -> loadFragment(createTransactionsFragment())
+                R.id.nav_budgets -> loadFragment(createBudgetsFragment())
+                R.id.nav_more -> loadFragment(createMoreFragment())
+                else -> loadFragment(createHomeFragment())
             }
-            // Set the selected item in the bottom navigation view
             bottomNav.selectedItemId = selectedTabId
         }
 
@@ -46,32 +41,77 @@ class DashboardActivity : AppCompatActivity()
             {
                 R.id.nav_home ->
                 {
-                    loadFragment(HomeFragment.newInstance(username))
+                    loadFragment(createHomeFragment())
                     true
                 }
                 R.id.nav_budget ->
                 {
-                    loadFragment(BudgetFragment.newInstance(username))
+                    loadFragment(createBudgetFragment())
                     true
                 }
                 R.id.nav_transactions ->
                 {
-                    loadFragment(TransactionsFragment.newInstance(username))
+                    loadFragment(createTransactionsFragment())
                     true
                 }
                 R.id.nav_budgets ->
                 {
-                    loadFragment(BudgetsFragment.newInstance(username))
+                    loadFragment(createBudgetsFragment())
                     true
                 }
                 R.id.nav_more ->
                 {
-                    loadFragment(MoreFragment.newInstance(username))
+                    loadFragment(createMoreFragment())
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun createHomeFragment(): Fragment
+    {
+        val fragment = HomeFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
+    }
+
+    private fun createBudgetFragment(): Fragment
+    {
+        val fragment = BudgetFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
+    }
+
+    private fun createTransactionsFragment(): Fragment
+    {
+        val fragment = TransactionsFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
+    }
+
+    private fun createBudgetsFragment(): Fragment
+    {
+        val fragment = BudgetsFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
+    }
+
+    private fun createMoreFragment(): Fragment
+    {
+        val fragment = MoreFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
     }
 
     private fun loadFragment(fragment: Fragment)

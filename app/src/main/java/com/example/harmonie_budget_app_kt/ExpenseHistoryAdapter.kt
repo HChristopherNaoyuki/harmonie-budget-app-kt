@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,17 +20,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-/**
- * ExpenseHistoryAdapter is a RecyclerView adapter for displaying expense records.
- * Uses ListAdapter with DiffUtil for efficient updates.
- *
- * Part 3 Enhancement (Receipt Viewing):
- * - Fixed photo URI handling to properly retrieve and display attached receipt images.
- * - Uses FileProvider to ensure correct file access permissions.
- * - Handles both content:// and file:// URI schemes.
- *
- * @param categories The list of Category objects for resolving category names
- */
 class ExpenseHistoryAdapter(
     private val categories: List<Category>
 ) : ListAdapter<Expense, ExpenseHistoryAdapter.ViewHolder>(ExpenseDiffCallback())
@@ -96,7 +86,6 @@ class ExpenseHistoryAdapter(
         holder.tvAmount.text = formattedAmount
         holder.tvAmount.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
 
-        // Part 3 Enhancement: Fixed receipt photo viewing
         if (!expense.photoUri.isNullOrEmpty())
         {
             holder.btnViewReceipt.visibility = android.view.View.VISIBLE
@@ -125,14 +114,6 @@ class ExpenseHistoryAdapter(
         }
     }
 
-    /**
-     * Opens the attached receipt photo using an Intent with ACTION_VIEW.
-     * Handles both content:// and file:// URI schemes.
-     * Uses FileProvider for file URIs to ensure proper permissions.
-     *
-     * @param itemView The view used to access the context
-     * @param photoUriString The URI string of the attached photo
-     */
     private fun viewReceiptPhoto(itemView: android.view.View, photoUriString: String?)
     {
         if (photoUriString.isNullOrEmpty())
@@ -143,12 +124,10 @@ class ExpenseHistoryAdapter(
 
         try
         {
-            val photoUri = Uri.parse(photoUriString)
+            val photoUri = photoUriString.toUri()
 
-            // Check if the URI scheme is file (local file path)
             if (photoUri.scheme == "file")
             {
-                // Use FileProvider to get a content URI with proper permissions
                 val photoFile = File(photoUri.path ?: "")
                 if (photoFile.exists())
                 {
@@ -169,7 +148,6 @@ class ExpenseHistoryAdapter(
             }
             else
             {
-                // Handle content URI directly
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(photoUri, "image/*")
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -178,7 +156,7 @@ class ExpenseHistoryAdapter(
         }
         catch (exception: Exception)
         {
-            Toast.makeText(itemView.context, "Unable to open receipt photo: ${exception.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(itemView.context, "Unable to open receipt photo", Toast.LENGTH_SHORT).show()
         }
     }
 }
