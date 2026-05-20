@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
@@ -15,15 +16,14 @@ import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 /**
  * CategoryActivity allows users to manage expense categories.
  *
- * Part 3 Enhancement:
- * When a category is added, the activity finishes and returns to the TransactionsFragment.
- * This allows the TransactionsFragment to refresh its category display onResume.
+ * Part 3 Enhancement: Added back arrow navigation to return to the Transactions tab.
  */
 class CategoryActivity : AppCompatActivity()
 {
     private lateinit var etCategoryName: EditText
     private lateinit var btnAddCategory: Button
     private lateinit var btnReturnHome: Button
+    private lateinit var ivBackArrow: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryAdapter
     private lateinit var username: String
@@ -40,11 +40,20 @@ class CategoryActivity : AppCompatActivity()
         etCategoryName = findViewById(R.id.et_category_name)
         btnAddCategory = findViewById(R.id.btn_add_category)
         btnReturnHome = findViewById(R.id.btn_return_home)
+        ivBackArrow = findViewById(R.id.iv_back_arrow)
         recyclerView = findViewById(R.id.recycler_categories)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Call through the ViewModel layer
+        // Back arrow navigation to return to the Transactions tab
+        ivBackArrow.setOnClickListener {
+            navigateToTransactionsTab()
+        }
+
+        btnReturnHome.setOnClickListener {
+            finish()
+        }
+
         val categories = categoryViewModel.getCategories(this, username).toMutableList()
         adapter = CategoryAdapter(categories)
         recyclerView.adapter = adapter
@@ -56,20 +65,27 @@ class CategoryActivity : AppCompatActivity()
                 val nextId = if (categories.isEmpty()) 1 else categories.maxOf { it.id } + 1
                 val category = Category(nextId, name)
 
-                // Call through the ViewModel layer
                 categoryViewModel.saveCategory(this, username, category)
 
                 adapter.addCategory(category)
 
                 etCategoryName.text.clear()
-                // Using getString to resolve the string resource
                 Toast.makeText(this, getString(R.string.category_added), Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        btnReturnHome.setOnClickListener {
-            finish()
-        }
+    /**
+     * Navigates back to the DashboardActivity and selects the Transactions tab.
+     */
+    private fun navigateToTransactionsTab()
+    {
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra("username", username)
+        intent.putExtra("selected_tab", R.id.nav_transactions)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private class CategoryAdapter(private val list: MutableList<Category>)

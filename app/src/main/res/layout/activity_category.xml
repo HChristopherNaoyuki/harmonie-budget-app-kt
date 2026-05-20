@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Manage Categories screen with minimalistic design.
-    All original views and identifiers are preserved.
-    Uses card-based grouping, refined spacing, and restrained typography.
-
-    Button styling standardized to black background with white text.
-    The Return Home button now uses StandardButton style.
+    Manage Categories screen with back arrow navigation.
+    Added a back arrow in the top-left corner to return to the Transactions tab.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +17,23 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Title with increased prominence -->
+        <!--
+            Back arrow navigation to return to the Transactions tab.
+            Positioned at the top-left corner of the screen.
+        -->
+        <TextView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_arrow"
+            android:textSize="16sp"
+            android:textColor="@color/accent_blue"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Title -->
         <TextView
             android:id="@+id/tv_category_title"
             android:layout_width="wrap_content"
@@ -74,7 +86,6 @@
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Add Category button with standardized black background -->
                 <Button
                     android:id="@+id/btn_add_category"
                     style="@style/StandardButton"
@@ -121,10 +132,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!--
-            Return Home button with standardized black background.
-            Uses the StandardButton style for consistency across the application.
-        -->
+        <!-- Return Home button -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,11 @@ import com.example.harmonie_budget_app_kt.viewmodels.GamificationViewModel
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * ExpenseActivity handles the creation and submission of new expense records.
+ *
+ * Part 3 Enhancement: Added back arrow navigation to return to the Budget tab.
+ */
 class ExpenseActivity : AppCompatActivity()
 {
     private val expenseViewModel = ExpenseViewModel()
@@ -33,6 +39,7 @@ class ExpenseActivity : AppCompatActivity()
     private lateinit var btnAttachPhoto: Button
     private lateinit var btnSaveExpense: Button
     private lateinit var btnReturnHome: Button
+    private lateinit var ivBackArrow: TextView
     private var selectedPhotoUri: Uri? = null
     private var username: String = "admin"
 
@@ -58,15 +65,17 @@ class ExpenseActivity : AppCompatActivity()
         btnAttachPhoto = findViewById(R.id.btn_attach_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
         btnReturnHome = findViewById(R.id.btn_return_home)
+        ivBackArrow = findViewById(R.id.iv_back_arrow)
 
         username = intent.getStringExtra("username") ?: "admin"
 
+        // Back arrow navigation to return to the Budget tab
+        ivBackArrow.setOnClickListener {
+            navigateToBudgetTab()
+        }
+
         btnReturnHome.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
-            intent.putExtra("username", username)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
+            navigateToBudgetTab()
         }
 
         val jsonHelper = JsonHelper()
@@ -97,6 +106,19 @@ class ExpenseActivity : AppCompatActivity()
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
+    }
+
+    /**
+     * Navigates back to the DashboardActivity and selects the Budget tab.
+     */
+    private fun navigateToBudgetTab()
+    {
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra("username", username)
+        intent.putExtra("selected_tab", R.id.nav_budget)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun showDatePicker()

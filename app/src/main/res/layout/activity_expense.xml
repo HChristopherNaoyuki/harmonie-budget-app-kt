@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Add Expense screen layout with responsive scrolling for small screens.
-    Uses NestedScrollView with LinearLayout to ensure all input fields and buttons
-    remain accessible on small screens including 4.7 inch devices.
-    All input fields use TextInputLayout for consistent Material Design appearance.
-    The submit button and return home button are positioned at the bottom and
-    remain visible within the scrollable area.
-
-    Modified to add RETURN HOME button as required by Part 3 specifications.
-    Button styling standardized to black background with white text.
+    Add Expense screen layout with back arrow navigation.
+    Added a back arrow in the top-left corner to return to the Budget tab.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,6 +19,22 @@
         android:padding="16dp"
         android:paddingBottom="32dp">
 
+        <!--
+            Back arrow navigation to return to the Budget tab.
+            Positioned at the top-left corner of the screen.
+        -->
+        <TextView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_arrow"
+            android:textSize="16sp"
+            android:textColor="@color/accent_blue"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
         <!-- Title centered at the top of the form -->
         <TextView
             android:id="@+id/tv_expense_title"
@@ -38,7 +47,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Amount input field with numberDecimal input type -->
+        <!-- Amount input field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_amount"
             android:layout_width="match_parent"
@@ -58,7 +67,7 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Date input field with focusable=false to trigger DatePickerDialog -->
+        <!-- Date input field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_date"
             android:layout_width="match_parent"
@@ -80,7 +89,7 @@
                 android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Start Time input field with focusable=false to trigger TimePickerDialog -->
+        <!-- Start Time input field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_start_time"
             android:layout_width="match_parent"
@@ -102,7 +111,7 @@
                 android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- End Time input field with focusable=false to trigger TimePickerDialog -->
+        <!-- End Time input field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_end_time"
             android:layout_width="match_parent"
@@ -124,7 +133,7 @@
                 android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description input field for expense details -->
+        <!-- Description input field -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_description"
             android:layout_width="match_parent"
@@ -143,7 +152,7 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Category spinner with dropdown background and fixed height -->
+        <!-- Category spinner -->
         <Spinner
             android:id="@+id/spinner_category"
             android:layout_width="match_parent"
@@ -153,7 +162,7 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp" />
 
-        <!-- Attach Photo button with standardized black background -->
+        <!-- Attach Photo button -->
         <Button
             android:id="@+id/btn_attach_photo"
             style="@style/StandardButton"
@@ -162,7 +171,7 @@
             android:layout_marginBottom="12dp"
             android:text="@string/btn_attach_photo" />
 
-        <!-- Submit button with standardized black background -->
+        <!-- Submit button -->
         <Button
             android:id="@+id/btn_save_expense"
             style="@style/StandardButton"
@@ -171,12 +180,7 @@
             android:layout_marginBottom="12dp"
             android:text="@string/btn_save_expense" />
 
-        <!--
-            RETURN HOME button added as required by Part 3 specifications.
-            Navigates directly to the Home screen when clicked.
-            Uses the same standardized black background and white text styling.
-            Positioned below the Submit button for logical flow.
-        -->
+        <!-- RETURN HOME button -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"

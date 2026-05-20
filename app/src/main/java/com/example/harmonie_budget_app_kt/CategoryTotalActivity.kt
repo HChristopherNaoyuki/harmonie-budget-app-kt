@@ -20,14 +20,15 @@ import java.util.Locale
 
 /**
  * CategoryTotalActivity now displays the Pie Chart visualization.
- * This screen shows a custom pie chart with spending breakdown by category.
- * The RETURN HOME button navigates back to the Budgets tab.
+ *
+ * Part 3 Enhancement: Added back arrow navigation to return to the Budgets tab.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
     private lateinit var tvTotals: TextView
     private lateinit var pieContainer: FrameLayout
     private lateinit var btnReturnHome: Button
+    private lateinit var ivBackArrow: TextView
     private lateinit var username: String
 
     private val expenseViewModel = ExpenseViewModel()
@@ -43,18 +44,17 @@ class CategoryTotalActivity : AppCompatActivity()
         tvTotals = findViewById(R.id.tv_totals)
         pieContainer = findViewById(R.id.pie_container)
         btnReturnHome = findViewById(R.id.btn_return_home)
+        ivBackArrow = findViewById(R.id.iv_back_arrow)
 
-        // RETURN HOME button navigates to Budgets tab
-        btnReturnHome.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
-            intent.putExtra("username", username)
-            intent.putExtra("selected_tab", R.id.nav_budgets)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
+        // Back arrow navigation to return to the Budgets tab
+        ivBackArrow.setOnClickListener {
+            navigateToBudgetsTab()
         }
 
-        // Load expenses and categories
+        btnReturnHome.setOnClickListener {
+            navigateToBudgetsTab()
+        }
+
         val expenses = expenseViewModel.getExpenses(this, username)
         val categories = categoryViewModel.getCategories(this, username)
 
@@ -94,6 +94,19 @@ class CategoryTotalActivity : AppCompatActivity()
             builder.append("No expenses found")
         }
         tvTotals.text = builder.toString()
+    }
+
+    /**
+     * Navigates back to the DashboardActivity and selects the Budgets tab.
+     */
+    private fun navigateToBudgetsTab()
+    {
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra("username", username)
+        intent.putExtra("selected_tab", R.id.nav_budgets)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     /**
