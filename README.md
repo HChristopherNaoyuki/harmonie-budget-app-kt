@@ -41,11 +41,15 @@ accountability across every phase of the Research, Plan, Design, Build, and Eval
 cycle.
 
 Project Manager, Researcher, and Designer: Murendeni
+
 (https://github.com/MurendeniMakhavhu)
 
-Software Developer: Naoyuki (https://github.com/HChristopherNaoyuki)
+Software Developer: Naoyuki 
+
+(https://github.com/HChristopherNaoyuki)
 
 Quality Assurance Tester, Documentation and Video Lead: Makaya
+
 (https://github.com/Khayaguzu)
 
 The Project Manager oversees the full project lifecycle, leads Part 1 research and
@@ -74,7 +78,7 @@ Part 1 submission: March 24, 2026
 
 Part 2 submission: April 28, 2026
 
-Final submission: May 29, 2026
+Final submission: June 15, 2026
 
 The timeline ensures steady progress across all three submissions while allowing
 adequate time for testing, documentation, and integration. Each phase is designed to
@@ -93,7 +97,7 @@ expense management, category handling, budget goals, local data persistence, and
 visual pie chart. The prototype is tested on both emulators and physical devices to
 verify stability and performance.
 
-April 29 to May 29, 2026: Part 3 Final App Development. This final phase includes
+April 29 to June 15, 2026: Part 3 Final App Development. This final phase includes
 gamification, advanced graphs, final video production, comprehensive testing, and
 submission of all required files. The final app must run on a mobile phone and include
 badges for meeting budget goals and consistent expense logging.
@@ -154,8 +158,12 @@ harmonie-budget-app-kt/
 │       │   └── nav_text_color.xml     
 │       ├── drawable/
 │       │   ├── ic_home.xml
+│       │   ├── ic_home_house.xml
 │       │   ├── ic_launcher_background.xml
 │       │   ├── ic_launcher_foreground.xml
+│       │   ├── ic_pie_chart.xml
+│       │   ├── ic_receipt.xml
+│       │   ├── ic_settings_gear.xml
 │       │   ├── rounded_button.xml
 │       │   └── spinner_dropdown_background.xml 
 │       ├── layout/
