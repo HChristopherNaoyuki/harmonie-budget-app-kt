@@ -30,7 +30,7 @@ import java.util.TimeZone
  * - Streak calculation logic
  * - Percentage calculation for progress bar
  * - Budget badge logic
- * - Time validation logic (new)
+ * - Time validation logic
  */
 class ExampleUnitTest
 {
@@ -66,16 +66,6 @@ class ExampleUnitTest
         return (totalSpent <= maxGoal && maxGoal > 0)
     }
 
-    /**
-     * Part 3 Enhancement: Time validation logic test helper.
-     * Validates that end time is not earlier than start time.
-     * For times crossing midnight, the end time is considered earlier
-     * because 00:00 (0 minutes) is less than 23:59 (1439 minutes).
-     *
-     * @param startTime The start time string in HH:mm format
-     * @param endTime The end time string in HH:mm format
-     * @return True if end time is not before start time, false otherwise
-     */
     private fun isTimeValid(startTime: String, endTime: String): Boolean
     {
         if (startTime.isEmpty() || endTime.isEmpty())
@@ -99,9 +89,6 @@ class ExampleUnitTest
         val startTotalMinutes = startHour * 60 + startMinute
         val endTotalMinutes = endHour * 60 + endMinute
 
-        // End time must not be earlier than start time (can be equal)
-        // Cross-midnight times (e.g., 23:59 to 00:00) are invalid because
-        // 00:00 (0 minutes) is earlier than 23:59 (1439 minutes)
         return endTotalMinutes >= startTotalMinutes
     }
 
@@ -607,13 +594,8 @@ class ExampleUnitTest
     @Test
     fun timeValidation_acceptsValidTimes()
     {
-        // Equal times should be valid
         assertTrue("Equal times should be valid", isTimeValid("09:00", "09:00"))
-
-        // End time after start time should be valid
         assertTrue("End time after start time should be valid", isTimeValid("09:00", "10:00"))
-
-        // Empty times should be valid (handled by required field validation)
         assertTrue("Empty start time should be valid", isTimeValid("", "10:00"))
         assertTrue("Empty end time should be valid", isTimeValid("09:00", ""))
         assertTrue("Both empty should be valid", isTimeValid("", ""))
@@ -622,13 +604,8 @@ class ExampleUnitTest
     @Test
     fun timeValidation_rejectsInvalidTimes()
     {
-        // End time before start time should be invalid
         assertFalse("End time before start time should be invalid", isTimeValid("10:00", "09:00"))
-
-        // End time earlier hour should be invalid
         assertFalse("End time earlier hour should be invalid", isTimeValid("09:30", "08:30"))
-
-        // Invalid format should be invalid
         assertFalse("Invalid format should be invalid", isTimeValid("09:00", "invalid"))
         assertFalse("Invalid format should be invalid", isTimeValid("invalid", "10:00"))
     }
@@ -636,17 +613,12 @@ class ExampleUnitTest
     @Test
     fun timeValidation_handlesBoundaryCases()
     {
-        // Cross-midnight (23:59 to 00:00) is invalid because 00:00 is earlier than 23:59
-        // when compared as minutes since midnight (0 minutes vs 1439 minutes)
         assertFalse("Cross-midnight (23:59 to 00:00) should be invalid",
             isTimeValid("23:59", "00:00"))
 
-        // Start time at midnight to early morning is valid
         assertTrue("Start time at midnight to early morning is valid",
             isTimeValid("00:00", "00:01"))
 
-        // Start time to same time on next day is invalid (not supported without date change)
-        // This test verifies the function does not incorrectly accept cross-midnight ranges
         assertFalse("Start time before end time crossing midnight should be invalid",
             isTimeValid("23:00", "01:00"))
     }
