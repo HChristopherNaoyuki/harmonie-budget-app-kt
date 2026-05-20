@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Color selector for bottom navigation text labels.
+    The selector applies a blue color when the item is selected
+    and a gray color when it is not selected.
+-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#007AFF" android:state_checked="true"/>
-    <item android:color="#757575"/>
+    <item android:color="@color/accent_blue" android:state_checked="true"/>
+    <item android:color="@color/text_secondary_light"/>
 </selector>

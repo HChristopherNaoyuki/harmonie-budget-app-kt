@@ -9,7 +9,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Application-specific colors that remain identical in both themes -->
+    <!-- Application-specific colors -->
     <color name="background_light">#F5F5F0</color>
     <color name="background_dark">#121212</color>
 
@@ -26,24 +26,11 @@
     <color name="button_secondary_background">#F0F0F0</color>
     <color name="button_secondary_text">#8E8E93</color>
 
-    <!--
-        Primary text colors - designed for high contrast in both themes.
-        These values are explicitly set to ensure visibility in dark mode.
-    -->
+    <!-- Text colors -->
     <color name="text_primary_light">#1C1C1E</color>
     <color name="text_primary_dark">#FFFFFF</color>
-
-    <!--
-        Secondary text colors for hints and labels.
-        Light gray for light mode, lighter gray for dark mode.
-    -->
     <color name="text_secondary_light">#8E8E93</color>
     <color name="text_secondary_dark">#B0B0B0</color>
-
-    <!--
-        Hint text colors for EditText placeholders.
-        Slightly lighter than secondary text for placeholder distinction.
-    -->
     <color name="text_hint_light">#C7C7CC</color>
     <color name="text_hint_dark">#808080</color>
 

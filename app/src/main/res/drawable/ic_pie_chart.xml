@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Custom Pie Chart icon for the Transactions bottom navigation tab.
+    This is a public vector drawable created by the application.
+    It represents a pie chart for categories and analytics.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#000000"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM13,13L13,4.05C16.76,4.36 20,7.55 20,12L13,12L13,13zM11,4.05L11,13L4.05,13C4.33,9.29 7.31,4.36 11,4.05zM4,12L12,12L12,20C7.56,20 4,16.44 4,12z" />
+</vector>

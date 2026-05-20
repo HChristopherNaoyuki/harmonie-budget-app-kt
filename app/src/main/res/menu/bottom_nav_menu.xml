@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Bottom navigation menu for the DashboardActivity.
-    Icons updated to match the requested specifications using public Android drawables:
-    - Home: ic_menu_home is private. Using ic_menu_view as an alternative house-like icon.
-    - Budget: No change (ic_menu_edit)
-    - Transactions: ic_menu_manage (pie chart / categories style)
-    - Budgets: ic_menu_gallery (receipt / expense history style)
-    - More: ic_menu_preferences is private. Using ic_menu_more as an alternative settings icon.
+    All icons are custom vector drawables created by the application.
+    This ensures no private Android system resources are used.
 
-    All drawable resources used are public Android system drawables that are
-    accessible to third-party applications.
+    Icon requirements satisfied:
+    - Home: House icon (ic_home_house)
+    - Budget: No change (ic_menu_edit - public system drawable)
+    - Transactions: Pie Chart icon (ic_pie_chart)
+    - Budgets: Receipt style icon (ic_receipt)
+    - More: Gear/Settings icon (ic_settings_gear)
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Home tab - using ic_menu_view as a house-like alternative -->
+    <!-- Home tab with custom House icon -->
     <item
         android:id="@+id/nav_home"
         android:title="@string/nav_home"
-        android:icon="@android:drawable/ic_menu_view" />
+        android:icon="@drawable/ic_home_house" />
 
-    <!-- Budget tab - no changes, using ic_menu_edit -->
+    <!-- Budget tab - no changes, using public system drawable -->
     <item
         android:id="@+id/nav_budget"
         android:title="@string/nav_budget"
         android:icon="@android:drawable/ic_menu_edit" />
 
-    <!-- Transactions tab with ic_menu_manage (pie chart / categories style) -->
+    <!-- Transactions tab with custom Pie Chart icon -->
     <item
         android:id="@+id/nav_transactions"
         android:title="@string/nav_transactions"
-        android:icon="@android:drawable/ic_menu_manage" />
+        android:icon="@drawable/ic_pie_chart" />
 
-    <!-- Budgets tab with ic_menu_gallery (receipt / expense history style) -->
+    <!-- Budgets tab with custom Receipt style icon -->
     <item
         android:id="@+id/nav_budgets"
         android:title="@string/nav_budgets"
-        android:icon="@android:drawable/ic_menu_gallery" />
+        android:icon="@drawable/ic_receipt" />
 
-    <!-- More tab - using ic_menu_more as a gear/settings alternative -->
+    <!-- More tab with custom Gear/Settings icon -->
     <item
         android:id="@+id/nav_more"
         android:title="@string/nav_more"
-        android:icon="@android:drawable/ic_menu_more" />
+        android:icon="@drawable/ic_settings_gear" />
 
 </menu>
