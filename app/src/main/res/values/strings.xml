@@ -6,34 +6,33 @@
         Tracker application. Using string resources enables internationalization and
         centralizes text management for easier maintenance.
 
-        Organization:
-        - Application metadata and branding
-        - Authentication screens (Login, Register, Forgot Password)
-        - Main dashboard and navigation
-        - Expense management
-        - Category management
-        - Budget and goals
-        - Gamification features
-        - Category totals and filtering
-        - Error messages
-        - Common UI elements
-        - Navigation and buttons
-        - Receipt photo preview
-        - User feedback
+        The file is organized into the following logical sections:
+        - Application Metadata (app name, welcome messages, version)
+        - Authentication Screens (login, register, forgot password)
+        - Budget and Goals (goal setting, budget displays)
+        - Category Management (categories, category lists)
+        - Expense Management (add expense, expense lists, filtering)
+        - Category Totals and Filtering (pie chart, totals, filters)
+        - Gamification (streaks, badges, rewards)
+        - More Screen Settings (export, reset, about, help)
+        - Navigation (bottom nav labels, screen titles, buttons)
+        - Receipt Photo Preview (view receipt, error messages)
+        - User Feedback (success messages, greetings)
+        - Error Messages (validation errors, authentication errors)
     -->
 
     <!-- ==================== Application Metadata ==================== -->
 
-    <!-- Application name displayed in launcher and title bars -->
+    <!-- Application name displayed in the device launcher and title bars -->
     <string name="app_name">Harmonie Budget</string>
 
-    <!-- Welcome message shown on landing page and login screens -->
+    <!-- Welcome message shown on the landing page and login screen -->
     <string name="welcome_message">Welcome to Harmonie Budget</string>
 
-    <!-- Subtitle text on landing page describing app features -->
+    <!-- Subtitle text on the landing page describing core app features -->
     <string name="landing_subtitle">Track expenses, set goals, earn rewards</string>
 
-    <!-- Version indicator displayed at bottom of landing page -->
+    <!-- Version indicator displayed at the bottom of the landing page -->
     <string name="version_indicator">Version 2.0.0</string>
 
 
@@ -45,19 +44,21 @@
     <string name="forgot_password_button">Forgot Password</string>
     <string name="log_in_button">Log In</string>
     <string name="sign_up_button">Sign up</string>
+
+    <!-- Account creation screen titles and subtitles -->
     <string name="create_account_title">Create New Account</string>
     <string name="create_new_account">Create Account</string>
 
     <!-- Link text for navigating between authentication screens -->
     <string name="already_registered_log_in">Already Registered? Log In here.</string>
 
-    <!-- Input field hints for registration and login forms -->
+    <!-- Input field hints and labels for registration and login forms -->
     <string name="full_name_hint">FULL NAME</string>
     <string name="username_hint">USERNAME</string>
     <string name="password_hint">PASSWORD</string>
     <string name="confirm_password_hint">CONFIRM PASSWORD</string>
 
-    <!-- User ID display labels -->
+    <!-- User ID display labels and generation button -->
     <string name="user_id_label">USER ID</string>
     <string name="generate_and_copy_user_id">Generate and copy User ID</string>
 
@@ -66,7 +67,7 @@
     <string name="new_password_label">New Password</string>
     <string name="reset_password_button">Reset Password</string>
 
-    <!-- Sign in helper text -->
+    <!-- Sign in helper text and credentials section label -->
     <string name="sign_in_to_continue">Sign in to continue</string>
     <string name="credentials">CREDENTIALS</string>
 
@@ -80,58 +81,72 @@
     <string name="hint_max_goal">Maximum monthly goal</string>
     <string name="btn_save_goals">Save Goals</string>
 
-    <!-- Budget display strings for dashboard -->
+    <!-- Budget display strings for the dashboard and home screen -->
     <string name="budget_title">Budget</string>
     <string name="edit_budget">Edit Budget</string>
     <string name="budget_overview">Budget Overview</string>
+
+    <!-- Budget range and total balance display formats -->
     <string name="monthly_budget">Monthly budget: %1$.2f - %2$.2f</string>
     <string name="total_balance">Total Balance: %1$.2f</string>
 
-    <!-- Budget status messages -->
+    <!-- Budget status messages for the progress dashboard -->
     <string name="within_budget">Within Budget</string>
     <string name="near_budget_limit">Near Budget Limit</string>
     <string name="over_budget">Over Budget</string>
 
-    <!-- Budget tab strings -->
+    <!-- Budget tab strings for button labels and section headers -->
     <string name="record_new_expense">Record new expense</string>
     <string name="set_monthly_spending_goals">Set monthly spending goals</string>
 
 
     <!-- ==================== Category Management ==================== -->
 
-    <!-- Category screen strings -->
+    <!-- Category screen titles and labels -->
     <string name="manage_categories">Manage Categories</string>
     <string name="new_category">NEW CATEGORY</string>
     <string name="your_categories">Your Categories</string>
+
+    <!-- Category input field hints and button labels -->
     <string name="hint_category_name">Category Name</string>
     <string name="btn_add_category">Add Category</string>
     <string name="category_added">Category added</string>
+
+    <!-- Legacy category button label (preserved for compatibility) -->
     <string name="open_categories">Open Categories</string>
+
+    <!-- Empty state message when no categories exist -->
     <string name="no_categories_added_yet">No categories added yet.</string>
 
-    <!-- Category list item format with bullet point -->
+    <!-- Category list item format with bullet point prefix -->
     <string name="category_bullet_format">• %s</string>
 
-    <!-- Transactions screen button -->
+    <!-- Transactions screen button label for adding new categories -->
     <string name="add_category_button">ADD CATEGORY</string>
 
 
     <!-- ==================== Expense Management ==================== -->
 
-    <!-- Expense entry screen strings -->
+    <!-- Expense entry screen titles and labels -->
     <string name="add_expense_title">Add Expense</string>
     <string name="add_expense">Add Expense</string>
+
+    <!-- Expense input field hints for amount, date, time, and description -->
     <string name="hint_amount">Amount</string>
     <string name="hint_date">Date</string>
     <string name="hint_start_time">Start Time</string>
     <string name="hint_end_time">End Time</string>
     <string name="hint_description">Description</string>
+
+    <!-- Expense entry button labels -->
     <string name="btn_attach_photo">ATTACH PHOTO</string>
     <string name="btn_save_expense">Submit</string>
+
+    <!-- Success and validation messages for expense submission -->
     <string name="expense_submitted">Expense submitted</string>
     <string name="please_fill_all_fields">Please fill all fields and select a category</string>
 
-    <!-- Category spending breakdown format -->
+    <!-- Category spending breakdown format for the home screen -->
     <string name="category_total">%1$s: %2$.2f</string>
     <string name="all_time_spending">All-time spending</string>
 
@@ -143,12 +158,12 @@
 
     <!-- ==================== Category Totals and Filtering ==================== -->
 
-    <!-- Category totals screen strings -->
+    <!-- Category totals screen title and section labels -->
     <string name="category_totals_title">Category Totals</string>
     <string name="smart_detection">Smart Detection</string>
     <string name="view_category_totals">View Category Totals</string>
 
-    <!-- Filter section strings -->
+    <!-- Filter section labels -->
     <string name="filter_expenses_label">Filter Expenses</string>
     <string name="category_label">Category</string>
     <string name="date_label">Date</string>
@@ -157,7 +172,7 @@
     <string name="clear_button">Clear</string>
     <string name="apply_filter_button">Apply Filter</string>
 
-    <!-- Expense history display strings -->
+    <!-- Expense history display labels and formats -->
     <string name="expense_history_label">Expense History</string>
     <string name="expense_history_row_format">Amount: %s | Date: %s | Category: %s | Submitted: %s | Start: %s | End: %s</string>
 
@@ -165,25 +180,25 @@
     <string name="default_zar_amount">R 0.00</string>
     <string name="this_month_label">this month</string>
 
-    <!-- Empty state and feedback messages -->
+    <!-- Empty state message when no expenses match the filter criteria -->
     <string name="no_expense_available">No expense available.</string>
 
 
     <!-- ==================== Gamification ==================== -->
 
-    <!-- Gamification section labels -->
+    <!-- Gamification section labels for the home screen -->
     <string name="gamification_rewards">Gamification Rewards</string>
     <string name="earned_badges">Earned Badges</string>
 
-    <!-- Streak display formats -->
+    <!-- Streak display formats for current and longest streaks -->
     <string name="current_streak">Current Streak: %d days</string>
     <string name="longest_streak">Longest Streak: %d days</string>
 
-    <!-- Progress bar labels -->
+    <!-- Progress bar labels for budget tracking -->
     <string name="progress_percentage">%d%% of monthly budget</string>
     <string name="set_budget_to_see_progress">Set a monthly budget to see progress</string>
 
-    <!-- Badge messages -->
+    <!-- Badge messages for empty state and badge display -->
     <string name="no_badges_message">No badges yet. Add expenses and stay within your budget to earn rewards</string>
     <string name="badge_display_format">🏆 %s</string>
 
@@ -207,7 +222,7 @@
     <string name="about_title">About</string>
     <string name="about_content">This is a personal budget tracker built for the OPSC6311 module.</string>
 
-    <!-- Help section strings -->
+    <!-- Help and information section strings -->
     <string name="help_and_info_title">Help and Information</string>
     <string name="help_and_info_content">How to use the app: log in, add expenses, set goals, view reports.</string>
 
@@ -224,22 +239,36 @@
     <!-- Bottom navigation bar item labels -->
     <string name="nav_home">Home</string>
     <string name="nav_budget">Budget</string>
-    <string name="nav_transactions">Transactions</string>
-    <string name="nav_budgets">Budgets</string>
     <string name="nav_more">More</string>
 
-    <!-- Common navigation buttons -->
+    <!--
+        nav_category: Displayed in the bottom navigation bar for the transactions tab.
+        The screen title inside the fragment remains "Transactions".
+    -->
+    <string name="nav_category">Category</string>
+
+    <!--
+        nav_history: Displayed in the bottom navigation bar for the budgets tab.
+        The screen title inside the fragment remains "Budgets".
+    -->
+    <string name="nav_history">History</string>
+
+    <!-- Screen titles for fragments (unchanged from original) -->
+    <string name="transactions_screen_title">Transactions</string>
+    <string name="budgets_screen_title">Budgets</string>
+
+    <!-- Common navigation buttons used across multiple screens -->
     <string name="return_home">Return Home</string>
     <string name="home_button">Home</string>
     <string name="copy">Copy</string>
 
-    <!-- Back arrow navigation text -->
+    <!-- Back arrow navigation text for top-left corner back buttons -->
     <string name="back_arrow">← Back</string>
 
 
     <!-- ==================== Receipt Photo Preview ==================== -->
 
-    <!-- Receipt viewing strings -->
+    <!-- Receipt viewing button and status messages -->
     <string name="view_receipt_button">View Receipt</string>
     <string name="no_receipt_available">No receipt photo available</string>
     <string name="unable_to_open_receipt">Unable to open receipt photo</string>
@@ -247,20 +276,22 @@
 
     <!-- ==================== User Feedback ==================== -->
 
-    <!-- Success messages -->
+    <!-- Success messages displayed after user actions -->
     <string name="user_id_copied">User ID copied to clipboard</string>
+
+    <!-- Personalized greeting displayed on the home screen -->
     <string name="greetings">Greetings, %1$s!</string>
 
 
     <!-- ==================== Error Messages ==================== -->
 
-    <!-- Authentication errors -->
+    <!-- Authentication and validation error messages -->
     <string name="error_invalid_credentials">Invalid username or password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_username_taken">Username is already taken</string>
     <string name="username_or_user_id_invalid">Username or User ID is invalid</string>
 
-    <!-- Password strength requirements error -->
+    <!-- Password strength requirements error message -->
     <string name="error_password_requirements">Password must be at least 8 characters with a letter, number, and special character</string>
 
 </resources>

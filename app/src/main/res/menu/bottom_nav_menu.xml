@@ -4,12 +4,14 @@
     All icons are custom vector drawables created by the application.
     This ensures no private Android system resources are used.
 
-    Icon requirements satisfied:
-    - Home: House icon (ic_home_house)
-    - Budget: No change (ic_menu_edit - public system drawable)
-    - Transactions: Pie Chart icon (ic_pie_chart)
-    - Budgets: Receipt style icon (ic_receipt)
-    - More: Gear/Settings icon (ic_settings_gear)
+    Navigation Labels:
+    - Home: stays "Home"
+    - Budget: stays "Budget"
+    - Category: changed from "Transactions" to "Category" (screen title remains "Transactions")
+    - History: changed from "Budgets" to "History" (screen title remains "Budgets")
+    - More: stays "More"
+
+    Screen titles are defined in the individual fragment layout files.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -19,22 +21,30 @@
         android:title="@string/nav_home"
         android:icon="@drawable/ic_home_house" />
 
-    <!-- Budget tab - no changes, using public system drawable -->
+    <!-- Budget tab - no changes -->
     <item
         android:id="@+id/nav_budget"
         android:title="@string/nav_budget"
         android:icon="@android:drawable/ic_menu_edit" />
 
-    <!-- Transactions tab with custom Pie Chart icon -->
+    <!--
+        Category tab - label changed from "Transactions" to "Category".
+        The icon remains the Pie Chart icon.
+        The screen title inside the fragment remains "Transactions".
+    -->
     <item
         android:id="@+id/nav_transactions"
-        android:title="@string/nav_transactions"
+        android:title="@string/nav_category"
         android:icon="@drawable/ic_pie_chart" />
 
-    <!-- Budgets tab with custom Receipt style icon -->
+    <!--
+        History tab - label changed from "Budgets" to "History".
+        The icon remains the Receipt icon.
+        The screen title inside the fragment remains "Budgets".
+    -->
     <item
         android:id="@+id/nav_budgets"
-        android:title="@string/nav_budgets"
+        android:title="@string/nav_history"
         android:icon="@drawable/ic_receipt" />
 
     <!-- More tab with custom Gear/Settings icon -->

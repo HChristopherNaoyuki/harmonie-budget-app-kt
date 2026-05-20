@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Transactions fragment layout.
+    The bottom navigation label is "Category" but the screen title remains "Transactions".
+    This screen allows users to manage expense categories.
+-->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,6 +19,19 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:paddingBottom="32dp">
+
+        <!--
+            Screen title: "Transactions"
+            This remains unchanged. The bottom navigation shows "Category".
+        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/transactions_screen_title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary_light"
+            android:layout_marginBottom="16dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_manage_categories"
@@ -38,10 +56,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/text_primary_light" />
 
-                <!--
-                    Button label updated from "OPEN CATEGORIES" to "ADD CATEGORY".
-                    The underlying functionality and onClick handler remain unchanged.
-                -->
                 <Button
                     android:id="@+id/btn_manage_categories"
                     style="@style/StandardButton"

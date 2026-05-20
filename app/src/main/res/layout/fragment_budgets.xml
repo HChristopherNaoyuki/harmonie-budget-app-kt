@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Budgets fragment layout.
+    The bottom navigation label is "History" but the screen title remains "Budgets".
     This screen displays the Expense History section.
-    The View Category Totals button navigates to the pie chart screen.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,11 +27,15 @@
             android:padding="16dp"
             android:paddingBottom="32dp">
 
+            <!--
+                Screen title: "Budgets"
+                This remains unchanged. The bottom navigation shows "History".
+            -->
             <TextView
                 android:id="@+id/tv_budgets_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/expense_history_label"
+                android:text="@string/budgets_screen_title"
                 android:textColor="@color/text_primary_light"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -39,7 +43,7 @@
 
             <!--
                 Expense History RecyclerView.
-                The ID rv_expense_history is defined here and referenced in BudgetsFragment.kt.
+                This section displays the expense history list.
             -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_expense_history"
@@ -51,6 +55,7 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- View Category Totals button -->
     <Button
         android:id="@+id/btn_view_totals"
         style="@style/StandardButton"
