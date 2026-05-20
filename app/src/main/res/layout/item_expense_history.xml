@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Layout for a single expense history item in the RecyclerView.
-    Displays complete expense details including:
-    - Category and description
-    - Amount (ZAR currency, negative value in red)
-    - Transaction date
-    - Start time and end time
-    - Submission date
+    This layout matches the mockup design showing:
+    - Category and description (e.g., "Transport - Taxi to Joburg CBD")
+    - Amount with ZAR currency on the right (e.g., "-R 20.00")
+    - Transaction date (e.g., "May 20, 2025")
+    - Start time and end time (e.g., "Start 17:30" and "07:17 PM")
+    - Submission date (e.g., "Recorded on: May 20, 2025")
     - Photo preview button when receipt exists
-
-    Padding is defined symmetrically for Start and End to support right-to-left layouts.
-    String resources are used for all user-facing text.
 -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,15 +52,6 @@
                     android:maxLines="2"
                     android:ellipsize="end" />
 
-                <!-- Transaction Date (date of the expense) -->
-                <TextView
-                    android:id="@+id/tv_transaction_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary_light"
-                    android:layout_marginTop="4dp" />
-
             </LinearLayout>
 
             <!-- Amount (negative value in red) -->
@@ -78,6 +66,15 @@
                 android:gravity="end" />
 
         </LinearLayout>
+
+        <!-- Transaction Date -->
+        <TextView
+            android:id="@+id/tv_transaction_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary_light"
+            android:layout_marginTop="4dp" />
 
         <!-- Row 2: Time Details (Start Time and End Time) -->
         <LinearLayout
@@ -105,7 +102,7 @@
 
         </LinearLayout>
 
-        <!-- Row 3: Submission Date (when the expense was recorded) -->
+        <!-- Submission Date -->
         <TextView
             android:id="@+id/tv_submission_date"
             android:layout_width="match_parent"
@@ -114,10 +111,7 @@
             android:textColor="@color/text_secondary_light"
             android:layout_marginTop="8dp" />
 
-        <!--
-            Row 4: Photo Preview Button (visible only if photo exists)
-            Uses string resource for button text to support internationalization.
-        -->
+        <!-- Photo Preview Button (visible only if photo exists) -->
         <Button
             android:id="@+id/btn_view_receipt"
             style="@style/SecondaryButton"

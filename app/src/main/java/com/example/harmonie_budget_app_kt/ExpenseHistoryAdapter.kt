@@ -16,10 +16,20 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * ExpenseHistoryAdapter is a RecyclerView adapter for displaying expense records.
+ * Uses ListAdapter with DiffUtil for efficient updates.
+ *
+ * Part 3 Enhancement:
+ * - Updated display format to match the mockup design.
+ * - Shows category, description, amount, transaction date, start time, end time,
+ *   submission date, and a receipt button when applicable.
+ *
+ * @param categories The list of Category objects for resolving category names
+ */
 class ExpenseHistoryAdapter(
     private val categories: List<Category>
 ) : ListAdapter<Expense, ExpenseHistoryAdapter.ViewHolder>(ExpenseDiffCallback())
@@ -65,27 +75,35 @@ class ExpenseHistoryAdapter(
     {
         val expense = getItem(position)
 
+        // Find category name, default to "General" if not found
         val categoryName = categories.find { it.id == expense.categoryId }?.name ?: "General"
 
+        // Format: "Category - Description" (e.g., "Transport - Taxi to Joburg CBD")
         val categoryDescriptionText = "$categoryName - ${expense.description}"
         holder.tvCategoryDescription.text = categoryDescriptionText
 
+        // Format transaction date as "MMM dd, yyyy" (e.g., "May 20, 2025")
         val transactionDateFormatted = formatDate(expense.date)
         holder.tvTransactionDate.text = transactionDateFormatted
 
-        val startTimeText = "Start: ${expense.startTime}"
+        // Format start time as "Start HH:mm" (e.g., "Start 17:30")
+        val startTimeText = "Start ${expense.startTime}"
         holder.tvStartTime.text = startTimeText
 
-        val endTimeText = "End: ${expense.endTime}"
-        holder.tvEndTime.text = endTimeText
+        // Format end time as "HH:mm a" (e.g., "07:17 PM")
+        val endTimeFormatted = formatTimeToAmPm(expense.endTime)
+        holder.tvEndTime.text = endTimeFormatted
 
+        // Format submission date as "Recorded on: MMM dd, yyyy"
         val submissionDateText = "Recorded on: ${formatDate(expense.date)}"
         holder.tvSubmissionDate.text = submissionDateText
 
+        // Format amount with ZAR currency (negative value in red)
         val formattedAmount = String.format(Locale.US, "-R %,.2f", expense.amount)
         holder.tvAmount.text = formattedAmount
         holder.tvAmount.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
 
+        // Handle receipt photo visibility and click
         if (!expense.photoUri.isNullOrEmpty())
         {
             holder.btnViewReceipt.visibility = android.view.View.VISIBLE
@@ -99,6 +117,12 @@ class ExpenseHistoryAdapter(
         }
     }
 
+    /**
+     * Formats a date string from yyyy-MM-dd to a more readable format.
+     *
+     * @param dateString The date string in yyyy-MM-dd format
+     * @return Formatted date string like "MMM dd, yyyy" (e.g., "May 20, 2025")
+     */
     private fun formatDate(dateString: String): String
     {
         return try
@@ -114,6 +138,35 @@ class ExpenseHistoryAdapter(
         }
     }
 
+    /**
+     * Formats a time string from HH:mm to HH:mm a (12-hour format with AM/PM).
+     *
+     * @param timeString The time string in HH:mm format
+     * @return Formatted time string like "07:17 PM"
+     */
+    private fun formatTimeToAmPm(timeString: String): String
+    {
+        return try
+        {
+            val inputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            val time = inputFormat.parse(timeString)
+            outputFormat.format(time ?: Date())
+        }
+        catch (exception: Exception)
+        {
+            timeString
+        }
+    }
+
+    /**
+     * Opens the attached receipt photo using an Intent with ACTION_VIEW.
+     * Handles both content:// and file:// URI schemes.
+     * Uses FileProvider for file URIs to ensure proper permissions.
+     *
+     * @param itemView The view used to access the context
+     * @param photoUriString The URI string of the attached photo
+     */
     private fun viewReceiptPhoto(itemView: android.view.View, photoUriString: String?)
     {
         if (photoUriString.isNullOrEmpty())
