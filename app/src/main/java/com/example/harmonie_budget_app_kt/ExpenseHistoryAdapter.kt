@@ -27,6 +27,7 @@ import java.util.Locale
  * - Updated display format to match the mockup design.
  * - Shows category, description, amount, transaction date, start time, end time,
  *   submission date, and a receipt button when applicable.
+ * - Time format uses 24-hour format (HH:mm) as required.
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -86,12 +87,12 @@ class ExpenseHistoryAdapter(
         val transactionDateFormatted = formatDate(expense.date)
         holder.tvTransactionDate.text = transactionDateFormatted
 
-        // Format start time as "Start HH:mm" (e.g., "Start 17:30")
+        // Format start time as "Start HH:mm" using 24-hour format
         val startTimeText = "Start ${expense.startTime}"
         holder.tvStartTime.text = startTimeText
 
-        // Format end time as "HH:mm a" (e.g., "07:17 PM")
-        val endTimeFormatted = formatTimeToAmPm(expense.endTime)
+        // Format end time as "HH:mm" using 24-hour format (no AM/PM conversion)
+        val endTimeFormatted = expense.endTime
         holder.tvEndTime.text = endTimeFormatted
 
         // Format submission date as "Recorded on: MMM dd, yyyy"
@@ -135,27 +136,6 @@ class ExpenseHistoryAdapter(
         catch (exception: Exception)
         {
             dateString
-        }
-    }
-
-    /**
-     * Formats a time string from HH:mm to HH:mm a (12-hour format with AM/PM).
-     *
-     * @param timeString The time string in HH:mm format
-     * @return Formatted time string like "07:17 PM"
-     */
-    private fun formatTimeToAmPm(timeString: String): String
-    {
-        return try
-        {
-            val inputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-            val time = inputFormat.parse(timeString)
-            outputFormat.format(time ?: Date())
-        }
-        catch (exception: Exception)
-        {
-            timeString
         }
     }
 
