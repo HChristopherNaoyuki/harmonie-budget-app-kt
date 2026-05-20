@@ -30,17 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * HomeFragment displays the user's dashboard with budget information,
- * current spending totals, category breakdown, and gamification elements.
- *
- * Part 3 Enhancements:
- * - Progress bar showing spending relative to monthly max goal
- * - Gamification badges and streaks
- * - Budget badge awarded when spending stays within budget
- * - Default "General" category handling for orphaned expense category IDs
- * All user-facing text uses string resources.
- */
 class HomeFragment : Fragment()
 {
     private lateinit var username: String
@@ -96,7 +85,7 @@ class HomeFragment : Fragment()
         progressBarSpending = view.findViewById(R.id.progress_bar_spending)
         tvProgressPercentage = view.findViewById(R.id.tv_progress_percentage)
 
-        // Set up greeting and date using string resource
+        // Set up greeting and date
         val greetingText = getString(R.string.greetings, username)
         tvGreeting.text = greetingText
 
@@ -166,12 +155,6 @@ class HomeFragment : Fragment()
         return view
     }
 
-    /**
-     * Updates the progress bar to visually show spending relative to the monthly max goal.
-     *
-     * @param spent Amount spent in the current month
-     * @param goal User's monthly goal (min and max), may be null
-     */
     private fun updateProgressBar(spent: Double, goal: Goal?)
     {
         if (goal != null && goal.maxGoal > 0)
@@ -182,7 +165,6 @@ class HomeFragment : Fragment()
             val progressText = getString(R.string.progress_percentage, percentage.toInt())
             tvProgressPercentage.text = progressText
 
-            // Change progress bar color based on spending level
             val colorRes = when
             {
                 percentage >= 100 -> android.R.color.holo_red_dark
@@ -198,12 +180,8 @@ class HomeFragment : Fragment()
         }
     }
 
-    /**
-     * Loads streak data and badges, then updates the UI.
-     */
     private fun loadAndDisplayGamificationData()
     {
-        // Load and display streak data using string resources
         val streakData = gamificationViewModel.getStreakData(requireContext(), username)
         if (streakData != null)
         {
@@ -218,16 +196,10 @@ class HomeFragment : Fragment()
             tvLongestStreak.text = getString(R.string.longest_streak, 0)
         }
 
-        // Load and display badges
         val badges = gamificationViewModel.getBadges(requireContext(), username)
         displayBadges(badges)
     }
 
-    /**
-     * Dynamically creates and adds badge views to the badges container.
-     *
-     * @param badges List of badges earned by the user
-     */
     private fun displayBadges(badges: List<Badge>)
     {
         badgesContainer.removeAllViews()
@@ -273,13 +245,6 @@ class HomeFragment : Fragment()
         }
     }
 
-    /**
-     * Determines the budget status text based on current spending and goals.
-     *
-     * @param spent Amount spent in the current month
-     * @param goal User's monthly goal, may be null
-     * @return Status string resource
-     */
     private fun determineBudgetStatus(spent: Double, goal: Goal?): String
     {
         if (goal == null)
@@ -294,16 +259,6 @@ class HomeFragment : Fragment()
         }
     }
 
-    /**
-     * Calculates category breakdown strings using actual category names.
-     * If an expense references a category that no longer exists (orphaned categoryId),
-     * the expense is classified under the default "General" category. This ensures
-     * that all expenses are displayed even if the original category was deleted.
-     *
-     * @param expenses List of expenses for the user
-     * @param categoryMap Map of category ID to Category object
-     * @return List of formatted strings for display
-     */
     private fun calculateCategoryBreakdown(
         expenses: List<Expense>,
         categoryMap: Map<Int, Category>
@@ -311,7 +266,6 @@ class HomeFragment : Fragment()
     {
         return expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
-                // If categoryId is not found in the map, default to "General"
                 val categoryName = categoryMap[categoryId]?.name ?: "General"
                 getString(R.string.category_total, categoryName, list.sumOf { it.amount })
             }
@@ -319,12 +273,6 @@ class HomeFragment : Fragment()
 
     companion object
     {
-        /**
-         * Factory method to create a new instance of HomeFragment with the specified username.
-         *
-         * @param username The logged-in user's username
-         * @return A configured HomeFragment instance
-         */
         fun newInstance(username: String): HomeFragment
         {
             val fragment = HomeFragment()
@@ -335,9 +283,6 @@ class HomeFragment : Fragment()
         }
     }
 
-    /**
-     * RecyclerView adapter for the category breakdown list.
-     */
     private class CategoryBreakdownAdapter(
         private val data: List<String>
     ) : RecyclerView.Adapter<CategoryBreakdownAdapter.ViewHolder>()

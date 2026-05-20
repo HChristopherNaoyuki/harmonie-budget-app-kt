@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Set Monthly Goals screen.
+    Added a back arrow in the toolbar for navigation.
+    Fixed RETURN HOME button to navigate to Budget tab.
+-->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,6 +17,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp">
+
+        <!--
+            Back arrow navigation using a TextView with a drawable and string resource.
+            This provides a visual back arrow in the top-left corner.
+        -->
+        <TextView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_arrow"
+            android:textSize="16sp"
+            android:textColor="@color/accent_blue"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/tv_goal_title"
@@ -94,6 +115,9 @@
             android:layout_marginTop="24dp"
             android:text="@string/btn_save_goals" />
 
+        <!--
+            Fixed RETURN HOME button navigates to Budget tab (nav_budget)
+        -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"

@@ -1,60 +1,37 @@
 package com.example.harmonie_budget_app_kt
 
-import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.FrameLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.graphics.toColorInt
 import com.example.harmonie_budget_app_kt.models.Category
-import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
-import java.util.Calendar
 import java.util.Locale
 
 /**
- * CategoryTotalActivity displays the expense history table with filtering capabilities.
- * Users can filter expenses by category and date, and view a scrollable list of results.
- *
- * Part 3 Enhancements:
- * - Displays a full expense history table with complete expense details
- * - Includes filter functionality by category and date
- * - RETURN HOME button navigates to the Budgets tab
- * - Default "General" category handling for expenses with unknown category IDs
+ * CategoryTotalActivity now displays the Pie Chart visualization.
+ * This screen shows a custom pie chart with spending breakdown by category.
+ * The RETURN HOME button navigates back to the Budgets tab.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
-    private lateinit var rvExpenseHistory: RecyclerView
-    private lateinit var spinnerFilterCategory: Spinner
-    private lateinit var etFilterDate: EditText
-    private lateinit var btnApplyFilter: Button
-    private lateinit var btnClearFilter: Button
+    private lateinit var tvTotals: TextView
+    private lateinit var pieContainer: FrameLayout
     private lateinit var btnReturnHome: Button
-    private lateinit var tvTotalAmount: TextView
-
     private lateinit var username: String
-    private lateinit var expenseAdapter: ExpenseHistoryAdapter
 
     private val expenseViewModel = ExpenseViewModel()
     private val categoryViewModel = CategoryViewModel()
-
-    // Data holders
-    private var allExpenses: List<Expense> = emptyList()
-    private var filteredExpenses: List<Expense> = emptyList()
-    private var categories: List<Category> = emptyList()
-
-    // Filter state
-    private var selectedCategoryId: Int = -1  // -1 means all categories
-    private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -63,112 +40,12 @@ class CategoryTotalActivity : AppCompatActivity()
 
         username = intent.getStringExtra("username") ?: "admin"
 
-        // Initialize views
-        rvExpenseHistory = findViewById(R.id.rv_expense_history)
-        spinnerFilterCategory = findViewById(R.id.spinner_filter_category)
-        etFilterDate = findViewById(R.id.et_filter_date)
-        btnApplyFilter = findViewById(R.id.btn_apply_filter)
-        btnClearFilter = findViewById(R.id.btn_clear_filter)
+        tvTotals = findViewById(R.id.tv_totals)
+        pieContainer = findViewById(R.id.pie_container)
         btnReturnHome = findViewById(R.id.btn_return_home)
-        tvTotalAmount = findViewById(R.id.tv_total_amount)
 
-        rvExpenseHistory.layoutManager = LinearLayoutManager(this)
-
-        // Load initial data
-        loadData()
-
-        // Setup UI listeners
-        setupCategorySpinner()
-        setupDatePicker()
-        setupButtonListeners()
-    }
-
-    /**
-     * Loads expenses and categories from the ViewModel.
-     * Sorts expenses in reverse chronological order (newest first) for better UX.
-     */
-    private fun loadData()
-    {
-        allExpenses = expenseViewModel.getExpenses(this, username)
-        categories = categoryViewModel.getCategories(this, username)
-
-        // Sort expenses in reverse chronological order (newest first)
-        allExpenses = allExpenses.sortedWith(
-            compareByDescending<Expense> { it.date }
-                .thenByDescending { it.startTime }
-        )
-
-        // Initialize filtered expenses to all expenses
-        filteredExpenses = allExpenses.toList()
-
-        // Initialize adapter and set data
-        expenseAdapter = ExpenseHistoryAdapter(categories)
-        rvExpenseHistory.adapter = expenseAdapter
-        updateAdapterAndTotal()
-    }
-
-    /**
-     * Sets up the category filter spinner with "All Categories" option.
-     */
-    private fun setupCategorySpinner()
-    {
-        val categoryNames = mutableListOf(getString(R.string.all_categories))
-        categoryNames.addAll(categories.map { it.name })
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerFilterCategory.adapter = adapter
-
-        spinnerFilterCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-        {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long)
-            {
-                selectedCategoryId = if (position == 0) -1 else categories[position - 1].id
-                // Filter is applied only when user clicks "Apply Filter" button
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>)
-            {
-                selectedCategoryId = -1
-            }
-        }
-    }
-
-    /**
-     * Sets up the date picker dialog for the filter date field.
-     */
-    private fun setupDatePicker()
-    {
-        etFilterDate.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, day ->
-                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day)
-                    etFilterDate.setText(selectedDate)
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-    }
-
-    /**
-     * Sets up click listeners for the Apply Filter, Clear Filter, and Return Home buttons.
-     */
-    private fun setupButtonListeners()
-    {
-        btnApplyFilter.setOnClickListener {
-            applyFilter()
-        }
-
-        btnClearFilter.setOnClickListener {
-            clearFilter()
-        }
-
+        // RETURN HOME button navigates to Budgets tab
         btnReturnHome.setOnClickListener {
-            // Navigate back to the DashboardActivity and explicitly select the "Budgets" tab
             val intent = Intent(this, DashboardActivity::class.java)
             intent.putExtra("username", username)
             intent.putExtra("selected_tab", R.id.nav_budgets)
@@ -176,80 +53,136 @@ class CategoryTotalActivity : AppCompatActivity()
             startActivity(intent)
             finish()
         }
-    }
 
-    /**
-     * Filters the expenses based on the current selectedCategoryId and selectedDate.
-     * Updates the RecyclerView and the total amount display.
-     * Filters are applied consistently across the entire expense history view.
-     */
-    private fun applyFilter()
-    {
-        // Perform filtering logic on allExpenses
-        val filtered = allExpenses.filter { expense ->
-            var matches = true
+        // Load expenses and categories
+        val expenses = expenseViewModel.getExpenses(this, username)
+        val categories = categoryViewModel.getCategories(this, username)
 
-            // Check category filter
-            if (selectedCategoryId != -1)
-            {
-                matches = matches && (expense.categoryId == selectedCategoryId)
-            }
+        val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
 
-            // Check date filter (filters by transaction date)
-            selectedDate?.let { date ->
-                if (date.isNotEmpty())
-                {
-                    matches = matches && (expense.date == date)
-                }
-            }
+        val totals = expenses.groupBy { it.categoryId }
+            .mapValues { entry -> entry.value.sumOf { it.amount } }
 
-            matches
+        val grandTotal = totals.values.sum()
+
+        val pieData = totals.map { (categoryId, amount) ->
+            val categoryName = categoryMap[categoryId]?.name ?: "General"
+            val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
+            Pair(categoryName, percentage)
         }
 
-        // Update the displayed list and total
-        filteredExpenses = filtered
-        updateAdapterAndTotal()
+        val pieChart = PieChartView(this, pieData)
+        pieContainer.addView(pieChart)
 
-        if (filteredExpenses.isEmpty())
+        val builder = StringBuilder()
+        for ((categoryId, total) in totals)
         {
-            Toast.makeText(this, getString(R.string.no_expense_available), Toast.LENGTH_SHORT).show()
+            val categoryName = categoryMap[categoryId]?.name ?: "General"
+            val percentage = if (grandTotal > 0) (total / grandTotal * 100) else 0.0
+            builder.append(
+                String.format(
+                    Locale.US,
+                    "%s: %.2f (%.1f%%) %n",
+                    categoryName,
+                    total,
+                    percentage
+                )
+            )
         }
+        if (totals.isEmpty())
+        {
+            builder.append("No expenses found")
+        }
+        tvTotals.text = builder.toString()
     }
 
     /**
-     * Clears all active filters, resetting the display to show all expenses.
+     * Custom PieChartView that draws the pie chart and a legend.
      */
-    private fun clearFilter()
+    private class PieChartView(
+        context: Context,
+        private val data: List<Pair<String, Double>>
+    ) : View(context)
     {
-        // Reset filter state
-        selectedCategoryId = -1
-        selectedDate = null
-        etFilterDate.text.clear()
-        spinnerFilterCategory.setSelection(0)
+        private val paint: Paint = Paint().apply { isAntiAlias = true }
+        private val rect: RectF = RectF()
+        private val legendPaint: Paint = Paint().apply { isAntiAlias = true }
+        private val textPaint: Paint = Paint().apply {
+            isAntiAlias = true
+            textSize = 28f
+            color = Color.BLACK
+        }
+        private val labelPaint: Paint = Paint().apply {
+            isAntiAlias = true
+            textSize = 24f
+            color = Color.WHITE
+            textAlign = Paint.Align.CENTER
+        }
 
-        // Reset displayed data to the full list
-        filteredExpenses = allExpenses
-        updateAdapterAndTotal()
-    }
+        override fun onDraw(canvas: Canvas)
+        {
+            super.onDraw(canvas)
 
-    /**
-     * Updates the RecyclerView adapter with the current filtered expenses list
-     * and refreshes the total amount display.
-     */
-    private fun updateAdapterAndTotal()
-    {
-        expenseAdapter.submitList(filteredExpenses)
-        updateTotalAmountDisplay()
-    }
+            if (data.isEmpty()) return
 
-    /**
-     * Calculates the sum of the currently displayed (filtered) expenses
-     * and updates the total amount TextView with ZAR formatting.
-     */
-    private fun updateTotalAmountDisplay()
-    {
-        val total = filteredExpenses.sumOf { it.amount }
-        val formattedTotal = String.format(Locale.US, "R %,.2f", total)
-        tvTotalAmount.text = formattedTotal
+            val total = data.sumOf { it.second }
+            if (total == 0.0) return
+
+            val pieHeight = (height * 0.65f).toInt()
+            val pieSize = minOf(width, pieHeight)
+            val left = (width - pieSize) / 2f
+            val top = 40f
+            rect.set(left, top, left + pieSize, top + pieSize)
+
+            var startAngle = 0f
+            val colors = listOf(
+                "#E53935".toColorInt(),
+                "#1E88E5".toColorInt(),
+                "#43A047".toColorInt(),
+                "#FDD835".toColorInt(),
+                "#8E24AA".toColorInt(),
+                "#00ACC1".toColorInt(),
+                "#FB8C00".toColorInt(),
+                "#3949AB".toColorInt()
+            )
+            val gap = 2f
+
+            data.forEachIndexed { index, (_, value) ->
+                val sweepAngle = (value / total * 360f - gap).toFloat().coerceAtLeast(0f)
+                paint.color = colors[index % colors.size]
+                canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
+
+                if (sweepAngle > 15f)
+                {
+                    val midAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
+                    val radius = rect.width() / 3f
+                    val labelX = rect.centerX() + (radius * kotlin.math.cos(midAngle)).toFloat()
+                    val labelY = rect.centerY() + (radius * kotlin.math.sin(midAngle)).toFloat()
+                    val percentageText = String.format(Locale.US, "%.1f%%", value)
+                    labelPaint.color = Color.WHITE
+                    canvas.drawText(percentageText, labelX, labelY + 8f, labelPaint)
+                }
+
+                startAngle += sweepAngle + gap
+            }
+
+            paint.color = Color.WHITE
+            canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 5f, paint)
+
+            val legendStartY = pieHeight + 60f
+            val legendItemHeight = 48f
+            val colorSize = 28f
+
+            data.forEachIndexed { index, (name, value) ->
+                val y = legendStartY + (index * legendItemHeight)
+                legendPaint.color = colors[index % colors.size]
+                canvas.drawRect(40f, y, 40f + colorSize, y + colorSize, legendPaint)
+
+                val percentageText = String.format(Locale.US, "%.1f%%", value)
+                textPaint.textSize = 28f
+                textPaint.color = Color.BLACK
+                canvas.drawText("$name: $percentageText", 90f, y + 26f, textPaint)
+            }
+        }
     }
 }

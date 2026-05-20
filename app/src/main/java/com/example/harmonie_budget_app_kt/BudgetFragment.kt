@@ -20,23 +20,17 @@ class BudgetFragment : Fragment()
     {
         val view = inflater.inflate(R.layout.fragment_budget, container, false)
 
-        // Username is received from DashboardActivity arguments
-        // This ensures user-specific data isolation for all operations
         username = arguments?.getString("username") ?: "admin"
 
         val btnAddExpense: Button = view.findViewById(R.id.btn_add_expense)
         val btnEditBudget: Button = view.findViewById(R.id.btn_edit_budget)
 
-        // Start ExpenseActivity and pass the username
-        // (fixes L-03)
         btnAddExpense.setOnClickListener {
             val intent = Intent(requireContext(), ExpenseActivity::class.java)
             intent.putExtra("username", username)
             startActivity(intent)
         }
 
-        // Start GoalActivity and pass the username
-        // (fixes L-04)
         btnEditBudget.setOnClickListener {
             val intent = Intent(requireContext(), GoalActivity::class.java)
             intent.putExtra("username", username)

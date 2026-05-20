@@ -16,9 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * TransactionsFragment displays the category management interface.
- */
 class TransactionsFragment : Fragment()
 {
     private lateinit var username: String
@@ -57,7 +54,6 @@ class TransactionsFragment : Fragment()
 
     private fun loadAndDisplayCategories()
     {
-        // Correct coroutine syntax: launch block with braces on same line
         lifecycleScope.launch {
             val categories = withContext(Dispatchers.IO) {
                 categoryViewModel.getCategories(requireContext(), username)

@@ -103,7 +103,7 @@ class MoreFragment : Fragment()
         tvLogOutTitle.setOnClickListener {
             sharedPrefs.edit {
                 putBoolean(KEY_IS_LOGGED_IN, false)
-                putString(KEY_LOGGED_IN_USERNAME, null)
+                remove(KEY_LOGGED_IN_USERNAME)
             }
 
             val intent = Intent(requireContext(), MainActivity::class.java)

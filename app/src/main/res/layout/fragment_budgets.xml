@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Budgets fragment layout.
+    This screen now displays the Expense History section (swapped from Category Totals).
+    The View Category Totals button remains at the bottom to navigate to the pie chart.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,29 +31,30 @@
                 android:id="@+id/tv_budgets_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/smart_detection"
+                android:text="@string/expense_history_label"
                 android:textColor="@color/text_primary_light"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
-            <FrameLayout
-                android:id="@+id/pie_container"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="16dp" />
-
-            <TextView
-                android:id="@+id/tv_totals"
+            <!--
+                Expense History RecyclerView.
+                This is the Expense History section moved from Category Totals.
+            -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_expense_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
     </ScrollView>
 
+    <!--
+        View Category Totals button.
+        Navigates to CategoryTotalActivity which now displays the pie chart.
+    -->
     <Button
         android:id="@+id/btn_view_totals"
         style="@style/StandardButton"

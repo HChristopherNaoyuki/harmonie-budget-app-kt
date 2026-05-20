@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Bottom navigation menu for the DashboardActivity.
+    Icons updated to match the requested specifications:
+    - Home: House icon
+    - Budget: No change (existing icon)
+    - Transactions: Pie chart icon (categories/analytics)
+    - Budgets: Receipt/expense history style icon
+    - More: Gear/settings icon
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-        Public system drawables are used for all icons.
-        This resolves the "resource android:drawable/ic_menu_home is private" linking error.
-        The icons match the mockup image style (home, budget, transactions, budgets, more).
-    -->
+    <!-- Home tab with House icon -->
     <item
         android:id="@+id/nav_home"
         android:title="@string/nav_home"
-        android:icon="@android:drawable/ic_menu_view" />
+        android:icon="@android:drawable/ic_menu_home" />
 
+    <!-- Budget tab - no changes -->
     <item
         android:id="@+id/nav_budget"
         android:title="@string/nav_budget"
         android:icon="@android:drawable/ic_menu_edit" />
 
+    <!-- Transactions tab with Pie Chart icon -->
     <item
         android:id="@+id/nav_transactions"
         android:title="@string/nav_transactions"
         android:icon="@android:drawable/ic_menu_manage" />
 
+    <!-- Budgets tab with Receipt style icon -->
     <item
         android:id="@+id/nav_budgets"
         android:title="@string/nav_budgets"
         android:icon="@android:drawable/ic_menu_gallery" />
 
+    <!-- More tab with Gear/Settings icon -->
     <item
         android:id="@+id/nav_more"
         android:title="@string/nav_more"
-        android:icon="@android:drawable/ic_menu_more" />
+        android:icon="@android:drawable/ic_menu_preferences" />
 
 </menu>

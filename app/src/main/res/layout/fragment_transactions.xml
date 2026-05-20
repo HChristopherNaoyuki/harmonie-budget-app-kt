@@ -38,13 +38,17 @@
                     android:textStyle="bold"
                     android:textColor="@color/text_primary_light" />
 
+                <!--
+                    Button label updated from "OPEN CATEGORIES" to "ADD CATEGORY".
+                    The underlying functionality and onClick handler remain unchanged.
+                -->
                 <Button
                     android:id="@+id/btn_manage_categories"
                     style="@style/StandardButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/open_categories" />
+                    android:text="@string/add_category_button" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
