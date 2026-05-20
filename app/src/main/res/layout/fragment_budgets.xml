@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Budgets fragment layout.
-    This screen now displays the Expense History section (swapped from Category Totals).
-    The View Category Totals button remains at the bottom to navigate to the pie chart.
+    This screen displays the Expense History section.
+    The View Category Totals button navigates to the pie chart screen.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -39,7 +39,7 @@
 
             <!--
                 Expense History RecyclerView.
-                This is the Expense History section moved from Category Totals.
+                The ID rv_expense_history is defined here and referenced in BudgetsFragment.kt.
             -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_expense_history"
@@ -51,10 +51,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!--
-        View Category Totals button.
-        Navigates to CategoryTotalActivity which now displays the pie chart.
-    -->
     <Button
         android:id="@+id/btn_view_totals"
         style="@style/StandardButton"

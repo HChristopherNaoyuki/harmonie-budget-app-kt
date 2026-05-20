@@ -42,6 +42,7 @@ class BudgetsFragment : Fragment()
 
         username = arguments?.getString("username") ?: "admin"
 
+        // Initialize RecyclerView - the ID rv_expense_history is defined in fragment_budgets.xml
         rvExpenseHistory = view.findViewById(R.id.rv_expense_history)
         btnViewTotals = view.findViewById(R.id.btn_view_totals)
 
