@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Login screen with minimalistic design and full scrolling capability.
-    Uses NestedScrollView to ensure content is accessible on all screen sizes.
-    All original views and identifiers are preserved.
-
-    Updated button styles: LOG IN and REGISTER buttons now use StandardButton style
-    with black background and white text as required.
-
-    Added RETURN HOME button that navigates back to the Landing Page.
+    Login screen with back arrow navigation to return to the Landing Page.
+    Added a back arrow in the top-left corner.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,6 +20,22 @@
         android:padding="24dp"
         android:paddingTop="64dp"
         android:paddingBottom="48dp">
+
+        <!--
+            Back arrow navigation to return to the Landing Page (MainActivity).
+            Positioned at the top-left corner of the screen.
+        -->
+        <TextView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/back_arrow"
+            android:textSize="16sp"
+            android:textColor="@color/accent_blue"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true" />
 
         <!-- App branding area -->
         <TextView
@@ -115,10 +125,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!--
-            LOG IN button with standardized black background and white text.
-            Uses StandardButton style for consistency across the application.
-        -->
+        <!-- LOG IN button -->
         <Button
             android:id="@+id/btn_log_in"
             style="@style/StandardButton"
@@ -127,10 +134,7 @@
             android:layout_marginTop="24dp"
             android:text="@string/log_in_button" />
 
-        <!--
-            REGISTER button with standardized black background and white text.
-            Uses StandardButton style for consistency across the application.
-        -->
+        <!-- REGISTER button -->
         <Button
             android:id="@+id/btn_register"
             style="@style/StandardButton"
@@ -139,11 +143,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/register_button" />
 
-        <!--
-            RETURN HOME button added as required.
-            Navigates back to the Landing Page (MainActivity).
-            Uses StandardButton style for consistency.
-        -->
+        <!-- RETURN HOME button -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"

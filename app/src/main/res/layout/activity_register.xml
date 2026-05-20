@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Register / Create Account screen with full scrolling capability.
-    Uses ScrollView to ensure all input fields and buttons remain accessible
-    on smaller screens. All fields are clearly labeled with a minimalist gray theme.
-
-    Updated SIGN UP button to use StandardButton style with black background
-    and white text as required.
-
-    Added RETURN HOME button that navigates back to the Landing Page.
+    Register / Create Account screen with back arrow navigation.
+    Added a back arrow in the top-left corner to return to the Landing Page.
 -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,7 +20,25 @@
         android:paddingBottom="48dp"
         android:background="@color/background_light">
 
-        <!-- Title - exact match to mock-up -->
+        <!--
+            Back arrow navigation to return to the Landing Page (MainActivity).
+            Positioned at the top-left corner of the screen.
+        -->
+        <TextView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_arrow"
+            android:textSize="16sp"
+            android:textColor="@color/accent_blue"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title -->
         <TextView
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
@@ -35,11 +47,12 @@
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary_light"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_back_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Subtitle - blue and clickable, exact match to mock-up -->
+        <!-- Subtitle - blue and clickable -->
         <TextView
             android:id="@+id/tv_already_registered"
             android:layout_width="wrap_content"
@@ -184,10 +197,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--
-            SIGN UP button with standardized black background and white text.
-            Uses StandardButton style for consistency across the application.
-        -->
+        <!-- SIGN UP button -->
         <Button
             android:id="@+id/btn_register"
             style="@style/StandardButton"
@@ -199,11 +209,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--
-            RETURN HOME button added as required.
-            Navigates back to the Landing Page (MainActivity).
-            Uses StandardButton style for consistency.
-        -->
+        <!-- RETURN HOME button -->
         <Button
             android:id="@+id/btn_return_home"
             style="@style/StandardButton"

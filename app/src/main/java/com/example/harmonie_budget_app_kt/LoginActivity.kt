@@ -5,12 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
+/**
+ * LoginActivity handles user authentication and session persistence.
+ *
+ * Part 3 Enhancement: Added back arrow navigation to return to the Landing Page.
+ */
 class LoginActivity : AppCompatActivity()
 {
     private lateinit var etUsername: EditText
@@ -18,6 +24,7 @@ class LoginActivity : AppCompatActivity()
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
     private lateinit var btnReturnHome: Button
+    private lateinit var ivBackArrow: TextView
 
     private val userViewModel = UserViewModel()
 
@@ -53,12 +60,15 @@ class LoginActivity : AppCompatActivity()
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
         btnReturnHome = findViewById(R.id.btn_return_home)
+        ivBackArrow = findViewById(R.id.iv_back_arrow)
+
+        // Back arrow navigation to return to the Landing Page (MainActivity)
+        ivBackArrow.setOnClickListener {
+            navigateToLandingPage()
+        }
 
         btnReturnHome.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
+            navigateToLandingPage()
         }
 
         btnLogin.setOnClickListener {
@@ -105,5 +115,17 @@ class LoginActivity : AppCompatActivity()
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    /**
+     * Navigates back to the Landing Page (MainActivity).
+     * Clears the back stack to prevent returning to the login screen.
+     */
+    private fun navigateToLandingPage()
+    {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 }
