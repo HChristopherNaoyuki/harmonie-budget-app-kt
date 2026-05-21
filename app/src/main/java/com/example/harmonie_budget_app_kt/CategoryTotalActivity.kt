@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
@@ -19,16 +20,20 @@ import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
 import java.util.Locale
 
 /**
- * CategoryTotalActivity now displays the Pie Chart visualization.
+ * CategoryTotalActivity displays the Pie Chart visualization and totals table.
  *
- * Part 3 Enhancement: Added back arrow navigation to return to the Budgets tab.
+ * Part 3 Enhancement:
+ * - Added back arrow navigation to return to the Budgets tab.
+ * - Updated to display category totals in a table format matching the mockup.
+ * - Table columns: Category, Amount (ZAR), Percentage.
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
-    private lateinit var tvTotals: TextView
+    private lateinit var tvTitle: TextView
     private lateinit var pieContainer: FrameLayout
     private lateinit var btnReturnHome: Button
     private lateinit var ivBackArrow: TextView
+    private lateinit var tableRowsContainer: LinearLayout
     private lateinit var username: String
 
     private val expenseViewModel = ExpenseViewModel()
@@ -41,10 +46,11 @@ class CategoryTotalActivity : AppCompatActivity()
 
         username = intent.getStringExtra("username") ?: "admin"
 
-        tvTotals = findViewById(R.id.tv_totals)
+        tvTitle = findViewById(R.id.tv_title)
         pieContainer = findViewById(R.id.pie_container)
         btnReturnHome = findViewById(R.id.btn_return_home)
         ivBackArrow = findViewById(R.id.iv_back_arrow)
+        tableRowsContainer = findViewById(R.id.table_rows_container)
 
         // Back arrow navigation to return to the Budgets tab
         ivBackArrow.setOnClickListener {
@@ -55,45 +61,7 @@ class CategoryTotalActivity : AppCompatActivity()
             navigateToBudgetsTab()
         }
 
-        val expenses = expenseViewModel.getExpenses(this, username)
-        val categories = categoryViewModel.getCategories(this, username)
-
-        val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
-
-        val totals = expenses.groupBy { it.categoryId }
-            .mapValues { entry -> entry.value.sumOf { it.amount } }
-
-        val grandTotal = totals.values.sum()
-
-        val pieData = totals.map { (categoryId, amount) ->
-            val categoryName = categoryMap[categoryId]?.name ?: "General"
-            val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
-            Pair(categoryName, percentage)
-        }
-
-        val pieChart = PieChartView(this, pieData)
-        pieContainer.addView(pieChart)
-
-        val builder = StringBuilder()
-        for ((categoryId, total) in totals)
-        {
-            val categoryName = categoryMap[categoryId]?.name ?: "General"
-            val percentage = if (grandTotal > 0) (total / grandTotal * 100) else 0.0
-            builder.append(
-                String.format(
-                    Locale.US,
-                    "%s: %.2f (%.1f%%) %n",
-                    categoryName,
-                    total,
-                    percentage
-                )
-            )
-        }
-        if (totals.isEmpty())
-        {
-            builder.append("No expenses found")
-        }
-        tvTotals.text = builder.toString()
+        loadAndDisplayData()
     }
 
     /**
@@ -107,6 +75,114 @@ class CategoryTotalActivity : AppCompatActivity()
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
+    }
+
+    /**
+     * Loads expense and category data, then displays the pie chart and totals table.
+     */
+    private fun loadAndDisplayData()
+    {
+        val expenses = expenseViewModel.getExpenses(this, username)
+        val categories = categoryViewModel.getCategories(this, username)
+
+        val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
+
+        // Group expenses by categoryId and calculate totals
+        val totals = expenses.groupBy { it.categoryId }
+            .mapValues { entry -> entry.value.sumOf { it.amount } }
+
+        val grandTotal = totals.values.sum()
+
+        // Build pie data with category names and percentages
+        val pieData = totals.map { (categoryId, amount) ->
+            val categoryName = categoryMap[categoryId]?.name ?: "General"
+            val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
+            Triple(categoryName, amount, percentage)
+        }
+
+        // Create and add the pie chart view
+        val pieChart = PieChartView(this, pieData.map { Pair(it.first, it.third) })
+        pieContainer.addView(pieChart)
+
+        // Display the totals table
+        displayTotalsTable(pieData)
+    }
+
+    /**
+     * Displays the category totals in a table format matching the mockup.
+     * Creates a row for each category showing Name, Amount (ZAR), and Percentage.
+     *
+     * @param data List of Triples containing category name, amount, and percentage
+     */
+    private fun displayTotalsTable(data: List<Triple<String, Double, Double>>)
+    {
+        // Clear existing rows
+        tableRowsContainer.removeAllViews()
+
+        if (data.isEmpty())
+        {
+            val emptyRow = TextView(this)
+            emptyRow.text = "No expense data available"
+            emptyRow.setTextColor(getColor(R.color.text_secondary_light))
+            emptyRow.textSize = 14f
+            emptyRow.setPadding(16, 32, 16, 32)
+            emptyRow.gravity = android.view.Gravity.CENTER
+            tableRowsContainer.addView(emptyRow)
+            return
+        }
+
+        // Create a row for each category
+        for ((categoryName, amount, percentage) in data)
+        {
+            val rowLayout = LinearLayout(this)
+            rowLayout.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            rowLayout.orientation = LinearLayout.HORIZONTAL
+            rowLayout.setPadding(0, 12, 0, 12)
+
+            // Category Name Column
+            val categoryTextView = TextView(this)
+            categoryTextView.layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                2f
+            )
+            categoryTextView.text = categoryName
+            categoryTextView.setTextColor(getColor(R.color.text_primary_light))
+            categoryTextView.textSize = 14f
+
+            // Amount Column (ZAR currency)
+            val amountTextView = TextView(this)
+            amountTextView.layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+            amountTextView.text = String.format(Locale.US, "%.2f", amount)
+            amountTextView.setTextColor(getColor(R.color.text_primary_light))
+            amountTextView.textSize = 14f
+            amountTextView.gravity = android.view.Gravity.END
+
+            // Percentage Column
+            val percentageTextView = TextView(this)
+            percentageTextView.layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+            percentageTextView.text = String.format(Locale.US, "(%.1f%%)", percentage)
+            percentageTextView.setTextColor(getColor(R.color.text_secondary_light))
+            percentageTextView.textSize = 14f
+            percentageTextView.gravity = android.view.Gravity.END
+
+            rowLayout.addView(categoryTextView)
+            rowLayout.addView(amountTextView)
+            rowLayout.addView(percentageTextView)
+
+            tableRowsContainer.addView(rowLayout)
+        }
     }
 
     /**
@@ -129,6 +205,12 @@ class CategoryTotalActivity : AppCompatActivity()
             isAntiAlias = true
             textSize = 24f
             color = Color.WHITE
+            textAlign = Paint.Align.CENTER
+        }
+        private val percentagePaint: Paint = Paint().apply {
+            isAntiAlias = true
+            textSize = 20f
+            color = Color.BLACK
             textAlign = Paint.Align.CENTER
         }
 
@@ -160,11 +242,12 @@ class CategoryTotalActivity : AppCompatActivity()
             )
             val gap = 2f
 
-            data.forEachIndexed { index, (_, value) ->
+            data.forEachIndexed { index, (name, value) ->
                 val sweepAngle = (value / total * 360f - gap).toFloat().coerceAtLeast(0f)
                 paint.color = colors[index % colors.size]
                 canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
 
+                // Draw percentage label on the segment
                 if (sweepAngle > 15f)
                 {
                     val midAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
@@ -179,12 +262,14 @@ class CategoryTotalActivity : AppCompatActivity()
                 startAngle += sweepAngle + gap
             }
 
+            // Draw center circle for donut style
             paint.color = Color.WHITE
             canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 5f, paint)
 
+            // Draw legend below the pie chart
             val legendStartY = pieHeight + 60f
-            val legendItemHeight = 48f
-            val colorSize = 28f
+            val legendItemHeight = 40f
+            val colorSize = 20f
 
             data.forEachIndexed { index, (name, value) ->
                 val y = legendStartY + (index * legendItemHeight)
@@ -192,9 +277,9 @@ class CategoryTotalActivity : AppCompatActivity()
                 canvas.drawRect(40f, y, 40f + colorSize, y + colorSize, legendPaint)
 
                 val percentageText = String.format(Locale.US, "%.1f%%", value)
-                textPaint.textSize = 28f
+                textPaint.textSize = 24f
                 textPaint.color = Color.BLACK
-                canvas.drawText("$name: $percentageText", 90f, y + 26f, textPaint)
+                canvas.drawText("$name: $percentageText", 80f, y + 18f, textPaint)
             }
         }
     }
