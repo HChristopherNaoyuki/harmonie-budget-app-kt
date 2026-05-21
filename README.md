@@ -165,7 +165,8 @@ harmonie-budget-app-kt/
 │       │   ├── ic_receipt.xml
 │       │   ├── ic_settings_gear.xml
 │       │   ├── rounded_button.xml
-│       │   └── spinner_dropdown_background.xml 
+│       │   ├── spinner_dropdown_background.xml
+│       │   └── table_header_background.xml 
 │       ├── layout/
 │       │   ├── activity_category.xml
 │       │   ├── activity_category_total.xml 
