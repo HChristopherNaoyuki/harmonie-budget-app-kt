@@ -19,6 +19,7 @@
         - Receipt Photo Preview (view receipt, error messages)
         - User Feedback (success messages, greetings)
         - Error Messages (validation errors, authentication errors)
+        - Category Totals Table (table headers, empty state)
     -->
 
     <!-- ==================== Application Metadata ==================== -->
@@ -124,6 +125,9 @@
     <!-- Transactions screen button label for adding new categories -->
     <string name="add_category_button">ADD CATEGORY</string>
 
+    <!-- Default category name for uncategorized expenses -->
+    <string name="default_category_name">General</string>
+
 
     <!-- ==================== Expense Management ==================== -->
 
@@ -184,6 +188,17 @@
     <string name="no_expense_available">No expense available.</string>
 
 
+    <!-- ==================== Category Totals Table ==================== -->
+
+    <!-- Table header labels for the category totals table -->
+    <string name="table_header_category">Category</string>
+    <string name="table_header_amount">Amount (ZAR)</string>
+    <string name="table_header_percentage">Percentage</string>
+
+    <!-- Empty state message when no expense data is available for the table -->
+    <string name="no_expense_data_available">No expense data available</string>
+
+
     <!-- ==================== Gamification ==================== -->
 
     <!-- Gamification section labels for the home screen -->
@@ -241,16 +256,8 @@
     <string name="nav_budget">Budget</string>
     <string name="nav_more">More</string>
 
-    <!--
-        nav_category: Displayed in the bottom navigation bar for the transactions tab.
-        The screen title inside the fragment remains "Transactions".
-    -->
+    <!-- Bottom navigation labels for renamed tabs -->
     <string name="nav_category">Category</string>
-
-    <!--
-        nav_history: Displayed in the bottom navigation bar for the budgets tab.
-        The screen title inside the fragment remains "Budgets".
-    -->
     <string name="nav_history">History</string>
 
     <!-- Screen titles for fragments (unchanged from original) -->

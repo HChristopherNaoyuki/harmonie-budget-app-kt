@@ -29,7 +29,6 @@ import java.util.Locale
  */
 class CategoryTotalActivity : AppCompatActivity()
 {
-    private lateinit var tvTitle: TextView
     private lateinit var pieContainer: FrameLayout
     private lateinit var btnReturnHome: Button
     private lateinit var ivBackArrow: TextView
@@ -46,7 +45,6 @@ class CategoryTotalActivity : AppCompatActivity()
 
         username = intent.getStringExtra("username") ?: "admin"
 
-        tvTitle = findViewById(R.id.tv_title)
         pieContainer = findViewById(R.id.pie_container)
         btnReturnHome = findViewById(R.id.btn_return_home)
         ivBackArrow = findViewById(R.id.iv_back_arrow)
@@ -95,7 +93,7 @@ class CategoryTotalActivity : AppCompatActivity()
 
         // Build pie data with category names and percentages
         val pieData = totals.map { (categoryId, amount) ->
-            val categoryName = categoryMap[categoryId]?.name ?: "General"
+            val categoryName = categoryMap[categoryId]?.name ?: getString(R.string.default_category_name)
             val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
             Triple(categoryName, amount, percentage)
         }
@@ -122,7 +120,7 @@ class CategoryTotalActivity : AppCompatActivity()
         if (data.isEmpty())
         {
             val emptyRow = TextView(this)
-            emptyRow.text = "No expense data available"
+            emptyRow.text = getString(R.string.no_expense_data_available)
             emptyRow.setTextColor(getColor(R.color.text_secondary_light))
             emptyRow.textSize = 14f
             emptyRow.setPadding(16, 32, 16, 32)
@@ -172,7 +170,8 @@ class CategoryTotalActivity : AppCompatActivity()
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f
             )
-            percentageTextView.text = String.format(Locale.US, "(%.1f%%)", percentage)
+            val percentageText = String.format(Locale.US, "(%.1f%%)", percentage)
+            percentageTextView.text = percentageText
             percentageTextView.setTextColor(getColor(R.color.text_secondary_light))
             percentageTextView.textSize = 14f
             percentageTextView.gravity = android.view.Gravity.END
@@ -207,12 +206,6 @@ class CategoryTotalActivity : AppCompatActivity()
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
         }
-        private val percentagePaint: Paint = Paint().apply {
-            isAntiAlias = true
-            textSize = 20f
-            color = Color.BLACK
-            textAlign = Paint.Align.CENTER
-        }
 
         override fun onDraw(canvas: Canvas)
         {
@@ -242,7 +235,7 @@ class CategoryTotalActivity : AppCompatActivity()
             )
             val gap = 2f
 
-            data.forEachIndexed { index, (name, value) ->
+            data.forEachIndexed { index, (_, value) ->
                 val sweepAngle = (value / total * 360f - gap).toFloat().coerceAtLeast(0f)
                 paint.color = colors[index % colors.size]
                 canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
