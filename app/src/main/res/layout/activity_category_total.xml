@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Category Totals screen displaying pie chart and totals table.
-    Responsive layout that stacks vertically on smaller screens.
+    Refined minimalist design matching the provided mockup.
+    Added spinner_sort for sorting functionality.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:paddingTop="12dp"
+            android:padding="20dp"
+            android:paddingTop="16dp"
             android:paddingBottom="24dp">
 
             <!-- Back arrow navigation -->
@@ -33,7 +34,7 @@
                 android:text="@string/back_arrow"
                 android:textSize="16sp"
                 android:textColor="@color/accent_blue"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -46,71 +47,50 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_totals_title"
                 android:textColor="@color/text_primary_light"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="24dp" />
 
-            <!-- Pie Chart Container -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/spending_distribution"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary_light"
-                android:layout_marginBottom="12dp" />
-
-            <FrameLayout
-                android:id="@+id/pie_container"
-                android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Totals Table Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/category_breakdown"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary_light"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="8dp" />
-
-            <!-- Sort Controls -->
+            <!-- Sort Spinner -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp"
-                android:gravity="end">
+                android:gravity="end"
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sort_by"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/text_secondary_light"
                     android:layout_marginEnd="8dp"
                     android:layout_gravity="center_vertical" />
 
                 <Spinner
                     android:id="@+id/spinner_sort"
-                    android:layout_width="120dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/spinner_dropdown_background"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:minWidth="150dp"
+                    android:background="@drawable/spinner_dropdown_background" />
 
             </LinearLayout>
 
-            <!-- Totals Table -->
+            <!-- Pie Chart Container (without legend) -->
+            <FrameLayout
+                android:id="@+id/pie_container"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Totals Table Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/surface_light"
-                android:padding="12dp"
+                android:padding="16dp"
                 android:layout_marginBottom="16dp">
 
                 <!-- Table Header Row -->
@@ -118,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="12dp"
                     android:layout_marginBottom="8dp">
 
                     <TextView
@@ -188,7 +168,7 @@
         android:id="@+id/btn_return_home"
         style="@style/StandardButton"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="52dp"
         android:layout_margin="16dp"
         android:text="@string/return_home" />
 

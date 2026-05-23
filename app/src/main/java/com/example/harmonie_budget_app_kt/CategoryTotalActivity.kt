@@ -30,8 +30,8 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 /**
- * CategoryTotalActivity displays the pie chart and totals table with category breakdown.
- * Supports dynamic data loading, sorting, and responsive layout for small screens.
+ * CategoryTotalActivity displays a minimalist pie chart and totals table.
+ * Refined to match the mockup with clean typography and no chart legend.
  */
 data class CategoryTotalData(
     val categoryName: String,
@@ -64,14 +64,14 @@ class CategoryTotalActivity : AppCompatActivity()
     private val expenseViewModel = ExpenseViewModel()
     private val categoryViewModel = CategoryViewModel()
 
-    // Colorblind-friendly palette (6 distinct colors)
+    // Minimalist color palette (soft, modern colors)
     private val colorPalette = listOf(
-        "#1E88E5".toColorInt(),  // Blue
-        "#E53935".toColorInt(),  // Red
-        "#43A047".toColorInt(),  // Green
-        "#FDD835".toColorInt(),  // Yellow
-        "#8E24AA".toColorInt(),  // Purple
-        "#FB8C00".toColorInt()   // Orange
+        "#4A90E2".toColorInt(),  // Soft Blue
+        "#E25A4A".toColorInt(),  // Soft Red
+        "#5CB85C".toColorInt(),  // Soft Green
+        "#F0AD4E".toColorInt(),  // Soft Orange
+        "#9B59B6".toColorInt(),  // Soft Purple
+        "#5BC0DE".toColorInt()   // Soft Cyan
     )
 
     companion object
@@ -89,12 +89,9 @@ class CategoryTotalActivity : AppCompatActivity()
 
         username = intent.getStringExtra("username") ?: "admin"
 
-        // Initialize UI components
         initializeViews()
         setupClickListeners()
         setupSortSpinner()
-
-        // Load and display data
         loadData()
     }
 
@@ -113,15 +110,9 @@ class CategoryTotalActivity : AppCompatActivity()
 
     private fun setupClickListeners()
     {
-        ivBackArrow.setOnClickListener {
-            navigateToBudgetsTab()
-        }
+        ivBackArrow.setOnClickListener { navigateToBudgetsTab() }
+        btnReturnHome.setOnClickListener { navigateToBudgetsTab() }
 
-        btnReturnHome.setOnClickListener {
-            navigateToBudgetsTab()
-        }
-
-        // Sort by category when header is clicked
         headerCategory.setOnClickListener {
             currentSortColumn = SORT_CATEGORY
             isAscending = !isAscending
@@ -129,7 +120,6 @@ class CategoryTotalActivity : AppCompatActivity()
             updateHeaderIndicators()
         }
 
-        // Sort by amount when header is clicked
         headerAmount.setOnClickListener {
             currentSortColumn = SORT_AMOUNT
             isAscending = !isAscending
@@ -137,7 +127,6 @@ class CategoryTotalActivity : AppCompatActivity()
             updateHeaderIndicators()
         }
 
-        // Sort by percentage when header is clicked
         headerPercentage.setOnClickListener {
             currentSortColumn = SORT_PERCENTAGE
             isAscending = !isAscending
@@ -184,7 +173,6 @@ class CategoryTotalActivity : AppCompatActivity()
 
     private fun updateHeaderIndicators()
     {
-        // Add visual indicator for active sort column
         headerCategory.text = when (currentSortColumn)
         {
             SORT_CATEGORY -> if (isAscending) "Category ▲" else "Category ▼"
@@ -216,7 +204,6 @@ class CategoryTotalActivity : AppCompatActivity()
 
     private fun loadData()
     {
-        // Correct coroutine syntax: opening brace on same line as launch
         lifecycleScope.launch {
             val (expenses, categories) = withContext(Dispatchers.IO) {
                 Pair(
@@ -235,13 +222,11 @@ class CategoryTotalActivity : AppCompatActivity()
     {
         val categoryMap: Map<Int, Category> = categories.associateBy { it.id }
 
-        // Group expenses by categoryId and calculate totals
         val totals = expenses.groupBy { it.categoryId }
             .mapValues { entry -> entry.value.sumOf { it.amount } }
 
         val grandTotal = totals.values.sum()
 
-        // Build category data with percentages
         val rawData = totals.map { (categoryId, amount) ->
             val categoryName = categoryMap[categoryId]?.name ?: getString(R.string.default_category_name)
             val percentage = if (grandTotal > 0) (amount / grandTotal * 100) else 0.0
@@ -264,12 +249,10 @@ class CategoryTotalActivity : AppCompatActivity()
             mainCategories
         }
 
-        // Assign colors to each category
         categoryData = categoryDataList.mapIndexed { index, data ->
             data.copy(color = colorPalette[index % colorPalette.size])
         }
 
-        // Sort and display
         sortAndDisplayData()
     }
 
@@ -296,7 +279,7 @@ class CategoryTotalActivity : AppCompatActivity()
 
         if (data.isEmpty() || data.sumOf { it.amount } == 0.0)
         {
-            showEmptyState(EMPTY_STATE_MESSAGE)
+            showEmptyState()
             return
         }
 
@@ -328,52 +311,29 @@ class CategoryTotalActivity : AppCompatActivity()
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             rowLayout.orientation = LinearLayout.HORIZONTAL
-            rowLayout.setPadding(0, 12, 0, 12)
+            rowLayout.setPadding(0, 14, 0, 14)
 
-            // Alternating background colors for better readability
-            if (index % 2 == 1)
-            {
-                rowLayout.setBackgroundColor(getColor(R.color.background_light))
-            }
-
-            // Category Name with color indicator
-            val categoryLayout = LinearLayout(this)
-            categoryLayout.layoutParams = LinearLayout.LayoutParams(
+            val categoryTextView = TextView(this)
+            categoryTextView.layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 2f
             )
-            categoryLayout.orientation = LinearLayout.HORIZONTAL
-            categoryLayout.gravity = Gravity.CENTER_VERTICAL
-
-            // Color indicator circle
-            val colorView = View(this)
-            colorView.layoutParams = LinearLayout.LayoutParams(16, 16).apply {
-                setMargins(0, 0, 8, 0)
-            }
-            colorView.setBackgroundColor(categoryInfo.color)
-
-            val categoryTextView = TextView(this)
             categoryTextView.text = categoryInfo.categoryName
             categoryTextView.setTextColor(getColor(R.color.text_primary_light))
-            categoryTextView.textSize = 14f
+            categoryTextView.textSize = 15f
 
-            categoryLayout.addView(colorView)
-            categoryLayout.addView(categoryTextView)
-
-            // Amount
             val amountTextView = TextView(this)
             amountTextView.layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f
             )
-            amountTextView.text = String.format(Locale.US, "R %,.2f", categoryInfo.amount)
+            amountTextView.text = String.format(Locale.US, "%,.2f", categoryInfo.amount)
             amountTextView.setTextColor(getColor(R.color.text_primary_light))
-            amountTextView.textSize = 14f
+            amountTextView.textSize = 15f
             amountTextView.gravity = Gravity.END
 
-            // Percentage
             val percentageTextView = TextView(this)
             percentageTextView.layoutParams = LinearLayout.LayoutParams(
                 0,
@@ -382,14 +342,13 @@ class CategoryTotalActivity : AppCompatActivity()
             )
             percentageTextView.text = String.format(Locale.US, "%.1f%%", categoryInfo.percentage)
             percentageTextView.setTextColor(getColor(R.color.text_secondary_light))
-            percentageTextView.textSize = 14f
+            percentageTextView.textSize = 15f
             percentageTextView.gravity = Gravity.END
 
-            rowLayout.addView(categoryLayout)
+            rowLayout.addView(categoryTextView)
             rowLayout.addView(amountTextView)
             rowLayout.addView(percentageTextView)
 
-            // Click listener to highlight corresponding pie slice
             val position = index
             rowLayout.setOnClickListener {
                 highlightPieSlice(position)
@@ -406,17 +365,16 @@ class CategoryTotalActivity : AppCompatActivity()
 
     private fun highlightPieSlice(index: Int)
     {
-        // Recreate the pie chart with highlighting
         pieContainer.removeAllViews()
         val pieChart = PieChartView(this, categoryData, highlightedSliceIndex = index)
         pieContainer.addView(pieChart)
     }
 
-    private fun showEmptyState(message: String)
+    private fun showEmptyState()
     {
         pieContainer.removeAllViews()
         val emptyText = TextView(this)
-        emptyText.text = message
+        emptyText.text = EMPTY_STATE_MESSAGE
         emptyText.setTextColor(getColor(R.color.text_secondary_light))
         emptyText.textSize = 16f
         emptyText.gravity = Gravity.CENTER
@@ -425,7 +383,8 @@ class CategoryTotalActivity : AppCompatActivity()
     }
 
     /**
-     * Custom PieChartView that draws the pie chart with legend and selection highlighting.
+     * Minimalist PieChartView without legend.
+     * Clean, modern design that matches the mockup.
      */
     private class PieChartView(
         context: Context,
@@ -441,15 +400,9 @@ class CategoryTotalActivity : AppCompatActivity()
             color = Color.BLACK
         }
         private val rect: RectF = RectF()
-        private val legendPaint: Paint = Paint().apply { isAntiAlias = true }
-        private val textPaint: Paint = Paint().apply {
-            isAntiAlias = true
-            textSize = 28f
-            color = Color.BLACK
-        }
         private val labelPaint: Paint = Paint().apply {
             isAntiAlias = true
-            textSize = 22f
+            textSize = 18f
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
         }
@@ -458,21 +411,15 @@ class CategoryTotalActivity : AppCompatActivity()
         {
             super.onDraw(canvas)
 
-            if (data.isEmpty())
+            if (data.isEmpty() || data.sumOf { it.amount } == 0.0)
             {
                 return
             }
 
             val total = data.sumOf { it.amount }
-            if (total == 0.0)
-            {
-                return
-            }
-
-            // Calculate pie chart size (responsive)
-            val pieSize = (width * 0.6f).toInt().coerceAtMost(height - 200)
+            val pieSize = (width * 0.7f).toInt().coerceAtMost(height - 60)
             val left = (width - pieSize) / 2f
-            val top = 40f
+            val top = 20f
             rect.set(left, top, left + pieSize, top + pieSize)
 
             var startAngle = 0f
@@ -481,7 +428,6 @@ class CategoryTotalActivity : AppCompatActivity()
             data.forEachIndexed { index, categoryInfo ->
                 val sweepAngle = (categoryInfo.amount / total * 360f).toFloat()
                 paint.color = categoryInfo.color
-
                 canvas.drawArc(rect, startAngle, sweepAngle, true, paint)
 
                 // Draw highlight border if this slice is selected
@@ -491,57 +437,24 @@ class CategoryTotalActivity : AppCompatActivity()
                 }
 
                 // Draw percentage label on slice if large enough
-                if (sweepAngle > 15f)
+                if (sweepAngle > 12f)
                 {
                     val midAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
-                    val radius = rect.width() / 3f
+                    val radius = rect.width() / 2.5f
                     val labelX = rect.centerX() + (radius * kotlin.math.cos(midAngle)).toFloat()
                     val labelY = rect.centerY() + (radius * kotlin.math.sin(midAngle)).toFloat()
                     val percentageText = String.format(Locale.US, "%.0f%%", categoryInfo.percentage)
 
-                    // Ensure text is readable against the slice color
-                    val isDarkSlice = isColorDark(categoryInfo.color)
-                    labelPaint.color = if (isDarkSlice) Color.WHITE else Color.BLACK
-                    canvas.drawText(percentageText, labelX, labelY + 8f, labelPaint)
+                    // Determine text color based on slice brightness
+                    val brightness = (categoryInfo.color shr 16 and 0xFF) * 0.299 +
+                            (categoryInfo.color shr 8 and 0xFF) * 0.587 +
+                            (categoryInfo.color and 0xFF) * 0.114
+                    labelPaint.color = if (brightness < 128) Color.WHITE else Color.BLACK
+                    canvas.drawText(percentageText, labelX, labelY + 6f, labelPaint)
                 }
 
                 startAngle += sweepAngle
             }
-
-            // Draw legend below the pie chart
-            val legendStartY = pieSize + 80f
-            val legendItemHeight = 36f
-            val colorSize = 20f
-            val maxLegendItems = 6
-
-            data.take(maxLegendItems).forEachIndexed { index, categoryInfo ->
-                val y = legendStartY + (index * legendItemHeight)
-                legendPaint.color = categoryInfo.color
-                canvas.drawRect(40f, y, 40f + colorSize, y + colorSize, legendPaint)
-
-                val legendText = "${categoryInfo.categoryName}: ${String.format(Locale.US, "%.1f", categoryInfo.percentage)}%"
-                textPaint.textSize = 22f
-                textPaint.color = Color.BLACK
-                canvas.drawText(legendText, 80f, y + 18f, textPaint)
-            }
-
-            // Show "Other" categories note if any were grouped
-            if (data.any { it.categoryName == "Other" })
-            {
-                val otherText = "Note: Categories with less than 0.5% are grouped as 'Other'"
-                textPaint.textSize = 16f
-                textPaint.color = Color.GRAY
-                canvas.drawText(otherText, 40f, legendStartY + (maxLegendItems * legendItemHeight) + 20f, textPaint)
-            }
-        }
-
-        private fun isColorDark(color: Int): Boolean
-        {
-            val red = (color shr 16 and 0xFF)
-            val green = (color shr 8 and 0xFF)
-            val blue = (color and 0xFF)
-            val brightness = (red * 0.299 + green * 0.587 + blue * 0.114)
-            return brightness < 128
         }
     }
 }
