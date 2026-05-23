@@ -23,11 +23,9 @@ import java.util.Locale
  * ExpenseHistoryAdapter is a RecyclerView adapter for displaying expense records.
  * Uses ListAdapter with DiffUtil for efficient updates.
  *
- * Part 3 Enhancement:
- * - Updated display format to match the mockup design.
- * - Shows category, description, amount, transaction date, start time, end time,
- *   submission date, and a receipt button when applicable.
- * - Time format uses 24-hour format (HH:mm) as required.
+ * Displays category, description, amount, transaction date, start time,
+ * submission date, and a receipt button when applicable.
+ * Time format uses 24-hour format (HH:mm).
  *
  * @param categories The list of Category objects for resolving category names
  */
@@ -60,7 +58,6 @@ class ExpenseHistoryAdapter(
         val tvTransactionDate: TextView = itemView.findViewById(R.id.tv_transaction_date)
         val tvAmount: TextView = itemView.findViewById(R.id.tv_amount)
         val tvStartTime: TextView = itemView.findViewById(R.id.tv_start_time)
-        val tvEndTime: TextView = itemView.findViewById(R.id.tv_end_time)
         val tvSubmissionDate: TextView = itemView.findViewById(R.id.tv_submission_date)
         val btnViewReceipt: Button = itemView.findViewById(R.id.btn_view_receipt)
     }
@@ -90,10 +87,6 @@ class ExpenseHistoryAdapter(
         // Format start time as "Start HH:mm" using 24-hour format
         val startTimeText = "Start ${expense.startTime}"
         holder.tvStartTime.text = startTimeText
-
-        // Format end time as "HH:mm" using 24-hour format (no AM/PM conversion)
-        val endTimeFormatted = expense.endTime
-        holder.tvEndTime.text = endTimeFormatted
 
         // Format submission date as "Recorded on: MMM dd, yyyy"
         val submissionDateText = "Recorded on: ${formatDate(expense.date)}"
@@ -135,6 +128,7 @@ class ExpenseHistoryAdapter(
         }
         catch (exception: Exception)
         {
+            // Return the original string if parsing fails
             dateString
         }
     }
