@@ -1,147 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Category Totals screen displaying pie chart visualization and totals table.
-    Updated to match the mockup design with a table showing Category, Amount, and Percentage.
-    The RETURN HOME button remains at the bottom.
+    Category Totals screen displaying totals table.
+    Updated to match the mockup with a clean table format.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_light">
+    android:background="@color/background_light"
+    android:padding="20dp"
+    android:paddingBottom="32dp">
 
-    <ScrollView
+    <!-- Back arrow navigation -->
+    <TextView
+        android:id="@+id/iv_back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back_arrow"
+        android:textSize="16sp"
+        android:textColor="@color/accent_blue"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- Screen Title -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/category_totals_title"
+        android:textColor="@color/text_primary_light"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Totals Table Section -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/surface_light"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp">
 
+        <!-- Table Header Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:paddingBottom="32dp">
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:layout_marginBottom="8dp">
 
-            <!-- Back arrow navigation -->
             <TextView
-                android:id="@+id/iv_back_arrow"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/back_arrow"
-                android:textSize="16sp"
-                android:textColor="@color/accent_blue"
-                android:padding="8dp"
-                android:layout_marginBottom="8dp"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Screen Title -->
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/category_totals_title"
-                android:textColor="@color/text_primary_light"
-                android:textSize="28sp"
+                android:layout_weight="2"
+                android:text="@string/table_header_category"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:textColor="@color/text_primary_light" />
 
-            <!-- Pie Chart Container -->
-            <FrameLayout
-                android:id="@+id/pie_container"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="24dp" />
-
-            <!--
-                Totals Table Section
-                Displays category totals in a table format matching the mockup.
-                Includes columns: Category, Amount (ZAR), Percentage.
-            -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp"
-                app:cardBackgroundColor="@color/surface_light"
-                app:strokeColor="@color/border_light"
-                app:strokeWidth="1dp">
+                android:layout_weight="1"
+                android:text="@string/table_header_amount"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary_light"
+                android:gravity="end" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- Table Header Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/table_header_background">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="@string/table_header_category"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary_light" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/table_header_amount"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary_light"
-                            android:gravity="end" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/table_header_percentage"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary_light"
-                            android:gravity="end" />
-
-                    </LinearLayout>
-
-                    <!-- Divider line between header and rows -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/border_light"
-                        android:layout_marginBottom="8dp" />
-
-                    <!-- Dynamic Table Rows Container -->
-                    <LinearLayout
-                        android:id="@+id/table_rows_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- RETURN HOME Button -->
-            <Button
-                android:id="@+id/btn_return_home"
-                style="@style/StandardButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/return_home" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/table_header_percentage"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary_light"
+                android:gravity="end" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_light"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Dynamic Table Rows Container -->
+        <LinearLayout
+            android:id="@+id/table_rows_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+    <!-- RETURN HOME Button -->
+    <Button
+        android:id="@+id/btn_return_home"
+        style="@style/StandardButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/return_home" />
+
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,15 +17,13 @@ import com.example.harmonie_budget_app_kt.models.Category
 import com.example.harmonie_budget_app_kt.models.Expense
 import com.example.harmonie_budget_app_kt.viewmodels.CategoryViewModel
 import com.example.harmonie_budget_app_kt.viewmodels.ExpenseViewModel
+import java.util.Calendar
+import java.util.Locale
 
 /**
- * BudgetsFragment displays the Expense History section with category filtering.
- * The bottom navigation label is "History" but the screen title remains "Budgets".
- *
- * Part 3 Enhancement:
- * - Added category filter spinner to allow users to filter expenses by category.
- * - Filter includes an "All Categories" option to show all expenses.
- * - Filter updates the expense history list dynamically when a category is selected.
+ * BudgetsFragment displays the Expense History section with filtering capabilities.
+ * Supports filtering by category, month, and year.
+ * Displays total spent and transaction count for the filtered results.
  */
 class BudgetsFragment : Fragment()
 {
@@ -32,6 +31,11 @@ class BudgetsFragment : Fragment()
     private lateinit var rvExpenseHistory: RecyclerView
     private lateinit var btnViewTotals: Button
     private lateinit var spinnerFilterCategory: Spinner
+    private lateinit var spinnerFilterMonth: Spinner
+    private lateinit var spinnerFilterYear: Spinner
+    private lateinit var tvTotalSpent: TextView
+    private lateinit var tvTransactionCount: TextView
+    private lateinit var tvCurrentMonthYear: TextView
 
     private val expenseViewModel = ExpenseViewModel()
     private val categoryViewModel = CategoryViewModel()
@@ -41,8 +45,15 @@ class BudgetsFragment : Fragment()
     private var categories: List<Category> = emptyList()
     private lateinit var expenseAdapter: ExpenseHistoryAdapter
 
-    // Filter state: -1 means all categories, otherwise the selected category ID
+    // Filter state
     private var selectedCategoryId: Int = -1
+    private var selectedMonth: Int = -1
+    private var selectedYear: Int = -1
+
+    private companion object
+    {
+        private const val ALL_CATEGORIES_POSITION = 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +68,11 @@ class BudgetsFragment : Fragment()
         rvExpenseHistory = view.findViewById(R.id.rv_expense_history)
         btnViewTotals = view.findViewById(R.id.btn_view_totals)
         spinnerFilterCategory = view.findViewById(R.id.spinner_filter_category)
+        spinnerFilterMonth = view.findViewById(R.id.spinner_filter_month)
+        spinnerFilterYear = view.findViewById(R.id.spinner_filter_year)
+        tvTotalSpent = view.findViewById(R.id.tv_total_spent)
+        tvTransactionCount = view.findViewById(R.id.tv_transaction_count)
+        tvCurrentMonthYear = view.findViewById(R.id.tv_current_month_year)
 
         rvExpenseHistory.layoutManager = LinearLayoutManager(requireContext())
 
@@ -75,10 +91,6 @@ class BudgetsFragment : Fragment()
         loadData()
     }
 
-    /**
-     * Loads all expenses and categories, then sets up the filter spinner
-     * and displays the expense history.
-     */
     private fun loadData()
     {
         allExpenses = expenseViewModel.getExpenses(requireContext(), username)
@@ -96,20 +108,19 @@ class BudgetsFragment : Fragment()
         // Initialize adapter and set data
         expenseAdapter = ExpenseHistoryAdapter(categories)
         rvExpenseHistory.adapter = expenseAdapter
-        updateAdapter()
 
-        // Set up the category filter spinner
+        // Set up spinners
         setupCategorySpinner()
+        setupMonthSpinner()
+        setupYearSpinner()
+
+        // Apply initial filter (current month and year)
+        applyFilters()
     }
 
-    /**
-     * Sets up the category filter spinner with category names.
-     * Adds an "All Categories" option at the beginning.
-     * When a category is selected, the expense list is filtered accordingly.
-     */
     private fun setupCategorySpinner()
     {
-        val categoryNames = mutableListOf("All Categories")
+        val categoryNames = mutableListOf(getString(R.string.all_categories))
         categoryNames.addAll(categories.map { it.name })
 
         val adapter = ArrayAdapter(
@@ -128,64 +139,172 @@ class BudgetsFragment : Fragment()
                 position: Int,
                 id: Long
             ) {
-                if (position == 0)
-                {
-                    // "All Categories" selected
-                    selectedCategoryId = -1
-                }
-                else
-                {
-                    // Specific category selected
-                    selectedCategoryId = categories[position - 1].id
-                }
-                applyFilter()
+                selectedCategoryId = if (position == ALL_CATEGORIES_POSITION) -1
+                else categories[position - 1].id
+                applyFilters()
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>)
-            {
+            override fun onNothingSelected(parent: AdapterView<*>) {
                 selectedCategoryId = -1
-                applyFilter()
+                applyFilters()
             }
         }
     }
 
-    /**
-     * Applies the category filter to the expense list.
-     * Updates the RecyclerView with the filtered results.
-     */
-    private fun applyFilter()
+    private fun setupMonthSpinner()
     {
-        filteredExpenses = if (selectedCategoryId == -1)
-        {
-            // Show all expenses
-            allExpenses
-        }
-        else
-        {
-            // Show only expenses matching the selected category
-            allExpenses.filter { it.categoryId == selectedCategoryId }
-        }
+        val months = arrayOf(
+            getString(R.string.month_january),
+            getString(R.string.month_february),
+            getString(R.string.month_march),
+            getString(R.string.month_april),
+            getString(R.string.month_may),
+            getString(R.string.month_june),
+            getString(R.string.month_july),
+            getString(R.string.month_august),
+            getString(R.string.month_september),
+            getString(R.string.month_october),
+            getString(R.string.month_november),
+            getString(R.string.month_december)
+        )
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerFilterMonth.adapter = adapter
 
-        updateAdapter()
+        // Set current month as default selection
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        spinnerFilterMonth.setSelection(currentMonth)
+
+        spinnerFilterMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedMonth = position + 1
+                applyFilters()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                selectedMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
+                applyFilters()
+            }
+        }
     }
 
-    /**
-     * Updates the RecyclerView adapter with the current filtered expenses list.
-     */
-    private fun updateAdapter()
+    private fun setupYearSpinner()
     {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val years = (currentYear - 2..currentYear + 2).toList().map { it.toString() }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerFilterYear.adapter = adapter
+
+        // Set current year as default selection
+        val currentYearIndex = years.indexOf(currentYear.toString())
+        spinnerFilterYear.setSelection(currentYearIndex)
+
+        spinnerFilterYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedYear = years[position].toInt()
+                applyFilters()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                selectedYear = currentYear
+                applyFilters()
+            }
+        }
+    }
+
+    private fun applyFilters()
+    {
+        filteredExpenses = allExpenses.filter { expense ->
+            var matches = true
+
+            // Category filter
+            if (selectedCategoryId != -1)
+            {
+                matches = matches && (expense.categoryId == selectedCategoryId)
+            }
+
+            // Month and Year filter
+            if (selectedMonth != -1 && selectedYear != -1)
+            {
+                val expenseDateParts = expense.date.split("-")
+                if (expenseDateParts.size >= 3)
+                {
+                    val expenseYear = expenseDateParts[0].toIntOrNull() ?: 0
+                    val expenseMonth = expenseDateParts[1].toIntOrNull() ?: 0
+                    matches = matches && (expenseYear == selectedYear && expenseMonth == selectedMonth)
+                }
+            }
+
+            matches
+        }
+
+        // Update the month/year display
+        updateMonthYearDisplay()
+
+        // Update total spent and transaction count
+        updateSummary()
+
+        // Update the adapter
         expenseAdapter.submitList(filteredExpenses)
     }
 
-    companion object
+    private fun updateMonthYearDisplay()
     {
-        fun newInstance(username: String): BudgetsFragment
-        {
-            val fragment = BudgetsFragment()
-            val args = Bundle()
-            args.putString("username", username)
-            fragment.arguments = args
-            return fragment
+        val monthNames = arrayOf(
+            getString(R.string.month_january),
+            getString(R.string.month_february),
+            getString(R.string.month_march),
+            getString(R.string.month_april),
+            getString(R.string.month_may),
+            getString(R.string.month_june),
+            getString(R.string.month_july),
+            getString(R.string.month_august),
+            getString(R.string.month_september),
+            getString(R.string.month_october),
+            getString(R.string.month_november),
+            getString(R.string.month_december)
+        )
+        val monthName = if (selectedMonth in 1..12) monthNames[selectedMonth - 1] else ""
+        val displayText = if (selectedMonth != -1 && selectedYear != -1) {
+            "$monthName $selectedYear"
+        } else {
+            ""
         }
+        tvCurrentMonthYear.text = displayText
+    }
+
+    private fun updateSummary()
+    {
+        val total = filteredExpenses.sumOf { it.amount }
+        tvTotalSpent.text = String.format(Locale.US, "-R %,.2f", total)
+
+        val transactionCountText = resources.getQuantityString(
+            R.plurals.transaction_count,
+            filteredExpenses.size,
+            filteredExpenses.size
+        )
+        tvTransactionCount.text = transactionCountText
+    }
+
+    fun newInstance(username: String): BudgetsFragment
+    {
+        val fragment = BudgetsFragment()
+        val args = Bundle()
+        args.putString("username", username)
+        fragment.arguments = args
+        return fragment
     }
 }

@@ -13,13 +13,18 @@
         - Category Management (categories, category lists)
         - Expense Management (add expense, expense lists, filtering)
         - Category Totals and Filtering (pie chart, totals, filters)
+        - Category Totals Table (table headers, empty state)
+        - Budgets Filter Section (category, month, year filters)
+        - Budgets Summary (total spent, transaction count)
+        - Month Names (January through December for spinners)
         - Gamification (streaks, badges, rewards)
         - More Screen Settings (export, reset, about, help)
         - Navigation (bottom nav labels, screen titles, buttons)
         - Receipt Photo Preview (view receipt, error messages)
         - User Feedback (success messages, greetings)
         - Error Messages (validation errors, authentication errors)
-        - Category Totals Table (table headers, empty state)
+        - Plurals (transaction count)
+        - Default Values (placeholder strings)
     -->
 
     <!-- ==================== Application Metadata ==================== -->
@@ -192,11 +197,51 @@
 
     <!-- Table header labels for the category totals table -->
     <string name="table_header_category">Category</string>
-    <string name="table_header_amount">Amount (ZAR)</string>
-    <string name="table_header_percentage">Percentage</string>
+    <string name="table_header_amount">Amount</string>
+    <string name="table_header_percentage">%</string>
 
     <!-- Empty state message when no expense data is available for the table -->
     <string name="no_expense_data_available">No expense data available</string>
+
+
+    <!-- ==================== Budgets Filter Section ==================== -->
+
+    <!-- Filter section headers -->
+    <string name="filter_by_category">Filter by Category</string>
+    <string name="filter_by_month_year">Filter by Month &amp; Year</string>
+
+    <!-- Total spent section label -->
+    <string name="total_spent">Total Spent</string>
+
+    <!-- Default placeholder values for transaction count and month/year -->
+    <string name="transaction_count_default">0 Transactions</string>
+    <string name="current_month_year_default">May 2026</string>
+
+
+    <!-- ==================== Month Names ==================== -->
+
+    <!-- Month names for the month filter spinner -->
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+
+
+    <!-- ==================== Budgets Summary ==================== -->
+
+    <!-- Transaction count display with plural support -->
+    <plurals name="transaction_count">
+        <item quantity="one">%d Transaction</item>
+        <item quantity="other">%d Transactions</item>
+    </plurals>
 
 
     <!-- ==================== Gamification ==================== -->

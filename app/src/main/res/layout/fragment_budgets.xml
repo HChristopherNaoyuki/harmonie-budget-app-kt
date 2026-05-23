@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Budgets fragment layout.
-    The bottom navigation label is "History" but the screen title remains "Budgets".
-    This screen displays the Expense History section with category filtering.
-
-    Added a filter section with a dropdown spinner for category selection.
-    The filter allows users to view all expenses or filter by a specific category.
+    Updated to match the mockup design with:
+    - Category filter spinner
+    - Month and Year filter spinners
+    - Total spent display
+    - Transaction count display
+    - Expense history list
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,11 +42,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
-            <!--
-                Part 3 Enhancement: Category Filter Section
-                Allows users to filter expenses by category.
-                Contains a label and a dropdown spinner.
-            -->
+            <!-- Filter Section Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Filter by Category"
+                        android:text="@string/filter_by_category"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary_light"
@@ -77,17 +74,134 @@
                         android:layout_height="48dp"
                         android:background="@drawable/spinner_dropdown_background"
                         android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
+                        android:paddingEnd="12dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_by_month_year"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary_light"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <Spinner
+                            android:id="@+id/spinner_filter_month"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/spinner_dropdown_background"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_filter_year"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/spinner_dropdown_background"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Summary Card: Total Spent and Transaction Count -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/surface_light"
+                app:strokeColor="@color/border_light"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_spent"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary_light" />
+
+                        <TextView
+                            android:id="@+id/tv_total_spent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/default_zar_amount"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary_light" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tv_transaction_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transaction_count_default"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_primary_light" />
+
+                        <TextView
+                            android:id="@+id/tv_current_month_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/current_month_year_default"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary_light" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Expense History RecyclerView -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/expense_history_label"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary_light"
+                android:layout_marginBottom="12dp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_expense_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
