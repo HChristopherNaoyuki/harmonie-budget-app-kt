@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Category Totals screen displaying totals table.
-    Updated to match the mockup design precisely.
-    Optimized for small screens (4.7 inches) with appropriate padding and scrolling.
+    Category Totals screen displaying pie chart and totals table.
+    Responsive layout that stacks vertically on smaller screens.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +12,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true"
         android:scrollbars="vertical">
 
@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:paddingTop="12dp"
-            android:paddingBottom="32dp">
+            android:paddingBottom="24dp">
 
             <!-- Back arrow navigation -->
             <TextView
@@ -36,7 +36,8 @@
                 android:padding="8dp"
                 android:layout_marginBottom="8dp"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/back_navigation_description" />
 
             <!-- Screen Title -->
             <TextView
@@ -49,14 +50,68 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp" />
 
+            <!-- Pie Chart Container -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spending_distribution"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary_light"
+                android:layout_marginBottom="12dp" />
+
+            <FrameLayout
+                android:id="@+id/pie_container"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_marginBottom="16dp" />
+
             <!-- Totals Table Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_breakdown"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary_light"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp" />
+
+            <!-- Sort Controls -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp"
+                android:gravity="end">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sort_by"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary_light"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_vertical" />
+
+                <Spinner
+                    android:id="@+id/spinner_sort"
+                    android:layout_width="120dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/spinner_dropdown_background"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
+
+            </LinearLayout>
+
+            <!-- Totals Table -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/surface_light"
                 android:padding="12dp"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="16dp">
 
                 <!-- Table Header Row -->
                 <LinearLayout
@@ -67,15 +122,20 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
+                        android:id="@+id/header_category"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/table_header_category"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary_light" />
+                        android:textColor="@color/text_primary_light"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="@string/sort_by_category" />
 
                     <TextView
+                        android:id="@+id/header_amount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -83,9 +143,13 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary_light"
-                        android:gravity="end" />
+                        android:gravity="end"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="@string/sort_by_amount" />
 
                     <TextView
+                        android:id="@+id/header_percentage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -93,7 +157,10 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary_light"
-                        android:gravity="end" />
+                        android:gravity="end"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="@string/sort_by_percentage" />
 
                 </LinearLayout>
 
@@ -113,15 +180,16 @@
 
             </LinearLayout>
 
-            <!-- RETURN HOME Button -->
-            <Button
-                android:id="@+id/btn_return_home"
-                style="@style/StandardButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/return_home" />
-
         </LinearLayout>
     </ScrollView>
+
+    <!-- RETURN HOME Button -->
+    <Button
+        android:id="@+id/btn_return_home"
+        style="@style/StandardButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:text="@string/return_home" />
+
 </LinearLayout>

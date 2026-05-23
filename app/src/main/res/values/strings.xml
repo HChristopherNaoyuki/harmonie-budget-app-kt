@@ -13,7 +13,8 @@
         - Category Management (categories, category lists)
         - Expense Management (add expense, expense lists, filtering)
         - Category Totals and Filtering (pie chart, totals, filters)
-        - Category Totals Table (table headers, empty state)
+        - Category Totals Table (table headers, empty state, sort options)
+        - Category Totals Accessibility (content descriptions)
         - Budgets Filter Section (category, month, year filters)
         - Budgets Summary (total spent, transaction count)
         - Month Names (January through December for spinners)
@@ -203,6 +204,30 @@
     <!-- Empty state message when no expense data is available for the table -->
     <string name="no_expense_data_available">No expense data available</string>
 
+    <!-- Section headers for the category totals screen -->
+    <string name="spending_distribution">Spending Distribution</string>
+    <string name="category_breakdown">Category Breakdown</string>
+    <string name="sort_by">Sort by</string>
+
+    <!-- Sort options for the category totals table -->
+    <string name="sort_category_asc">Sort: Category (A-Z)</string>
+    <string name="sort_category_desc">Sort: Category (Z-A)</string>
+    <string name="sort_amount_asc">Sort: Amount (Low to High)</string>
+    <string name="sort_amount_desc">Sort: Amount (High to Low)</string>
+    <string name="sort_percentage_asc">Sort: Percentage (Low to High)</string>
+    <string name="sort_percentage_desc">Sort: Percentage (High to Low)</string>
+
+
+    <!-- ==================== Category Totals Accessibility ==================== -->
+
+    <!-- Content descriptions for accessibility (TalkBack) -->
+    <string name="back_navigation_description">Navigate back to previous screen</string>
+    <string name="sort_by_category">Sort table by category name</string>
+    <string name="sort_by_amount">Sort table by amount</string>
+    <string name="sort_by_percentage">Sort table by percentage</string>
+    <string name="pie_chart_description">Pie chart showing spending distribution by category</string>
+    <string name="category_row_description">Category row for %1$s with amount %2$s and percentage %3$s percent</string>
+
 
     <!-- ==================== Budgets Filter Section ==================== -->
 
@@ -216,6 +241,9 @@
     <!-- Default placeholder values for transaction count and month/year -->
     <string name="transaction_count_default">0 Transactions</string>
     <string name="current_month_year_default">May 2026</string>
+
+    <!-- Year picker dialog title -->
+    <string name="select_year_title">Select Year</string>
 
 
     <!-- ==================== Month Names ==================== -->
