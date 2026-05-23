@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Budgets fragment layout.
-    Updated to match the mockup design with:
-    - Category filter spinner
-    - Month and Year filter spinners
-    - Total spent display
-    - Transaction count display
-    - Expense history list
+    Updated to match the mockup design.
+    Year filter uses a TextView that opens a native year picker dialog.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -102,15 +98,19 @@
                             android:paddingStart="12dp"
                             android:paddingEnd="12dp" />
 
-                        <Spinner
-                            android:id="@+id/spinner_filter_year"
+                        <!-- Year picker as TextView that opens a native NumberPicker dialog -->
+                        <TextView
+                            android:id="@+id/tv_filter_year"
                             android:layout_width="0dp"
                             android:layout_height="48dp"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
                             android:background="@drawable/spinner_dropdown_background"
                             android:paddingStart="12dp"
-                            android:paddingEnd="12dp" />
+                            android:paddingEnd="12dp"
+                            android:gravity="center_vertical"
+                            android:clickable="true"
+                            android:focusable="true" />
 
                     </LinearLayout>
 

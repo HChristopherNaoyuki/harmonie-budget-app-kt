@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Category Totals screen displaying totals table.
-    Updated to match the mockup with a clean table format.
+    Category Totals screen displaying pie chart and totals table.
+    Updated to match the mockup design with pie chart above the table.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,6 +35,13 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
+
+    <!-- Pie Chart Container -->
+    <FrameLayout
+        android:id="@+id/pie_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="24dp" />
 
     <!-- Totals Table Section -->
     <LinearLayout

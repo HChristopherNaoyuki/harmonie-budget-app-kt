@@ -1,5 +1,6 @@
 package com.example.harmonie_budget_app_kt
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.NumberPicker
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -32,7 +34,7 @@ class BudgetsFragment : Fragment()
     private lateinit var btnViewTotals: Button
     private lateinit var spinnerFilterCategory: Spinner
     private lateinit var spinnerFilterMonth: Spinner
-    private lateinit var spinnerFilterYear: Spinner
+    private lateinit var tvFilterYear: TextView
     private lateinit var tvTotalSpent: TextView
     private lateinit var tvTransactionCount: TextView
     private lateinit var tvCurrentMonthYear: TextView
@@ -69,7 +71,7 @@ class BudgetsFragment : Fragment()
         btnViewTotals = view.findViewById(R.id.btn_view_totals)
         spinnerFilterCategory = view.findViewById(R.id.spinner_filter_category)
         spinnerFilterMonth = view.findViewById(R.id.spinner_filter_month)
-        spinnerFilterYear = view.findViewById(R.id.spinner_filter_year)
+        tvFilterYear = view.findViewById(R.id.tv_filter_year)
         tvTotalSpent = view.findViewById(R.id.tv_total_spent)
         tvTransactionCount = view.findViewById(R.id.tv_transaction_count)
         tvCurrentMonthYear = view.findViewById(R.id.tv_current_month_year)
@@ -109,10 +111,10 @@ class BudgetsFragment : Fragment()
         expenseAdapter = ExpenseHistoryAdapter(categories)
         rvExpenseHistory.adapter = expenseAdapter
 
-        // Set up spinners
+        // Set up spinners and year picker
         setupCategorySpinner()
         setupMonthSpinner()
-        setupYearSpinner()
+        setupYearPicker()
 
         // Apply initial filter (current month and year)
         applyFilters()
@@ -194,35 +196,44 @@ class BudgetsFragment : Fragment()
         }
     }
 
-    private fun setupYearSpinner()
+    private fun setupYearPicker()
     {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val years = (currentYear - 2..currentYear + 2).toList().map { it.toString() }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerFilterYear.adapter = adapter
+        selectedYear = currentYear
+        tvFilterYear.text = currentYear.toString()
 
-        // Set current year as default selection
-        val currentYearIndex = years.indexOf(currentYear.toString())
-        spinnerFilterYear.setSelection(currentYearIndex)
-
-        spinnerFilterYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-        {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedYear = years[position].toInt()
-                applyFilters()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                selectedYear = currentYear
-                applyFilters()
-            }
+        tvFilterYear.setOnClickListener {
+            showYearPickerDialog()
         }
+    }
+
+    /**
+     * Shows a native year picker dialog using NumberPicker.
+     * This replaces the hardcoded year spinner with a native Android component.
+     */
+    private fun showYearPickerDialog()
+    {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val minYear = currentYear - 10
+        val maxYear = currentYear + 10
+
+        val numberPicker = NumberPicker(requireContext())
+        numberPicker.minValue = minYear
+        numberPicker.maxValue = maxYear
+        numberPicker.value = selectedYear
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Select Year")
+            .setView(numberPicker)
+            .setPositiveButton("OK") { _, _ ->
+                selectedYear = numberPicker.value
+                tvFilterYear.text = selectedYear.toString()
+                applyFilters()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     private fun applyFilters()
