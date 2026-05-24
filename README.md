@@ -405,16 +405,23 @@ For the latest APK, please visit the Releases section of this repository.
 
 ## 10. Video Demonstration
 
-A professional demonstration video showing all features running on a mobile device is
-available on YouTube.
+Two professional demonstration videos are available showing all features running on a
+physical mobile device. The Part 2 video covers the prototype functionality, while the
+Part 3 video includes all final features, gamification, and UI refinements.
 
+Part 2 Video - Prototype Demonstration:
 Title: OPSC6311 Part 2 | Harmonie Budget App Demo | Code Blooded
-
 Link: https://youtu.be/Dnyl_DxfviM
 
-The video is uploaded as an unlisted video and includes voiceover demonstrating user
-registration, login, category management, expense entry, budget goal setting, the pie
-chart visualization, data export, reset functionality, and logout.
+Part 3 Video - Final Submission with Gamification and ZAR Currency:
+Title: Harmonie Budget Tracker | Part 3 Final Submission | Full Demo | Code Blooded
+Link: https://www.youtube.com/watch?v=Ze9LMSgqsG0
+
+Both videos are uploaded as unlisted and include voiceover demonstrating user
+registration, login, category management, expense entry, budget goal setting, pie chart
+visualization, data export, reset functionality, and logout. The Part 3 video adds
+demonstrations of streak tracking, badges, category filtering, month/year filtering,
+sortable tables, and dark mode compatibility.
 
 ## 11. Sources
 
