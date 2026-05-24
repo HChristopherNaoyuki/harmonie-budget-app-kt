@@ -410,12 +410,12 @@ physical mobile device. The Part 2 video covers the prototype functionality, whi
 Part 3 video includes all final features, gamification, and UI refinements.
 
 Part 2 Video - Prototype Demonstration:
-Title: OPSC6311 Part 2 | Harmonie Budget App Demo | Code Blooded
-Link: https://youtu.be/Dnyl_DxfviM
+- Title: OPSC6311 Part 2 | Harmonie Budget App Demo | Code Blooded
+- Link: https://youtu.be/Dnyl_DxfviM
 
 Part 3 Video - Final Submission with Gamification and ZAR Currency:
-Title: Harmonie Budget Tracker | Part 3 Final Submission | Full Demo | Code Blooded
-Link: https://www.youtube.com/watch?v=Ze9LMSgqsG0
+- Title: Harmonie Budget Tracker | Part 3 Final Submission | Full Demo | Code Blooded
+- Link: https://www.youtube.com/watch?v=Ze9LMSgqsG0
 
 Both videos are uploaded as unlisted and include voiceover demonstrating user
 registration, login, category management, expense entry, budget goal setting, pie chart
