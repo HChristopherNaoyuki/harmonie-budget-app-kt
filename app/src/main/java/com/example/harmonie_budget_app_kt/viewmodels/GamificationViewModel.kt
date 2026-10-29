@@ -6,17 +6,13 @@ import com.example.harmonie_budget_app_kt.models.Badge
 import com.example.harmonie_budget_app_kt.models.StreakData
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 /**
  * GamificationViewModel manages badge and streak data for the application.
- * It calls JsonHelper methods to load and save badges and streak information.
- * This follows the MVVM pattern by separating UI logic from data access.
  *
- * Part 3 requirement: Gamification elements such as rewards or badges
- * for meeting budget goals or consistent expense logging.
+ * It routes reward and streak updates through JsonHelper to maintain local JSON state.
  */
 class GamificationViewModel : ViewModel()
 {
@@ -36,13 +32,12 @@ class GamificationViewModel : ViewModel()
     }
 
     /**
-     * Saves a new badge for the user.
-     * Prevents duplicate badges of the same type.
+     * Saves a new badge for the user if not already earned.
      *
      * @param context Application context for file access
      * @param username User identifier for data isolation
-     * @param badge Badge to save
-     * @return true if badge was saved (new), false if already exists
+     * @param badge Badge object to save
+     * @return True if the badge was successfully persisted, false if already present or write failed
      */
     fun saveBadge(context: Context, username: String, badge: Badge): Boolean
     {
@@ -54,8 +49,7 @@ class GamificationViewModel : ViewModel()
             return false
         }
 
-        jsonHelper.saveBadge(context, username, badge)
-        return true
+        return jsonHelper.saveBadge(context, username, badge)
     }
 
     /**
@@ -85,7 +79,6 @@ class GamificationViewModel : ViewModel()
 
         val updatedStreak = if (existingStreak == null)
         {
-            // First expense ever recorded
             StreakData(currentStreak = 1, longestStreak = 1, lastExpenseDate = today)
         }
         else
@@ -94,7 +87,6 @@ class GamificationViewModel : ViewModel()
             val currentDate = parseDate(today)
             val daysDifference = daysBetween(lastDate, currentDate)
 
-            // Use when expression with daysDifference as the subject
             val newStreak = when (daysDifference)
             {
                 1 -> existingStreak.currentStreak + 1
@@ -112,8 +104,6 @@ class GamificationViewModel : ViewModel()
         }
 
         jsonHelper.saveStreakData(context, username, updatedStreak)
-
-        // Check and award streak-based badges
         checkAndAwardStreakBadges(context, username, updatedStreak.currentStreak)
 
         return updatedStreak
@@ -121,7 +111,6 @@ class GamificationViewModel : ViewModel()
 
     /**
      * Awards badges when the user achieves specific streak milestones.
-     * Milestones: 3 days, 7 days, 14 days, 30 days.
      *
      * @param context Application context for file access
      * @param username User identifier for data isolation
@@ -161,7 +150,6 @@ class GamificationViewModel : ViewModel()
     {
         val today = dateFormat.format(Date())
 
-        // Budget Goal Achieved badge: spent less than or equal to maxGoal
         if (totalSpent <= maxGoal && maxGoal > 0)
         {
             val budgetBadge = Badge(5, "Budget Champion", "Stayed within monthly budget", today)

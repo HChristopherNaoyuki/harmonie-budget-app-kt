@@ -31,8 +31,11 @@ import javax.crypto.spec.PBEKeySpec
  *
  * The hash is stored as a Base64 string in "salt:hash" format.
  *
- * Part 3 Enhancement:
- * Added full name validation in saveUser method requiring at least two names.
+ * Data Layer Improvements:
+ * - Atomic write logic via temporary files to prevent data corruption on write failures.
+ * - Complete CRUD operations for Expense, Category, Goal, Badge, Streak, and User entities.
+ * - Return values indicating operation success or failure for caller error handling.
+ * - Validation rules for data integrity (e.g. positive expense amounts, non-duplicate categories).
  */
 class JsonHelper
 {
@@ -161,62 +164,97 @@ class JsonHelper
         return File(folder, fileName)
     }
 
+    /**
+     * Writes content to a destination file atomically using a temporary file.
+     * This prevents file corruption in the event of an unexpected termination during write.
+     *
+     * @param destFile Target file where content should ultimately be written
+     * @param content String data to write into the file
+     * @return True if the atomic write succeeded, false otherwise
+     */
+    private fun atomicWrite(destFile: File, content: String): Boolean
+    {
+        val tempFile = File(destFile.parentFile, "${destFile.name}.tmp")
+        return try
+        {
+            tempFile.writeText(content)
+            if (tempFile.renameTo(destFile))
+            {
+                true
+            }
+            else
+            {
+                // In case direct rename fails, copy and delete temporary file
+                tempFile.copyTo(destFile, overwrite = true)
+                tempFile.delete()
+                true
+            }
+        }
+        catch (exception: Exception)
+        {
+            Log.e(TAG, "Atomic write failed for file ${destFile.absolutePath}", exception)
+            if (tempFile.exists())
+            {
+                tempFile.delete()
+            }
+            false
+        }
+    }
+
     // ==================== User Methods ====================
 
     /**
      * Validates that the full name contains at least two names (first name and surname).
-     * This method is used internally by saveUser for backend validation.
      *
      * @param fullName The full name string to validate
      * @return True if the name contains at least two non-empty parts after trimming
      */
     private fun isValidFullName(fullName: String): Boolean
     {
-        // Trim the input and collapse multiple spaces into single spaces
         val trimmed = fullName.trim().replace(Regex("\\s+"), " ")
 
-        // Check if the trimmed string is empty
         if (trimmed.isEmpty())
         {
             return false
         }
 
-        // Split by space and filter out empty parts
         val nameParts = trimmed.split(" ").filter { it.isNotEmpty() }
-
-        // Require at least two name parts (first name and surname)
         return nameParts.size >= 2
     }
 
     /**
      * Saves a user to the JSON file. The password is hashed before storage.
-     * Performs backend validation on the full name before saving.
+     * Performs backend validation on the full name and username existence before saving.
      *
      * @param context Application context
      * @param user User object containing plaintext password (will be hashed)
-     * @throws IllegalArgumentException If the full name is invalid
+     * @return True if the user was saved successfully, false otherwise
+     * @throws IllegalArgumentException If the full name is invalid or username already exists
      * @throws IOException If file operations fail
      * @throws RuntimeException If hashing fails
      */
     @Throws(IllegalArgumentException::class, IOException::class, RuntimeException::class)
-    fun saveUser(context: Context, user: User)
+    fun saveUser(context: Context, user: User): Boolean
     {
         Log.d(TAG, "saveUser called for username: ${user.username}")
 
-        // Part 3 Enhancement: Backend validation for full name.
-        // This ensures that even if frontend validation is bypassed, the name is validated here.
         if (!isValidFullName(user.name))
         {
             Log.e(TAG, "saveUser failed: Invalid full name for username: ${user.username}")
             throw IllegalArgumentException("Please enter your full name (first name and surname)")
         }
 
-        // Trim and clean the name for storage
         val cleanedName = user.name.trim().replace(Regex("\\s+"), " ")
 
         try
         {
             val file = getFile(context, "${user.username}.json")
+
+            if (file.exists())
+            {
+                Log.e(TAG, "saveUser failed: Username already exists: ${user.username}")
+                throw IllegalArgumentException("Username already exists")
+            }
 
             val hashedPassword = hashPassword(user.password)
             Log.d(TAG, "Password hashed successfully for username: ${user.username}")
@@ -230,8 +268,16 @@ class JsonHelper
             )
 
             val json = gson.toJson(secureUser)
-            file.writeText(json)
-            Log.d(TAG, "User file written successfully for username: ${user.username}")
+            val success = atomicWrite(file, json)
+            if (success)
+            {
+                Log.d(TAG, "User file written successfully for username: ${user.username}")
+            }
+            return success
+        }
+        catch (exception: IllegalArgumentException)
+        {
+            throw exception
         }
         catch (exception: IOException)
         {
@@ -277,39 +323,156 @@ class JsonHelper
     // ==================== Category Methods ====================
 
     /**
-     * Saves a new category for the user.
+     * Saves a new category for the user after validation.
      *
      * @param context Application context
      * @param username User identifier
      * @param category Category to save
+     * @return True if saved successfully, false if name is invalid, duplicate, or write fails
      */
-    fun saveCategory(context: Context, username: String, category: Category)
+    fun saveCategory(context: Context, username: String, category: Category): Boolean
     {
-        try
+        val categoryName = category.name.trim()
+        if (categoryName.isEmpty())
+        {
+            Log.e(TAG, "saveCategory failed: Category name cannot be empty")
+            return false
+        }
+
+        return try
         {
             val file = getFile(context, "${username}_categories.json")
             val listType = object : TypeToken<MutableList<Category>>() {}.type
             val list: MutableList<Category> = if (file.exists())
             {
-                gson.fromJson(file.readText(), listType)
+                gson.fromJson(file.readText(), listType) ?: mutableListOf()
             }
             else
             {
                 mutableListOf()
             }
 
-            val nameExists = list.any { it.name.equals(category.name, ignoreCase = true) }
+            val nameExists = list.any { it.name.equals(categoryName, ignoreCase = true) }
 
-            if (!nameExists)
+            if (nameExists)
             {
-                list.add(category)
-                file.writeText(gson.toJson(list))
-                Log.d(TAG, "Category saved for user $username: ${category.name}")
+                Log.w(TAG, "saveCategory skipped: Duplicate category name ${category.name}")
+                return false
             }
+
+            val cleanedCategory = category.copy(name = categoryName)
+            list.add(cleanedCategory)
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Category saved for user $username: ${cleanedCategory.name}")
+            }
+            success
         }
         catch (exception: Exception)
         {
             Log.e(TAG, "Exception in saveCategory for $username", exception)
+            false
+        }
+    }
+
+    /**
+     * Updates an existing category for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param updatedCategory Category object with updated details
+     * @return True if updated successfully, false if not found or write fails
+     */
+    fun updateCategory(context: Context, username: String, updatedCategory: Category): Boolean
+    {
+        val categoryName = updatedCategory.name.trim()
+        if (categoryName.isEmpty())
+        {
+            Log.e(TAG, "updateCategory failed: Category name cannot be empty")
+            return false
+        }
+
+        return try
+        {
+            val file = getFile(context, "${username}_categories.json")
+            if (!file.exists())
+            {
+                return false
+            }
+
+            val listType = object : TypeToken<MutableList<Category>>() {}.type
+            val list: MutableList<Category> = gson.fromJson(file.readText(), listType) ?: return false
+
+            val index = list.indexOfFirst { it.id == updatedCategory.id }
+            if (index == -1)
+            {
+                Log.w(TAG, "updateCategory failed: Category ID ${updatedCategory.id} not found")
+                return false
+            }
+
+            // Check duplicate name on another category
+            val duplicate = list.any { it.id != updatedCategory.id && it.name.equals(categoryName, ignoreCase = true) }
+            if (duplicate)
+            {
+                Log.w(TAG, "updateCategory failed: Duplicate category name $categoryName")
+                return false
+            }
+
+            list[index] = updatedCategory.copy(name = categoryName)
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Category updated for user $username: ID ${updatedCategory.id}")
+            }
+            success
+        }
+        catch (exception: Exception)
+        {
+            Log.e(TAG, "Exception in updateCategory for $username", exception)
+            false
+        }
+    }
+
+    /**
+     * Deletes a category by ID for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param categoryId ID of the category to delete
+     * @return True if deleted successfully, false otherwise
+     */
+    fun deleteCategory(context: Context, username: String, categoryId: Int): Boolean
+    {
+        return try
+        {
+            val file = getFile(context, "${username}_categories.json")
+            if (!file.exists())
+            {
+                return false
+            }
+
+            val listType = object : TypeToken<MutableList<Category>>() {}.type
+            val list: MutableList<Category> = gson.fromJson(file.readText(), listType) ?: return false
+
+            val removed = list.removeAll { it.id == categoryId }
+            if (!removed)
+            {
+                Log.w(TAG, "deleteCategory failed: Category ID $categoryId not found")
+                return false
+            }
+
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Category deleted for user $username: ID $categoryId")
+            }
+            success
+        }
+        catch (exception: Exception)
+        {
+            Log.e(TAG, "Exception in deleteCategory for $username", exception)
+            false
         }
     }
 
@@ -331,7 +494,7 @@ class JsonHelper
             }
 
             val listType = object : TypeToken<List<Category>>() {}.type
-            return gson.fromJson(file.readText(), listType)
+            return gson.fromJson(file.readText(), listType) ?: emptyList()
         }
         catch (exception: Exception)
         {
@@ -343,21 +506,28 @@ class JsonHelper
     // ==================== Expense Methods ====================
 
     /**
-     * Saves a new expense for the user.
+     * Saves a new expense for the user after validating amount.
      *
      * @param context Application context
      * @param username User identifier
      * @param expense Expense to save
+     * @return True if saved successfully, false if amount <= 0 or write fails
      */
-    fun saveExpense(context: Context, username: String, expense: Expense)
+    fun saveExpense(context: Context, username: String, expense: Expense): Boolean
     {
-        try
+        if (expense.amount <= 0.0)
+        {
+            Log.e(TAG, "saveExpense failed: Expense amount must be positive")
+            return false
+        }
+
+        return try
         {
             val file = getFile(context, "${username}_expenses.json")
             val listType = object : TypeToken<MutableList<Expense>>() {}.type
             val list: MutableList<Expense> = if (file.exists())
             {
-                gson.fromJson(file.readText(), listType)
+                gson.fromJson(file.readText(), listType) ?: mutableListOf()
             }
             else
             {
@@ -368,12 +538,108 @@ class JsonHelper
             val newExpense = expense.copy(id = maxId + 1)
             list.add(newExpense)
 
-            file.writeText(gson.toJson(list))
-            Log.d(TAG, "Expense saved for user $username with ID ${newExpense.id}")
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Expense saved for user $username with ID ${newExpense.id}")
+            }
+            success
         }
         catch (exception: Exception)
         {
             Log.e(TAG, "Exception in saveExpense for $username", exception)
+            false
+        }
+    }
+
+    /**
+     * Updates an existing expense for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param updatedExpense Expense object with updated details
+     * @return True if updated successfully, false if not found, invalid amount, or write fails
+     */
+    fun updateExpense(context: Context, username: String, updatedExpense: Expense): Boolean
+    {
+        if (updatedExpense.amount <= 0.0)
+        {
+            Log.e(TAG, "updateExpense failed: Expense amount must be positive")
+            return false
+        }
+
+        return try
+        {
+            val file = getFile(context, "${username}_expenses.json")
+            if (!file.exists())
+            {
+                return false
+            }
+
+            val listType = object : TypeToken<MutableList<Expense>>() {}.type
+            val list: MutableList<Expense> = gson.fromJson(file.readText(), listType) ?: return false
+
+            val index = list.indexOfFirst { it.id == updatedExpense.id }
+            if (index == -1)
+            {
+                Log.w(TAG, "updateExpense failed: Expense ID ${updatedExpense.id} not found")
+                return false
+            }
+
+            list[index] = updatedExpense
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Expense updated for user $username: ID ${updatedExpense.id}")
+            }
+            success
+        }
+        catch (exception: Exception)
+        {
+            Log.e(TAG, "Exception in updateExpense for $username", exception)
+            false
+        }
+    }
+
+    /**
+     * Deletes an expense by ID for the user.
+     *
+     * @param context Application context
+     * @param username User identifier
+     * @param expenseId ID of the expense to delete
+     * @return True if deleted successfully, false otherwise
+     */
+    fun deleteExpense(context: Context, username: String, expenseId: Int): Boolean
+    {
+        return try
+        {
+            val file = getFile(context, "${username}_expenses.json")
+            if (!file.exists())
+            {
+                return false
+            }
+
+            val listType = object : TypeToken<MutableList<Expense>>() {}.type
+            val list: MutableList<Expense> = gson.fromJson(file.readText(), listType) ?: return false
+
+            val removed = list.removeAll { it.id == expenseId }
+            if (!removed)
+            {
+                Log.w(TAG, "deleteExpense failed: Expense ID $expenseId not found")
+                return false
+            }
+
+            val success = atomicWrite(file, gson.toJson(list))
+            if (success)
+            {
+                Log.d(TAG, "Expense deleted for user $username: ID $expenseId")
+            }
+            success
+        }
+        catch (exception: Exception)
+        {
+            Log.e(TAG, "Exception in deleteExpense for $username", exception)
+            false
         }
     }
 
@@ -395,7 +661,7 @@ class JsonHelper
             }
 
             val listType = object : TypeToken<List<Expense>>() {}.type
-            return gson.fromJson(file.readText(), listType)
+            return gson.fromJson(file.readText(), listType) ?: emptyList()
         }
         catch (exception: Exception)
         {
@@ -412,19 +678,25 @@ class JsonHelper
      * @param context Application context
      * @param username User identifier
      * @param goal Goal object
+     * @return True if saved successfully, false otherwise
      */
-    fun saveGoal(context: Context, username: String, goal: Goal)
+    fun saveGoal(context: Context, username: String, goal: Goal): Boolean
     {
-        try
+        return try
         {
             val file = getFile(context, "${username}_goals.json")
             val json = gson.toJson(goal)
-            file.writeText(json)
-            Log.d(TAG, "Goal saved for user $username")
+            val success = atomicWrite(file, json)
+            if (success)
+            {
+                Log.d(TAG, "Goal saved for user $username")
+            }
+            success
         }
         catch (exception: Exception)
         {
             Log.e(TAG, "Exception in saveGoal for $username", exception)
+            false
         }
     }
 
@@ -463,16 +735,17 @@ class JsonHelper
      * @param context Application context
      * @param username User identifier
      * @param badge Badge to save
+     * @return True if saved successfully or already existing, false on write error
      */
-    fun saveBadge(context: Context, username: String, badge: Badge)
+    fun saveBadge(context: Context, username: String, badge: Badge): Boolean
     {
-        try
+        return try
         {
             val file = getFile(context, "${username}_badges.json")
             val listType = object : TypeToken<MutableList<Badge>>() {}.type
             val list: MutableList<Badge> = if (file.exists())
             {
-                gson.fromJson(file.readText(), listType)
+                gson.fromJson(file.readText(), listType) ?: mutableListOf()
             }
             else
             {
@@ -482,13 +755,22 @@ class JsonHelper
             if (list.none { it.id == badge.id })
             {
                 list.add(badge)
-                file.writeText(gson.toJson(list))
-                Log.d(TAG, "Badge saved for user $username: ${badge.name}")
+                val success = atomicWrite(file, gson.toJson(list))
+                if (success)
+                {
+                    Log.d(TAG, "Badge saved for user $username: ${badge.name}")
+                }
+                success
+            }
+            else
+            {
+                true
             }
         }
         catch (exception: Exception)
         {
             Log.e(TAG, "Exception in saveBadge for $username", exception)
+            false
         }
     }
 
@@ -510,7 +792,7 @@ class JsonHelper
             }
 
             val listType = object : TypeToken<List<Badge>>() {}.type
-            return gson.fromJson(file.readText(), listType)
+            return gson.fromJson(file.readText(), listType) ?: emptyList()
         }
         catch (exception: Exception)
         {
@@ -527,19 +809,25 @@ class JsonHelper
      * @param context Application context
      * @param username User identifier
      * @param streakData StreakData object
+     * @return True if saved successfully, false otherwise
      */
-    fun saveStreakData(context: Context, username: String, streakData: StreakData)
+    fun saveStreakData(context: Context, username: String, streakData: StreakData): Boolean
     {
-        try
+        return try
         {
             val file = getFile(context, "${username}_streak.json")
             val json = gson.toJson(streakData)
-            file.writeText(json)
-            Log.d(TAG, "Streak data saved for user $username")
+            val success = atomicWrite(file, json)
+            if (success)
+            {
+                Log.d(TAG, "Streak data saved for user $username")
+            }
+            success
         }
         catch (exception: Exception)
         {
             Log.e(TAG, "Exception in saveStreakData for $username", exception)
+            false
         }
     }
 

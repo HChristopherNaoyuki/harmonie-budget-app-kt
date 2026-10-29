@@ -6,18 +6,21 @@ import com.example.harmonie_budget_app_kt.models.Goal
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
- * GoalViewModel manages data and logic for goal-related screens.
- * It calls JsonHelper methods to load and save goals.
- * This follows the MVVM pattern by separating UI logic from data access.
- * All calls to JsonHelper are now routed through this ViewModel.
+ * GoalViewModel manages data and business logic for goal operations.
+ *
+ * It serves as an intermediary between the user interface and the local JSON data layer.
+ * All operations are delegated to JsonHelper to perform atomic operations on internal storage.
  */
 class GoalViewModel : ViewModel()
 {
     private val jsonHelper = JsonHelper()
 
     /**
-     * Returns the goal for the given user.
-     * Context is required by JsonHelper.
+     * Retrieves the spending goals for the specified user.
+     *
+     * @param context Application context required for file access
+     * @param username Unique identifier of the logged-in user
+     * @return Goal model instance, or null if no goal exists
      */
     fun getGoal(context: Context, username: String): Goal?
     {
@@ -25,11 +28,15 @@ class GoalViewModel : ViewModel()
     }
 
     /**
-     * Saves the goal for the user.
-     * Context is required by JsonHelper.
+     * Saves the spending goals for the user.
+     *
+     * @param context Application context required for file access
+     * @param username Unique identifier of the logged-in user
+     * @param goal Goal model instance to persist
+     * @return True if the goal was saved successfully, false otherwise
      */
-    fun saveGoal(context: Context, username: String, goal: Goal)
+    fun saveGoal(context: Context, username: String, goal: Goal): Boolean
     {
-        jsonHelper.saveGoal(context, username, goal)
+        return jsonHelper.saveGoal(context, username, goal)
     }
 }
