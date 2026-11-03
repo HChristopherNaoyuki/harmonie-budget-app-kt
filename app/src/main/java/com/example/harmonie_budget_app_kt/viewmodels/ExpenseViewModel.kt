@@ -2,67 +2,50 @@ package com.example.harmonie_budget_app_kt.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.example.harmonie_budget_app_kt.db.DatabaseRepository
 import com.example.harmonie_budget_app_kt.models.Expense
-import com.example.harmonie_budget_app_kt.utils.JsonHelper
 
 /**
  * ExpenseViewModel manages data and business logic for expense operations.
  *
- * It serves as an intermediary between the user interface and the local JSON data layer.
- * All operations are delegated to JsonHelper to perform atomic operations on internal storage.
+ * It uses DatabaseRepository to perform direct SQLite database reads and writes,
+ * ensuring relational data integrity and transaction persistence.
  */
 class ExpenseViewModel : ViewModel()
 {
-    private val jsonHelper = JsonHelper()
-
     /**
-     * Retrieves the list of expenses for the specified user.
-     *
-     * @param context Application context required for file access
-     * @param username Unique identifier of the logged-in user
-     * @return List of expenses associated with the user
+     * Retrieves the list of expenses for the specified user from the database.
      */
     fun getExpenses(context: Context, username: String): List<Expense>
     {
-        return jsonHelper.loadExpenses(context, username)
+        val repository = DatabaseRepository(context)
+        return repository.getExpenses(username)
     }
 
     /**
-     * Saves a new expense for the user after validation.
-     *
-     * @param context Application context required for file access
-     * @param username Unique identifier of the logged-in user
-     * @param expense Expense model instance to persist
-     * @return True if the expense was saved successfully, false otherwise
+     * Saves a new expense for the user into the database repository.
      */
     fun saveExpense(context: Context, username: String, expense: Expense): Boolean
     {
-        return jsonHelper.saveExpense(context, username, expense)
+        val repository = DatabaseRepository(context)
+        return repository.saveExpense(username, expense)
     }
 
     /**
-     * Updates an existing expense for the user.
-     *
-     * @param context Application context required for file access
-     * @param username Unique identifier of the logged-in user
-     * @param updatedExpense Expense model instance with updated field values
-     * @return True if the expense was updated successfully, false otherwise
+     * Updates an existing expense record in the database repository.
      */
     fun updateExpense(context: Context, username: String, updatedExpense: Expense): Boolean
     {
-        return jsonHelper.updateExpense(context, username, updatedExpense)
+        val repository = DatabaseRepository(context)
+        return repository.saveExpense(username, updatedExpense)
     }
 
     /**
-     * Deletes an expense by its unique identifier.
-     *
-     * @param context Application context required for file access
-     * @param username Unique identifier of the logged-in user
-     * @param expenseId Numeric ID of the expense to remove
-     * @return True if the expense was removed successfully, false otherwise
+     * Deletes an expense by ID from the database repository.
      */
     fun deleteExpense(context: Context, username: String, expenseId: Int): Boolean
     {
-        return jsonHelper.deleteExpense(context, username, expenseId)
+        val repository = DatabaseRepository(context)
+        return repository.deleteExpense(username, expenseId)
     }
 }

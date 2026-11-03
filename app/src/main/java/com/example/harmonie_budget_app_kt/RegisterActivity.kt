@@ -2,7 +2,6 @@ package com.example.harmonie_budget_app_kt
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +17,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 /**
- * RegisterActivity handles new user account creation.
- *
- * Part 3 Enhancement: Added back arrow navigation to return to the Landing Page.
+ * RegisterActivity handles new user account creation and direct database persistence.
  */
 class RegisterActivity : AppCompatActivity()
 {
@@ -58,7 +55,6 @@ class RegisterActivity : AppCompatActivity()
         tvGeneratedUserId = findViewById(R.id.tv_generated_user_id)
         tvAlreadyRegistered = findViewById(R.id.tv_already_registered)
 
-        // Back arrow navigation to return to the Landing Page (MainActivity)
         ivBackArrow.setOnClickListener {
             navigateToLandingPage()
         }
@@ -67,14 +63,12 @@ class RegisterActivity : AppCompatActivity()
             navigateToLandingPage()
         }
 
-        // Navigate to Login screen if user already has an account
         tvAlreadyRegistered.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        // Generate a unique User ID based on username and current timestamp
         btnGenerateUserId.setOnClickListener {
             val username = etUsername.text.toString().trim()
 
@@ -94,7 +88,6 @@ class RegisterActivity : AppCompatActivity()
             }
         }
 
-        // Create new user account with validation
         btnRegister.setOnClickListener {
             val name = etName.text.toString().trim()
             val username = etUsername.text.toString().trim()
@@ -156,7 +149,7 @@ class RegisterActivity : AppCompatActivity()
                         try
                         {
                             userViewModel.saveUser(this, user)
-                            Log.i(TAG, "Account created successfully for username: $username")
+                            Log.i(TAG, "Account created successfully in database for username: $username")
                             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
                             finish()
                         }
@@ -176,10 +169,6 @@ class RegisterActivity : AppCompatActivity()
         }
     }
 
-    /**
-     * Navigates back to the Landing Page (MainActivity).
-     * Clears the back stack to prevent returning to the register screen.
-     */
     private fun navigateToLandingPage()
     {
         val intent = Intent(this, MainActivity::class.java)
@@ -198,7 +187,6 @@ class RegisterActivity : AppCompatActivity()
         }
 
         val nameParts = trimmed.split(" ").filter { it.isNotEmpty() }
-
         return nameParts.size >= 2
     }
 

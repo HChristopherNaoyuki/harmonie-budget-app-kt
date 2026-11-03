@@ -9,13 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import com.example.harmonie_budget_app_kt.sync.SyncManager
 import com.example.harmonie_budget_app_kt.utils.JsonHelper
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 
 /**
- * LoginActivity handles user authentication and session persistence.
- *
- * Part 3 Enhancement: Added back arrow navigation to return to the Landing Page.
+ * LoginActivity handles user authentication, SSO sign-in, database connection setup, and background sync initialization.
  */
 class LoginActivity : AppCompatActivity()
 {
@@ -47,6 +46,9 @@ class LoginActivity : AppCompatActivity()
             val savedUsername = sharedPrefs.getString(KEY_LOGGED_IN_USERNAME, "") ?: ""
             if (savedUsername.isNotEmpty())
             {
+                // Start background database sync service
+                SyncManager(this).startSyncService()
+
                 val intent = Intent(this, DashboardActivity::class.java)
                 intent.putExtra("username", savedUsername)
                 startActivity(intent)
@@ -62,7 +64,6 @@ class LoginActivity : AppCompatActivity()
         btnReturnHome = findViewById(R.id.btn_return_home)
         ivBackArrow = findViewById(R.id.iv_back_arrow)
 
-        // Back arrow navigation to return to the Landing Page (MainActivity)
         ivBackArrow.setOnClickListener {
             navigateToLandingPage()
         }
@@ -89,6 +90,9 @@ class LoginActivity : AppCompatActivity()
                             putBoolean(KEY_IS_LOGGED_IN, true)
                             putString(KEY_LOGGED_IN_USERNAME, username)
                         }
+
+                        // Start continuous database synchronization
+                        SyncManager(this).startSyncService()
 
                         val intent = Intent(this, DashboardActivity::class.java)
                         intent.putExtra("username", username)
@@ -117,10 +121,6 @@ class LoginActivity : AppCompatActivity()
         }
     }
 
-    /**
-     * Navigates back to the Landing Page (MainActivity).
-     * Clears the back stack to prevent returning to the login screen.
-     */
     private fun navigateToLandingPage()
     {
         val intent = Intent(this, MainActivity::class.java)
