@@ -10,7 +10,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.example.harmonie_budget_app_kt.models.User
+import com.example.harmonie_budget_app_kt.sync.SyncManager
 import com.example.harmonie_budget_app_kt.viewmodels.UserViewModel
 import java.util.Calendar
 import java.util.Locale
@@ -24,6 +26,9 @@ class RegisterActivity : AppCompatActivity()
     companion object
     {
         private const val TAG = "RegisterActivity"
+        private const val PREFS_NAME = "harmonie_prefs"
+        private const val KEY_IS_LOGGED_IN = "is_logged_in"
+        private const val KEY_LOGGED_IN_USERNAME = "logged_in_username"
     }
 
     private lateinit var etName: EditText
@@ -129,13 +134,14 @@ class RegisterActivity : AppCompatActivity()
                         Log.w(TAG, "Account creation failed: Username already taken: $username")
                         Toast.makeText(this, getString(R.string.error_username_taken), Toast.LENGTH_SHORT).show()
                     }
-                    else if (generatedUserId.isEmpty())
-                    {
-                        Log.w(TAG, "Account creation failed: User ID not generated")
-                        Toast.makeText(this, "Please generate a User ID first", Toast.LENGTH_SHORT).show()
-                    }
                     else
                     {
+                        if (generatedUserId.isEmpty())
+                        {
+                            generatedUserId = generateUserId(username)
+                            tvGeneratedUserId.text = generatedUserId
+                        }
+
                         val user = User(
                             name = name,
                             surname = "",
@@ -150,7 +156,20 @@ class RegisterActivity : AppCompatActivity()
                         {
                             userViewModel.saveUser(this, user)
                             Log.i(TAG, "Account created successfully in database for username: $username")
+
+                            val sharedPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                            sharedPrefs.edit {
+                                putBoolean(KEY_IS_LOGGED_IN, true)
+                                putString(KEY_LOGGED_IN_USERNAME, username)
+                            }
+
+                            SyncManager(this).startSyncService()
+
                             Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(this, DashboardActivity::class.java)
+                            intent.putExtra("username", username)
+                            startActivity(intent)
                             finish()
                         }
                         catch (exception: Exception)

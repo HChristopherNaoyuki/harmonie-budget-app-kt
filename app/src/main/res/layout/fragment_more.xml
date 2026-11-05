@@ -4,7 +4,7 @@
     Wrapped in NestedScrollView to ensure all cards remain accessible on smaller screens.
     Maintains minimalist gray theme and consistent card-based design.
 
-    Version displays "Version 2.0.0" using the version_content string resource.
+    Version displays "Version 3.0.0" using the version_content string resource.
 
     All IDs correctly match the references in MoreFragment.kt:
     - tv_export_title, layout_export_content

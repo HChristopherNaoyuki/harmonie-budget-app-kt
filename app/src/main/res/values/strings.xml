@@ -11,7 +11,7 @@
     <string name="app_name">Harmonie Budget</string>
     <string name="welcome_message">Welcome to Harmonie Budget</string>
     <string name="landing_subtitle">Track expenses, set goals, earn rewards</string>
-    <string name="version_indicator">Version 2.0.0</string>
+    <string name="version_indicator">Version 3.0.0</string>
 
     <!-- ==================== Authentication Screens ==================== -->
     <string name="login_button">Login</string>
@@ -173,7 +173,7 @@
     <string name="help_and_info_title">Help and Information</string>
     <string name="help_and_info_content">How to use the app: log in, add expenses, set goals, view reports.</string>
     <string name="version_title">Version</string>
-    <string name="version_content">Version 2.0.0</string>
+    <string name="version_content">Version 3.0.0</string>
     <string name="log_out_title">Log Out</string>
 
     <!-- ==================== Navigation ==================== -->
