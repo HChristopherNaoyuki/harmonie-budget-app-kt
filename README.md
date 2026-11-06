@@ -6,14 +6,13 @@
 - [2. Project Overview](#2-project-overview)
 - [3. Team Members and Roles](#3-team-members-and-roles)
 - [4. Project Timeline and Milestones](#4-project-timeline-and-milestones)
-- [5. Folder Structure](#5-folder-structure)
-- [6. System Architecture and Features](#6-system-architecture-and-features)
-- [7. Contributing Guidelines](#7-contributing-guidelines)
-- [8. AI Usage and Contributions Policy](#8-ai-usage-and-contributions-policy)
-- [9. Testing and Quality Assurance](#9-testing-and-quality-assurance)
-- [10. Building and Running](#10-building-and-running)
-- [11. Video Demonstration](#11-video-demonstration)
-- [12. Sources](#12-sources)
+- [5. System Architecture and Features](#5-system-architecture-and-features)
+- [6. Contributing Guidelines](#6-contributing-guidelines)
+- [7. AI Usage and Contributions Policy](#7-ai-usage-and-contributions-policy)
+- [8. Testing and Quality Assurance](#8-testing-and-quality-assurance)
+- [9. Building and Running](#9-building-and-running)
+- [10. Video Demonstration](#10-video-demonstration)
+- [11. Sources](#11-sources)
 
 ## 1. Terms and Conditions
 
@@ -23,10 +22,10 @@ merge, publish, distribute, sublicense, and/or sell copies of the software,
 subject to the following conditions.
 
 The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the software. The software is provided
-"as is", without warranty of any kind, express or implied, including but not
-limited to the warranties of merchantability, fitness for a particular
-purpose, and noninfringement.
+all copies or substantial portions of the software. The software is
+provided "as is", without warranty of any kind, express or implied,
+including but not limited to the warranties of merchantability, fitness for
+a particular purpose, and noninfringement.
 
 In no event shall the authors or copyright holders be liable for any claim,
 damages, or other liability, whether in an action of contract, tort, or
@@ -48,19 +47,19 @@ can be addressed appropriately by the maintainers or contributors.
 
 ## 2. Project Overview
 
-Harmonie Budget Tracker is an Android mobile application developed in Kotlin
-for the Introduction to Open-Source Coding module. The application helps
-users track daily expenses, manage custom categories, set monthly budget
-goals, and view spending summaries through a custom pie chart. All data is
-persisted locally using JSON files to ensure offline functionality and
-user-specific data isolation. The project follows the Model-View-ViewModel
-architectural pattern and uses Material Design components for a minimalistic
-user interface. The minimum SDK is API 24, which corresponds to Android 7.0
-Nougat. The project uses Kotlin DSL for build configuration and targets API
-36. Gson handles JSON serialization, while RecyclerView and CardView
-components provide modern list and container layouts. This repository
-contains the complete source code, documentation, and demonstration
-materials for the Portfolio of Evidence.
+Harmonie Budget Tracker is an Android mobile application developed in
+Kotlin for the Introduction to Open-Source Coding module. The application
+helps users track daily expenses, manage custom categories, set monthly
+budget goals, and view spending summaries through a custom pie chart. All
+data is persisted locally using JSON files to ensure offline functionality
+and user-specific data isolation. The project follows the
+Model-View-ViewModel architectural pattern and uses Material Design
+components for a minimalistic user interface. The minimum SDK is API 24,
+which corresponds to Android 7.0 Nougat. The project uses Kotlin DSL for
+build configuration and targets API 36. Gson handles JSON serialization,
+while RecyclerView and CardView components provide modern list and
+container layouts. This repository contains the complete source code,
+documentation, and demonstration materials for the Portfolio of Evidence.
 
 The development process follows a structured Research, Plan, Design, Build,
 and Evaluate cycle as prescribed by the module. Each phase builds upon the
@@ -140,125 +139,7 @@ comprehensive testing, and submission of all required files. The final app
 must run on a mobile phone and include badges for meeting budget goals and
 consistent expense logging.
 
-## 5. Folder Structure
-
-The project follows this exact folder structure:
-
-```
-harmonie-budget-app-kt/
-├── app/
-│   ├── manifests/
-│   │   └── AndroidManifest.xml
-│   ├── kotlin+java/
-│   │   ├── com.example.harmonie_budget_app_kt/
-│   │   │   ├── BudgetFragment.kt
-│   │   │   ├── BudgetsFragment.kt
-│   │   │   ├── CategoryActivity.kt 
-│   │   │   ├── CategoryTotalActivity.kt 
-│   │   │   ├── DashboardActivity.kt
-│   │   │   ├── ExpenseActivity.kt
-│   │   │   ├── ExpenseHistoryAdapter.kt
-│   │   │   ├── ExpenseListActivity.kt
-│   │   │   ├── ForgotPasswordActivity.kt
-│   │   │   ├── GoalActivity.kt
-│   │   │   ├── HomeFragment.kt
-│   │   │   ├── LoginActivity.kt
-│   │   │   ├── MainActivity.kt 
-│   │   │   ├── MoreFragment.kt
-│   │   │   ├── RegisterActivity.kt
-│   │   │   ├── TransactionsFragment.kt
-│   │   │   ├── models/
-│   │   │   │   ├── Badge.kt
-│   │   │   │   ├── Category.kt
-│   │   │   │   ├── Expense.kt
-│   │   │   │   ├── Goal.kt
-│   │   │   │   ├── StreakData.kt
-│   │   │   │   └── User.kt
-│   │   │   ├── viewmodels/
-│   │   │   │   ├── CategoryViewModel.kt
-│   │   │   │   ├── ExpenseViewModel.kt
-│   │   │   │   ├── GamificationViewModel.kt
-│   │   │   │   ├── GoalViewModel.kt
-│   │   │   │   ├── HomeViewModel.kt
-│   │   │   │   ├── MoreViewModel.kt
-│   │   │   │   └── UserViewModel.kt
-│   │   │   └── utils/
-│   │   │       └── JsonHelper.kt 
-│   │   ├── com.example.harmonie_budget_app_kt (androidTest)/
-│   │   │   └── ExampleInstrumentedTest.kt
-│   │   └── com.example.harmonie_budget_app_kt (test)/
-│   │       └── ExampleUnitTest.kt
-│   └── res/
-│       ├── menu/
-│       │   └── bottom_nav_menu.xml      
-│       ├── color/
-│       │   ├── nav_icon_color.xml 
-│       │   └── nav_text_color.xml     
-│       ├── drawable/
-│       │   ├── ic_home.xml
-│       │   ├── ic_home_house.xml
-│       │   ├── ic_launcher_background.xml
-│       │   ├── ic_launcher_foreground.xml
-│       │   ├── ic_pie_chart.xml
-│       │   ├── ic_receipt.xml
-│       │   ├── ic_settings_gear.xml
-│       │   ├── rounded_button.xml
-│       │   ├── spinner_dropdown_background.xml
-│       │   └── table_header_background.xml 
-│       ├── layout/
-│       │   ├── activity_category.xml
-│       │   ├── activity_category_total.xml 
-│       │   ├── activity_dashboard.xml
-│       │   ├── activity_expense.xml
-│       │   ├── activity_expense_list.xml
-│       │   ├── activity_forgot_password.xml
-│       │   ├── activity_goal.xml
-│       │   ├── activity_login.xml
-│       │   ├── activity_main.xml
-│       │   ├── activity_register.xml 
-│       │   ├── fragment_budget.xml 
-│       │   ├── fragment_budgets.xml 
-│       │   ├── fragment_home.xml 
-│       │   ├── fragment_more.xml 
-│       │   ├── fragment_transactions.xml 
-│       │   └── item_expense_history.xml
-│       ├── mipmap/
-│       │   ├── ic_launcher/
-│       │   │   ├── ic_launcher.webp (hdpi)
-│       │   │   ├── ic_launcher.webp (mdpi)
-│       │   │   ├── ic_launcher.webp (xhdpi)
-│       │   │   ├── ic_launcher.webp (xxhdpi)
-│       │   │   ├── ic_launcher.webp (xxxhdpi)
-│       │   │   └── ic_launcher.xml (anydpi-v26)
-│       │   └── ic_launcher_round/
-│       │       ├── ic_launcher_round.webp (hdpi)
-│       │       ├── ic_launcher_round.webp (mdpi)
-│       │       ├── ic_launcher_round.webp (xhdpi)
-│       │       ├── ic_launcher_round.webp (xxhdpi)
-│       │       ├── ic_launcher_round.webp (xxxhdpi)
-│       │       └── ic_launcher_round.xml (anydpi-v26)
-│       ├── values/
-│       │   ├── themes/
-│       │   │   ├── themes.xml
-│       │   │   └── themes.xml (night)
-│       │   ├── colors.xml
-│       │   └── strings.xml
-│       └── xml/
-│           ├── backup_rules.xml
-│           ├── data_extraction_rules.xml
-│           └── file_paths.xml
-└── Gradle Scripts/
-    ├── build.gradle.kts (Project: harmonie-budget-app-kt)
-    ├── build.gradle.kts (Module: app)
-    ├── proguard-rules.pro
-    ├── gradle.properties
-    ├── gradle-wrapper.properties
-    ├── libs.versions.toml
-    ├── local.properties
-    └── settings.gradle.kts
-```
-
-## 6. System Architecture and Features
+## 5. System Architecture and Features
 
 The application follows the Model-View-ViewModel architectural pattern.
 Activities and Fragments handle the user interface while ViewModels manage
@@ -296,7 +177,7 @@ described by Malewicz (2021), with a restrained color palette of light
 grays, white surfaces, and blue accent colors. The app icon features a
 minimalistic MB monogram on a solid circular background.
 
-## 7. Contributing Guidelines
+## 6. Contributing Guidelines
 
 This project is developed by the Code Blooded team as part of the Portfolio
 of Evidence. Contributions follow a structured workflow across the
@@ -402,7 +283,7 @@ Reported-by: whoever-reported-it
 Signed-off-by: Your Name
 ```
 
-## 8. AI Usage and Contributions Policy
+## 7. AI Usage and Contributions Policy
 
 We welcome the use of AI tools to assist developers, but we enforce strict
 human accountability:
@@ -417,7 +298,7 @@ human accountability:
   by an AI assistant, please explicitly note it in your Pull Request
   description.
 
-## 9. Testing and Quality Assurance
+## 8. Testing and Quality Assurance
 
 The project includes comprehensive unit tests and instrumented tests. Unit
 tests verify password validation regular expressions, User ID generation
@@ -432,7 +313,7 @@ and logic. Whitman and Mattord (2022) highlight that information security
 principles must be embedded throughout the development lifecycle, which
 informed the testing strategy for user data protection.
 
-## 10. Building and Running
+## 9. Building and Running
 
 To clone this project directly in Android Studio, open Android Studio and
 click Get from VCS on the welcome screen. Paste the repository URL
@@ -451,7 +332,7 @@ Bundle(s) / APK(s) and choose Build Release APK.
 
 For the latest APK, please visit the Releases section of this repository.
 
-## 11. Video Demonstration
+## 10. Video Demonstration
 
 Two professional demonstration videos are available showing all features
 running on a physical mobile device. The Part 2 video covers the prototype
@@ -485,7 +366,7 @@ logout. The Part 3 video adds demonstrations of streak tracking, badges,
 category filtering, month/year filtering, sortable tables, and dark mode
 compatibility.
 
-## 12. Sources
+## 11. Sources
 
 Kotlin Docs. (2021, March 2). Kotlin. Retrieved May 7, 2026, from
 https://kotlinlang.org/docs/home.html
